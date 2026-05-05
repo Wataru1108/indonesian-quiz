@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Indonesian Word Quiz</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f2f4f8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  width: 100%;
+  background: linear-gradient(135deg, #c8001d 0%, #e8002a 60%, #ff3355 100%);
+  color: white;
+  text-align: center;
+  padding: 22px 16px 18px;
+  box-shadow: 0 3px 12px rgba(200,0,29,0.35);
+}
+header h1 { font-size: 21px; font-weight: 800; letter-spacing: 0.3px; }
+header p  { font-size: 12px; opacity: 0.82; margin-top: 3px; }
+
+.container { width: 100%; max-width: 480px; padding: 14px; }
+
+/* ── Mode tabs ── */
+.mode-tabs {
+  display: flex; background: white; border-radius: 13px;
+  padding: 4px; margin-bottom: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.10);
+}
+.mode-tab {
+  flex: 1; padding: 10px 4px; border: none; background: none;
+  border-radius: 9px; font-size: 13px; font-weight: 700;
+  color: #777; cursor: pointer; transition: all .2s;
+}
+.mode-tab.active { background: #c8001d; color: white; }
+
+/* ── Category filter ── */
+.cat-filter {
+  display: flex; gap: 7px; overflow-x: auto;
+  padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none;
+}
+.cat-filter::-webkit-scrollbar { display: none; }
+.cat-btn {
+  padding: 6px 13px; border: 2px solid #ddd; border-radius: 20px;
+  background: white; font-size: 12px; font-weight: 700;
+  color: #555; cursor: pointer; white-space: nowrap; transition: all .2s;
+}
+.cat-btn.active { border-color: #c8001d; background: #c8001d; color: white; }
+
+/* ── Progress ── */
+.progress-area {
+  background: white; border-radius: 13px;
+  padding: 11px 15px; margin-bottom: 11px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+}
+.progress-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.progress-text { font-size: 13px; color: #666; font-weight: 500; }
+.score-badge   { font-size: 13px; font-weight: 800; color: #c8001d; }
+.progress-bar  { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg,#c8001d,#ff6680); border-radius: 3px; transition: width .4s; }
+
+/* ── Action row ── */
+.action-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.btn-sm {
+  padding: 9px 16px; border: none; border-radius: 10px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  background: white; color: #444;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10); transition: all .15s;
+}
+.btn-sm:active { transform: scale(0.96); }
+
+/* ── Flash card ── */
+.flash-card {
+  width: 100%; min-height: 210px; background: white;
+  border-radius: 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  cursor: pointer; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 36px 24px; text-align: center;
+  position: relative; user-select: none;
+  transition: transform .12s;
+  margin-bottom: 14px;
+}
+.flash-card:active { transform: scale(0.98); }
+
+.cat-badge {
+  font-size: 10px; font-weight: 800; padding: 4px 10px;
+  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.6px;
+  margin-bottom: 10px; display: inline-block;
+}
+.cat-greeting  { background: #fff3cd; color: #7a5700; }
+.cat-question  { background: #d1ecf1; color: #0a4a55; }
+.cat-verb      { background: #d4edda; color: #145424; }
+.cat-noun      { background: #cce5ff; color: #003a80; }
+.cat-adjective { background: #f8d7da; color: #6b1520; }
+
+.word-idn  { font-size: 34px; font-weight: 800; color: #111827; line-height: 1.2; }
+.tap-hint  { font-size: 13px; color: #bbb; margin-top: 14px; }
+.divider   { width: 40px; height: 2px; background: #eee; margin: 14px auto; }
+.word-eng  { font-size: 22px; font-weight: 700; color: #c8001d; line-height: 1.35; }
+
+/* ── Nav buttons ── */
+.nav-buttons { display: flex; gap: 12px; margin-bottom: 14px; }
+.btn {
+  flex: 1; padding: 14px; border: none; border-radius: 13px;
+  font-size: 15px; font-weight: 700; cursor: pointer; transition: all .15s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-secondary { background: white; color: #333; box-shadow: 0 1px 5px rgba(0,0,0,0.10); }
+.btn-primary   { background: #c8001d; color: white; box-shadow: 0 3px 10px rgba(200,0,29,0.28); }
+.btn:disabled  { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ── Quiz mode ── */
+.quiz-question {
+  background: white; border-radius: 22px;
+  padding: 30px 24px; text-align: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  margin-bottom: 14px; min-height: 150px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.quiz-label { font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.quiz-word  { font-size: 36px; font-weight: 800; color: #111827; }
+
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.opt-btn {
+  padding: 16px 10px; border: 2px solid #e2e2e2; border-radius: 13px;
+  background: white; font-size: 14px; font-weight: 600;
+  color: #333; cursor: pointer; transition: all .15s;
+  text-align: center; line-height: 1.35; min-height: 64px;
+  display: flex; align-items: center; justify-content: center;
+}
+.opt-btn:active:not(:disabled) { transform: scale(0.96); }
+.opt-btn.correct { border-color: #28a745; background: #d4edda; color: #145424; }
+.opt-btn.wrong   { border-color: #dc3545; background: #f8d7da; color: #6b1520; }
+.opt-btn:disabled { cursor: not-allowed; }
+
+/* ── Typing mode ── */
+.typing-card {
+  background: white; border-radius: 22px;
+  padding: 26px 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  margin-bottom: 14px; text-align: center;
+}
+.typing-word { font-size: 36px; font-weight: 800; color: #111827; margin-bottom: 6px; }
+.typing-sub  { font-size: 12px; color: #bbb; margin-bottom: 20px; }
+.typing-input {
+  width: 100%; padding: 14px 16px; border: 2px solid #e2e2e2;
+  border-radius: 13px; font-size: 18px; font-weight: 600;
+  text-align: center; outline: none; transition: border-color .2s;
+  -webkit-appearance: none; background: white; color: #111;
+}
+.typing-input:focus { border-color: #c8001d; }
+.typing-input.correct { border-color: #28a745; background: #d4edda; color: #145424; }
+.typing-input.wrong   { border-color: #dc3545; background: #f8d7da; color: #6b1520; }
+.typing-fb { margin-top: 11px; font-size: 14px; font-weight: 700; min-height: 20px; }
+.fb-ok  { color: #28a745; }
+.fb-err { color: #dc3545; }
+
+/* ── Result screen ── */
+.result-screen {
+  text-align: center; background: white;
+  border-radius: 22px; padding: 44px 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.result-emoji { font-size: 68px; margin-bottom: 14px; }
+.result-title { font-size: 24px; font-weight: 800; color: #111827; margin-bottom: 8px; }
+.result-score { font-size: 52px; font-weight: 800; color: #c8001d; margin-bottom: 6px; }
+.result-sub   { font-size: 15px; color: #666; margin-bottom: 28px; }
+.btn-full { width: 100%; }
+
+.hidden { display: none !important; }
+
+@media (max-width: 360px) {
+  .word-idn, .quiz-word, .typing-word { font-size: 28px; }
+  .word-eng { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🇮🇩 Indonesian Word Quiz</h1>
+  <p>Belajar Bahasa Indonesia · 101 words</p>
+</header>
+
+<div class="container">
+
+  <!-- Mode tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('flashcard')">Flashcard</button>
+    <button class="mode-tab" onclick="setMode('quiz')">4-Choice</button>
+    <button class="mode-tab" onclick="setMode('typing')">Typing</button>
+  </div>
+
+  <!-- Category filter -->
+  <div class="cat-filter" id="catFilter">
+    <button class="cat-btn active" onclick="setCategory(this,'all')">All</button>
+    <button class="cat-btn" onclick="setCategory(this,'greeting')">Greetings</button>
+    <button class="cat-btn" onclick="setCategory(this,'question')">Questions</button>
+    <button class="cat-btn" onclick="setCategory(this,'verb')">Verbs</button>
+    <button class="cat-btn" onclick="setCategory(this,'noun')">Nouns</button>
+    <button class="cat-btn" onclick="setCategory(this,'adjective')">Adjectives</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-area">
+    <div class="progress-info">
+      <span class="progress-text" id="progressText">1 / 101</span>
+      <span class="score-badge" id="scoreText"></span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Action row -->
+  <div class="action-row">
+    <button class="btn-sm" onclick="shuffleWords()">🔀 Shuffle</button>
+    <button class="btn-sm" onclick="resetQuiz()">↩ Restart</button>
+  </div>
+
+  <!-- ═══ FLASHCARD MODE ═══ -->
+  <div id="flashcardMode">
+    <div class="flash-card" id="flashCard" onclick="toggleCard()">
+      <span class="cat-badge" id="flashCat"></span>
+      <div class="word-idn" id="flashWord"></div>
+      <div class="tap-hint" id="flashHint">Tap to reveal</div>
+      <div class="divider hidden" id="flashDiv"></div>
+      <div class="word-eng hidden" id="flashMeaning"></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" id="prevBtn" onclick="prevCard()">← Prev</button>
+      <button class="btn btn-primary"   id="nextBtn" onclick="nextCard()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ═══ QUIZ MODE ═══ -->
+  <div id="quizMode" class="hidden">
+    <div class="quiz-question">
+      <div class="quiz-label">What does this word mean?</div>
+      <span class="cat-badge" id="quizCat"></span>
+      <div class="quiz-word" id="quizWord"></div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <button class="btn btn-primary btn-full hidden" id="quizNext" onclick="nextQuestion()">Next →</button>
+  </div>
+
+  <!-- ═══ TYPING MODE ═══ -->
+  <div id="typingMode" class="hidden">
+    <div class="typing-card">
+      <span class="cat-badge" id="typingCat"></span>
+      <div class="typing-word" id="typingWord"></div>
+      <div class="typing-sub">Type the English meaning</div>
+      <input type="text" class="typing-input" id="typingInput"
+             placeholder="Type here..."
+             autocomplete="off" autocorrect="off"
+             autocapitalize="off" spellcheck="false">
+      <div class="typing-fb" id="typingFb"></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" id="skipBtn"   onclick="typingSkip()">Skip</button>
+      <button class="btn btn-primary"   id="checkBtn"  onclick="typingSubmit()">Check ✓</button>
+    </div>
+    <button class="btn btn-primary btn-full hidden" id="typingNext" onclick="nextQuestion()">Next →</button>
+  </div>
+
+  <!-- ═══ RESULT SCREEN ═══ -->
+  <div id="resultScreen" class="hidden">
+    <div class="result-screen">
+      <div class="result-emoji" id="resEmoji">🎉</div>
+      <div class="result-title">Complete!</div>
+      <div class="result-score" id="resScore"></div>
+      <div class="result-sub"   id="resSub"></div>
+      <button class="btn btn-primary btn-full" onclick="resetQuiz()">Try Again</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+/* ══════════════════════════════════════════
+   WORD LIST  (101 words)
+══════════════════════════════════════════ */
+const WORDS = [
+  // ── Greetings (14) ──
+  {w:"Selamat pagi",   m:"Good morning",       c:"greeting"},
+  {w:"Selamat siang",  m:"Good afternoon",     c:"greeting"},
+  {w:"Selamat sore",   m:"Good late afternoon",c:"greeting"},
+  {w:"Selamat malam",  m:"Good evening",       c:"greeting"},
+  {w:"Halo",           m:"Hello",              c:"greeting"},
+  {w:"Hai",            m:"Hi",                 c:"greeting"},
+  {w:"Terima kasih",   m:"Thank you",          c:"greeting"},
+  {w:"Sama-sama",      m:"You're welcome",     c:"greeting"},
+  {w:"Selamat tinggal",m:"Goodbye",            c:"greeting"},
+  {w:"Maaf",           m:"Sorry",              c:"greeting"},
+  {w:"Permisi",        m:"Excuse me",          c:"greeting"},
+  {w:"Tolong",         m:"Please",             c:"greeting"},
+  {w:"Ya",             m:"Yes",                c:"greeting"},
+  {w:"Tidak",          m:"No",                 c:"greeting"},
+
+  // ── Question words (9) ──
+  {w:"Apa",       m:"What",         c:"question"},
+  {w:"Siapa",     m:"Who",          c:"question"},
+  {w:"Di mana",   m:"Where",        c:"question"},
+  {w:"Kapan",     m:"When",         c:"question"},
+  {w:"Mengapa",   m:"Why",          c:"question"},
+  {w:"Kenapa",    m:"Why (informal)",c:"question"},
+  {w:"Bagaimana", m:"How",          c:"question"},
+  {w:"Berapa",    m:"How many",     c:"question"},
+  {w:"Mana",      m:"Which",        c:"question"},
+
+  // ── Verbs (30) ──
+  {w:"makan",      m:"to eat",        c:"verb"},
+  {w:"minum",      m:"to drink",      c:"verb"},
+  {w:"pergi",      m:"to go",         c:"verb"},
+  {w:"datang",     m:"to come",       c:"verb"},
+  {w:"tidur",      m:"to sleep",      c:"verb"},
+  {w:"bangun",     m:"to wake up",    c:"verb"},
+  {w:"bekerja",    m:"to work",       c:"verb"},
+  {w:"belajar",    m:"to study",      c:"verb"},
+  {w:"membaca",    m:"to read",       c:"verb"},
+  {w:"menulis",    m:"to write",      c:"verb"},
+  {w:"berbicara",  m:"to speak",      c:"verb"},
+  {w:"mendengar",  m:"to listen",     c:"verb"},
+  {w:"melihat",    m:"to see",        c:"verb"},
+  {w:"membeli",    m:"to buy",        c:"verb"},
+  {w:"menjual",    m:"to sell",       c:"verb"},
+  {w:"membawa",    m:"to bring",      c:"verb"},
+  {w:"mencari",    m:"to search",     c:"verb"},
+  {w:"menemukan",  m:"to find",       c:"verb"},
+  {w:"bermain",    m:"to play",       c:"verb"},
+  {w:"berlari",    m:"to run",        c:"verb"},
+  {w:"berjalan",   m:"to walk",       c:"verb"},
+  {w:"memasak",    m:"to cook",       c:"verb"},
+  {w:"mencuci",    m:"to wash",       c:"verb"},
+  {w:"duduk",      m:"to sit",        c:"verb"},
+  {w:"berdiri",    m:"to stand",      c:"verb"},
+  {w:"tahu",       m:"to know",       c:"verb"},
+  {w:"mau",        m:"to want",       c:"verb"},
+  {w:"bisa",       m:"to be able to", c:"verb"},
+  {w:"suka",       m:"to like",       c:"verb"},
+  {w:"cinta",      m:"to love",       c:"verb"},
+
+  // ── Nouns (27) ──
+  {w:"rumah",    m:"house",       c:"noun"},
+  {w:"sekolah",  m:"school",      c:"noun"},
+  {w:"kantor",   m:"office",      c:"noun"},
+  {w:"pasar",    m:"market",      c:"noun"},
+  {w:"toko",     m:"shop",        c:"noun"},
+  {w:"restoran", m:"restaurant",  c:"noun"},
+  {w:"makanan",  m:"food",        c:"noun"},
+  {w:"minuman",  m:"drink",       c:"noun"},
+  {w:"air",      m:"water",       c:"noun"},
+  {w:"nasi",     m:"rice",        c:"noun"},
+  {w:"buku",     m:"book",        c:"noun"},
+  {w:"meja",     m:"table",       c:"noun"},
+  {w:"kursi",    m:"chair",       c:"noun"},
+  {w:"pintu",    m:"door",        c:"noun"},
+  {w:"mobil",    m:"car",         c:"noun"},
+  {w:"uang",     m:"money",       c:"noun"},
+  {w:"waktu",    m:"time",        c:"noun"},
+  {w:"hari",     m:"day",         c:"noun"},
+  {w:"orang",    m:"person",      c:"noun"},
+  {w:"anak",     m:"child",       c:"noun"},
+  {w:"keluarga", m:"family",      c:"noun"},
+  {w:"teman",    m:"friend",      c:"noun"},
+  {w:"ibu",      m:"mother",      c:"noun"},
+  {w:"ayah",     m:"father",      c:"noun"},
+  {w:"nama",     m:"name",        c:"noun"},
+  {w:"kota",     m:"city",        c:"noun"},
+  {w:"jalan",    m:"road",        c:"noun"},
+
+  // ── Adjectives (21) ──
+  {w:"besar",   m:"big",       c:"adjective"},
+  {w:"kecil",   m:"small",     c:"adjective"},
+  {w:"tinggi",  m:"tall",      c:"adjective"},
+  {w:"pendek",  m:"short",     c:"adjective"},
+  {w:"baik",    m:"good",      c:"adjective"},
+  {w:"buruk",   m:"bad",       c:"adjective"},
+  {w:"cantik",  m:"beautiful", c:"adjective"},
+  {w:"pintar",  m:"smart",     c:"adjective"},
+  {w:"baru",    m:"new",       c:"adjective"},
+  {w:"lama",    m:"old",       c:"adjective"},
+  {w:"mahal",   m:"expensive", c:"adjective"},
+  {w:"murah",   m:"cheap",     c:"adjective"},
+  {w:"panas",   m:"hot",       c:"adjective"},
+  {w:"dingin",  m:"cold",      c:"adjective"},
+  {w:"cepat",   m:"fast",      c:"adjective"},
+  {w:"lambat",  m:"slow",      c:"adjective"},
+  {w:"banyak",  m:"many",      c:"adjective"},
+  {w:"sedikit", m:"few",       c:"adjective"},
+  {w:"senang",  m:"happy",     c:"adjective"},
+  {w:"sedih",   m:"sad",       c:"adjective"},
+  {w:"lelah",   m:"tired",     c:"adjective"},
+];
+
+/* ══════════════════════════════════════════
+   CONFIG
+══════════════════════════════════════════ */
+const CAT_CLASS = {
+  greeting:"cat-greeting", question:"cat-question",
+  verb:"cat-verb", noun:"cat-noun", adjective:"cat-adjective"
+};
+const CAT_LABEL = {
+  greeting:"Greeting", question:"Question",
+  verb:"Verb", noun:"Noun", adjective:"Adjective"
+};
+
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let mode     = 'flashcard';
+let filtered = [...WORDS];
+let deck     = [];
+let idx      = 0;
+let score    = {ok:0, total:0};
+let revealed = false;
+let answered = false;
+
+/* ══════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function normAnswer(s) {
+  return s.trim().toLowerCase()
+          .replace(/^to\s+/,'')
+          .replace(/\s*\(.*?\)\s*/g,'')
+          .trim();
+}
+
+function isCorrect(userInput, meaning) {
+  const user = normAnswer(userInput);
+  if (!user) return false;
+  return meaning.split(/[\/,]/)
+    .map(normAnswer)
+    .filter(Boolean)
+    .some(a => a === user);
+}
+
+/* ══════════════════════════════════════════
+   CATEGORY BADGE HELPER
+══════════════════════════════════════════ */
+function setBadge(el, cat) {
+  el.textContent = CAT_LABEL[cat] || cat;
+  el.className = 'cat-badge ' + (CAT_CLASS[cat] || '');
+}
+
+/* ══════════════════════════════════════════
+   PROGRESS
+══════════════════════════════════════════ */
+function updateProgress() {
+  const total = deck.length;
+  const cur   = Math.min(idx+1, total);
+  document.getElementById('progressText').textContent = cur + ' / ' + total;
+  document.getElementById('progressFill').style.width = (cur/total*100) + '%';
+  const sb = document.getElementById('scoreText');
+  sb.textContent = (mode !== 'flashcard' && score.total > 0)
+    ? score.ok + '/' + score.total : '';
+}
+
+/* ══════════════════════════════════════════
+   MODE SWITCHING
+══════════════════════════════════════════ */
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-tab').forEach((btn,i) => {
+    btn.classList.toggle('active', ['flashcard','quiz','typing'][i] === m);
+  });
+  resetState();
+  showPanel();
+  renderCurrent();
+}
+
+function showPanel() {
+  const panels = ['flashcardMode','quizMode','typingMode','resultScreen'];
+  panels.forEach(id => document.getElementById(id).classList.add('hidden'));
+  if (mode === 'flashcard') document.getElementById('flashcardMode').classList.remove('hidden');
+  else if (mode === 'quiz') document.getElementById('quizMode').classList.remove('hidden');
+  else document.getElementById('typingMode').classList.remove('hidden');
+}
+
+/* ══════════════════════════════════════════
+   CATEGORY SWITCHING
+══════════════════════════════════════════ */
+function setCategory(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filtered = cat === 'all' ? [...WORDS] : WORDS.filter(w => w.c === cat);
+  resetState();
+  document.getElementById('resultScreen').classList.add('hidden');
+  showPanel();
+  renderCurrent();
+}
+
+/* ══════════════════════════════════════════
+   RESET / SHUFFLE
+══════════════════════════════════════════ */
+function resetState() {
+  deck     = shuffle(filtered);
+  idx      = 0;
+  score    = {ok:0, total:0};
+  revealed = false;
+  answered = false;
+}
+
+function shuffleWords() {
+  resetState();
+  document.getElementById('resultScreen').classList.add('hidden');
+  showPanel();
+  renderCurrent();
+}
+
+function resetQuiz() {
+  resetState();
+  document.getElementById('resultScreen').classList.add('hidden');
+  showPanel();
+  renderCurrent();
+}
+
+/* ══════════════════════════════════════════
+   RENDER DISPATCH
+══════════════════════════════════════════ */
+function renderCurrent() {
+  if (idx >= deck.length) { showResult(); return; }
+  updateProgress();
+  const w = deck[idx];
+  if (mode === 'flashcard') renderFlash(w);
+  else if (mode === 'quiz') renderQuiz(w);
+  else renderTyping(w);
+}
+
+/* ══════════════════════════════════════════
+   FLASHCARD
+══════════════════════════════════════════ */
+function renderFlash(w) {
+  revealed = false;
+  setBadge(document.getElementById('flashCat'), w.c);
+  document.getElementById('flashWord').textContent    = w.w;
+  document.getElementById('flashMeaning').textContent = w.m;
+  document.getElementById('flashHint').classList.remove('hidden');
+  document.getElementById('flashDiv').classList.add('hidden');
+  document.getElementById('flashMeaning').classList.add('hidden');
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function toggleCard() {
+  revealed = !revealed;
+  document.getElementById('flashHint').classList.toggle('hidden', revealed);
+  document.getElementById('flashDiv').classList.toggle('hidden', !revealed);
+  document.getElementById('flashMeaning').classList.toggle('hidden', !revealed);
+}
+
+function prevCard() { if (idx > 0) { idx--; renderCurrent(); } }
+function nextCard() {
+  if (idx < deck.length-1) { idx++; renderCurrent(); }
+  else showResult();
+}
+
+/* ══════════════════════════════════════════
+   QUIZ (4-CHOICE)
+══════════════════════════════════════════ */
+function renderQuiz(w) {
+  answered = false;
+  setBadge(document.getElementById('quizCat'), w.c);
+  document.getElementById('quizWord').textContent = w.w;
+  document.getElementById('quizNext').classList.add('hidden');
+
+  // Pick 3 distractors
+  const distractors = shuffle(WORDS.filter(x => x !== w && x.m !== w.m)).slice(0,3);
+  const opts = shuffle([w, ...distractors]);
+
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt.m;
+    btn.onclick = () => selectOpt(btn, opt === w, w);
+    container.appendChild(btn);
+  });
+}
+
+function selectOpt(btn, correct, word) {
+  if (answered) return;
+  answered = true;
+  score.total++;
+  if (correct) {
+    btn.classList.add('correct');
+    score.ok++;
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.textContent === word.m) b.classList.add('correct');
+    });
+  }
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+  document.getElementById('quizNext').classList.remove('hidden');
+  updateProgress();
+}
+
+/* ══════════════════════════════════════════
+   TYPING
+══════════════════════════════════════════ */
+function renderTyping(w) {
+  answered = false;
+  setBadge(document.getElementById('typingCat'), w.c);
+  document.getElementById('typingWord').textContent = w.w;
+
+  const inp = document.getElementById('typingInput');
+  inp.value = '';
+  inp.className = 'typing-input';
+  inp.disabled = false;
+  inp.placeholder = 'Type here...';
+
+  document.getElementById('typingFb').textContent = '';
+  document.getElementById('typingFb').className = 'typing-fb';
+  document.getElementById('checkBtn').classList.remove('hidden');
+  document.getElementById('skipBtn').classList.remove('hidden');
+  document.getElementById('typingNext').classList.add('hidden');
+
+  setTimeout(() => { inp.focus(); inp.scrollIntoView({block:'nearest'}); }, 150);
+}
+
+function typingSubmit() {
+  if (answered) return;
+  const inp = document.getElementById('typingInput');
+  const w   = deck[idx];
+  if (!inp.value.trim()) return;
+
+  answered = true;
+  score.total++;
+  const ok = isCorrect(inp.value, w.m);
+
+  if (ok) {
+    inp.className = 'typing-input correct';
+    document.getElementById('typingFb').textContent = 'Correct!';
+    document.getElementById('typingFb').className   = 'typing-fb fb-ok';
+    score.ok++;
+  } else {
+    inp.className = 'typing-input wrong';
+    document.getElementById('typingFb').textContent = 'Answer: "' + w.m + '"';
+    document.getElementById('typingFb').className   = 'typing-fb fb-err';
+  }
+
+  inp.disabled = true;
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('skipBtn').classList.add('hidden');
+  document.getElementById('typingNext').classList.remove('hidden');
+  updateProgress();
+}
+
+function typingSkip() {
+  if (answered) return;
+  const w = deck[idx];
+  const inp = document.getElementById('typingInput');
+  answered = true;
+  score.total++;
+
+  inp.className = 'typing-input wrong';
+  document.getElementById('typingFb').textContent = 'Answer: "' + w.m + '"';
+  document.getElementById('typingFb').className   = 'typing-fb fb-err';
+  inp.disabled = true;
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('skipBtn').classList.add('hidden');
+  document.getElementById('typingNext').classList.remove('hidden');
+  updateProgress();
+}
+
+/* ══════════════════════════════════════════
+   NEXT (quiz & typing)
+══════════════════════════════════════════ */
+function nextQuestion() {
+  idx++;
+  if (idx >= deck.length) showResult();
+  else renderCurrent();
+}
+
+/* ══════════════════════════════════════════
+   RESULT SCREEN
+══════════════════════════════════════════ */
+function showResult() {
+  ['flashcardMode','quizMode','typingMode'].forEach(id =>
+    document.getElementById(id).classList.add('hidden'));
+  document.getElementById('resultScreen').classList.remove('hidden');
+
+  if (mode === 'flashcard') {
+    document.getElementById('resEmoji').textContent = '🎓';
+    document.getElementById('resScore').textContent = deck.length + ' words';
+    document.getElementById('resSub').textContent   = 'You reviewed all the cards!';
+    return;
+  }
+
+  const pct = score.total ? Math.round(score.ok/score.total*100) : 0;
+  document.getElementById('resScore').textContent = score.ok + '/' + score.total;
+
+  let emoji, msg;
+  if (pct >= 90) { emoji='🏆'; msg='Excellent! Luar biasa!'; }
+  else if (pct >= 70) { emoji='🎉'; msg='Great job! Bagus sekali!'; }
+  else if (pct >= 50) { emoji='👍'; msg='Good effort! Terus berlatih!'; }
+  else { emoji='📚'; msg='Keep studying! Semangat!'; }
+
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resSub').textContent   = pct + '% — ' + msg;
+}
+
+/* ══════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+══════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (mode === 'typing') {
+    if (e.key === 'Enter') {
+      if (!answered) typingSubmit();
+      else nextQuestion();
+    }
+    return;
+  }
+  if (mode === 'flashcard') {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleCard(); }
+    if (e.key === 'ArrowRight') nextCard();
+    if (e.key === 'ArrowLeft')  prevCard();
+    return;
+  }
+  if (mode === 'quiz') {
+    if (e.key === 'Enter' && answered) nextQuestion();
+  }
+});
+
+/* ══════════════════════════════════════════
+   UPDATE CATEGORY BUTTON COUNTS
+══════════════════════════════════════════ */
+(function initCatCounts() {
+  const counts = {};
+  WORDS.forEach(w => counts[w.c] = (counts[w.c]||0)+1);
+  const btns = document.querySelectorAll('.cat-btn');
+  btns[0].textContent = 'All (' + WORDS.length + ')';
+  ['greeting','question','verb','noun','adjective'].forEach((cat,i) => {
+    const label = CAT_LABEL[cat] + 's';
+    btns[i+1].textContent = label + ' (' + (counts[cat]||0) + ')';
+  });
+})();
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+filtered = [...WORDS];
+resetState();
+renderCurrent();
+</script>
+</body>
+</html>
