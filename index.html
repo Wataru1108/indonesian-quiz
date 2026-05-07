@@ -6,230 +6,232 @@
 <title>Indonesian Word Quiz</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #f2f4f8;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: #f2f4f8; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
 }
-
 header {
-  width: 100%;
-  background: linear-gradient(135deg, #c8001d 0%, #e8002a 60%, #ff3355 100%);
-  color: white;
-  text-align: center;
-  padding: 22px 16px 18px;
-  box-shadow: 0 3px 12px rgba(200,0,29,0.35);
+  width: 100%; background: linear-gradient(135deg,#c8001d,#e8002a,#ff3355);
+  color: white; text-align: center; padding: 20px 16px 16px;
+  box-shadow: 0 3px 12px rgba(200,0,29,.35);
 }
-header h1 { font-size: 21px; font-weight: 800; letter-spacing: 0.3px; }
-header p  { font-size: 12px; opacity: 0.82; margin-top: 3px; }
+header h1 { font-size: 20px; font-weight: 800; }
+header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
+.container { width: 100%; max-width: 480px; padding: 13px; }
 
-.container { width: 100%; max-width: 480px; padding: 14px; }
+/* mode tabs */
+.mode-tabs { display:flex; background:white; border-radius:13px; padding:4px; margin-bottom:11px; box-shadow:0 1px 6px rgba(0,0,0,.10); }
+.mode-tab  { flex:1; padding:10px 4px; border:none; background:none; border-radius:9px; font-size:13px; font-weight:700; color:#777; cursor:pointer; transition:all .2s; }
+.mode-tab.active { background:#c8001d; color:white; }
 
-/* ── Mode tabs ── */
-.mode-tabs {
-  display: flex; background: white; border-radius: 13px;
-  padding: 4px; margin-bottom: 12px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.10);
+/* filter rows */
+.filter-block { background:white; border-radius:13px; padding:11px 13px; margin-bottom:10px; box-shadow:0 1px 5px rgba(0,0,0,.08); }
+.filter-label { font-size:11px; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:.7px; display:block; margin-bottom:7px; }
+.lvl-pills { display:flex; gap:6px; }
+.lvl-pill  { flex:1; padding:7px 4px; border:2px solid #e0e0e0; border-radius:8px; background:white; font-size:13px; font-weight:800; color:#555; cursor:pointer; text-align:center; transition:all .2s; }
+.lvl-pill.active { border-color:#c8001d; background:#c8001d; color:white; }
+.genre-select {
+  width:100%; padding:10px 12px; border:2px solid #e0e0e0; border-radius:10px;
+  font-size:14px; font-weight:600; color:#333; background:white;
+  appearance:none; -webkit-appearance:none; cursor:pointer; outline:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; padding-right:32px;
 }
-.mode-tab {
-  flex: 1; padding: 10px 4px; border: none; background: none;
-  border-radius: 9px; font-size: 13px; font-weight: 700;
-  color: #777; cursor: pointer; transition: all .2s;
-}
-.mode-tab.active { background: #c8001d; color: white; }
+.genre-select:focus { border-color:#c8001d; }
 
-/* ── Category filter ── */
-.cat-filter {
-  display: flex; gap: 7px; overflow-x: auto;
-  padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none;
-}
-.cat-filter::-webkit-scrollbar { display: none; }
-.cat-btn {
-  padding: 6px 13px; border: 2px solid #ddd; border-radius: 20px;
-  background: white; font-size: 12px; font-weight: 700;
-  color: #555; cursor: pointer; white-space: nowrap; transition: all .2s;
-}
-.cat-btn.active { border-color: #c8001d; background: #c8001d; color: white; }
+/* stats / progress */
+.progress-area { background:white; border-radius:13px; padding:10px 14px; margin-bottom:10px; box-shadow:0 1px 5px rgba(0,0,0,.08); }
+.progress-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.progress-text { font-size:12px; color:#666; font-weight:500; }
+.score-badge   { font-size:13px; font-weight:800; color:#c8001d; }
+.filter-stats  { font-size:11px; color:#999; margin-bottom:5px; }
+.progress-bar  { height:5px; background:#eee; border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#c8001d,#ff6680); border-radius:3px; transition:width .4s; }
 
-/* ── Progress ── */
-.progress-area {
-  background: white; border-radius: 13px;
-  padding: 11px 15px; margin-bottom: 11px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.08);
-}
-.progress-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
-.progress-text { font-size: 13px; color: #666; font-weight: 500; }
-.score-badge   { font-size: 13px; font-weight: 800; color: #c8001d; }
-.progress-bar  { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg,#c8001d,#ff6680); border-radius: 3px; transition: width .4s; }
+/* action row */
+.action-row { display:flex; gap:8px; margin-bottom:11px; }
+.btn-sm { padding:9px 15px; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; background:white; color:#444; box-shadow:0 1px 4px rgba(0,0,0,.10); transition:all .15s; }
+.btn-sm:active { transform:scale(.96); }
 
-/* ── Action row ── */
-.action-row { display: flex; gap: 8px; margin-bottom: 12px; }
-.btn-sm {
-  padding: 9px 16px; border: none; border-radius: 10px;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-  background: white; color: #444;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.10); transition: all .15s;
-}
-.btn-sm:active { transform: scale(0.96); }
+/* category badge */
+.cat-badge { font-size:10px; font-weight:800; padding:3px 9px; border-radius:20px; text-transform:uppercase; letter-spacing:.5px; display:inline-block; margin-bottom:8px; }
+.cat-greeting{background:#fff3cd;color:#7a5700} .cat-pronoun{background:#e8d5f5;color:#5a0082}
+.cat-number{background:#d0f0e8;color:#005c3f}   .cat-question{background:#d1ecf1;color:#0a4a55}
+.cat-color{background:#fce4ec;color:#880e4f}     .cat-family{background:#fce8d5;color:#7a3800}
+.cat-body{background:#ffcccc;color:#8b0000}      .cat-home{background:#fff9c4;color:#5c4200}
+.cat-food{background:#c8f5c8;color:#1a5e20}      .cat-drink{background:#b3e5fc;color:#014377}
+.cat-transport{background:#cfd8dc;color:#1c313a} .cat-occupation{background:#f5e6d0;color:#5c3200}
+.cat-weather{background:#e3f2fd;color:#0d47a1}   .cat-time{background:#f3e5f5;color:#4a0072}
+.cat-place{background:#e8f5e9;color:#1b5e20}     .cat-emotion{background:#fce4ec;color:#880e4f}
+.cat-travel{background:#fff8e1;color:#5c3d00}    .cat-tourism{background:#e0f7fa;color:#006064}
+.cat-business{background:#e8eaf6;color:#1a237e}  .cat-news{background:#efebe9;color:#3e2723}
+.cat-verb{background:#d4edda;color:#145424}       .cat-adjective{background:#f8d7da;color:#6b1520}
+.cat-adverb{background:#fff3e0;color:#7a3200}     .cat-noun{background:#cce5ff;color:#003a80}
+.lvl-badge { font-size:10px; font-weight:800; padding:3px 8px; border-radius:6px; display:inline-block; margin-left:5px; }
+.lvl-A1{background:#c8f5c8;color:#145424} .lvl-A2{background:#b3e5fc;color:#014377}
+.lvl-B1{background:#fff3cd;color:#7a5700} .lvl-B2{background:#f8d7da;color:#6b1520}
 
-/* ── Flash card ── */
+/* flashcard */
 .flash-card {
-  width: 100%; min-height: 210px; background: white;
-  border-radius: 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  cursor: pointer; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 36px 24px; text-align: center;
-  position: relative; user-select: none;
-  transition: transform .12s;
-  margin-bottom: 14px;
+  width:100%; min-height:200px; background:white; border-radius:22px;
+  box-shadow:0 6px 20px rgba(0,0,0,.12); cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:32px 22px; text-align:center; position:relative; user-select:none;
+  transition:transform .12s; margin-bottom:13px;
 }
-.flash-card:active { transform: scale(0.98); }
+.flash-card:active { transform:scale(.98); }
+.word-idn  { font-size:32px; font-weight:800; color:#111827; line-height:1.2; }
+.tap-hint  { font-size:13px; color:#bbb; margin-top:12px; }
+.divider   { width:38px; height:2px; background:#eee; margin:12px auto; }
+.word-eng  { font-size:21px; font-weight:700; color:#c8001d; line-height:1.35; }
+.nav-buttons { display:flex; gap:11px; margin-bottom:13px; }
+.btn { flex:1; padding:13px; border:none; border-radius:13px; font-size:15px; font-weight:700; cursor:pointer; transition:all .15s; }
+.btn:active { transform:scale(.97); }
+.btn-secondary { background:white; color:#333; box-shadow:0 1px 5px rgba(0,0,0,.10); }
+.btn-primary   { background:#c8001d; color:white; box-shadow:0 3px 10px rgba(200,0,29,.28); }
+.btn:disabled  { opacity:.4; cursor:not-allowed; transform:none; }
+.btn-full { width:100%; }
 
-.cat-badge {
-  font-size: 10px; font-weight: 800; padding: 4px 10px;
-  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.6px;
-  margin-bottom: 10px; display: inline-block;
-}
-.cat-greeting  { background: #fff3cd; color: #7a5700; }
-.cat-question  { background: #d1ecf1; color: #0a4a55; }
-.cat-verb      { background: #d4edda; color: #145424; }
-.cat-noun      { background: #cce5ff; color: #003a80; }
-.cat-adjective { background: #f8d7da; color: #6b1520; }
-
-.word-idn  { font-size: 34px; font-weight: 800; color: #111827; line-height: 1.2; }
-.tap-hint  { font-size: 13px; color: #bbb; margin-top: 14px; }
-.divider   { width: 40px; height: 2px; background: #eee; margin: 14px auto; }
-.word-eng  { font-size: 22px; font-weight: 700; color: #c8001d; line-height: 1.35; }
-
-/* ── Nav buttons ── */
-.nav-buttons { display: flex; gap: 12px; margin-bottom: 14px; }
-.btn {
-  flex: 1; padding: 14px; border: none; border-radius: 13px;
-  font-size: 15px; font-weight: 700; cursor: pointer; transition: all .15s;
-}
-.btn:active { transform: scale(0.97); }
-.btn-secondary { background: white; color: #333; box-shadow: 0 1px 5px rgba(0,0,0,0.10); }
-.btn-primary   { background: #c8001d; color: white; box-shadow: 0 3px 10px rgba(200,0,29,0.28); }
-.btn:disabled  { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-/* ── Quiz mode ── */
+/* quiz */
 .quiz-question {
-  background: white; border-radius: 22px;
-  padding: 30px 24px; text-align: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  margin-bottom: 14px; min-height: 150px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
+  background:white; border-radius:22px; padding:28px 22px; text-align:center;
+  box-shadow:0 6px 20px rgba(0,0,0,.12); margin-bottom:13px; min-height:140px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
 }
-.quiz-label { font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-.quiz-word  { font-size: 36px; font-weight: 800; color: #111827; }
-
-.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.quiz-label { font-size:11px; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+.quiz-word  { font-size:34px; font-weight:800; color:#111827; }
+.quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:13px; }
 .opt-btn {
-  padding: 16px 10px; border: 2px solid #e2e2e2; border-radius: 13px;
-  background: white; font-size: 14px; font-weight: 600;
-  color: #333; cursor: pointer; transition: all .15s;
-  text-align: center; line-height: 1.35; min-height: 64px;
-  display: flex; align-items: center; justify-content: center;
+  padding:14px 9px; border:2px solid #e2e2e2; border-radius:12px; background:white;
+  font-size:13px; font-weight:600; color:#333; cursor:pointer; text-align:center;
+  line-height:1.3; min-height:60px; display:flex; align-items:center; justify-content:center;
+  transition:all .15s;
 }
-.opt-btn:active:not(:disabled) { transform: scale(0.96); }
-.opt-btn.correct { border-color: #28a745; background: #d4edda; color: #145424; }
-.opt-btn.wrong   { border-color: #dc3545; background: #f8d7da; color: #6b1520; }
-.opt-btn:disabled { cursor: not-allowed; }
+.opt-btn:active:not(:disabled) { transform:scale(.96); }
+.opt-btn.correct { border-color:#28a745; background:#d4edda; color:#145424; }
+.opt-btn.wrong   { border-color:#dc3545; background:#f8d7da; color:#6b1520; }
+.opt-btn:disabled { cursor:not-allowed; }
 
-/* ── Typing mode ── */
-.typing-card {
-  background: white; border-radius: 22px;
-  padding: 26px 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  margin-bottom: 14px; text-align: center;
-}
-.typing-word { font-size: 36px; font-weight: 800; color: #111827; margin-bottom: 6px; }
-.typing-sub  { font-size: 12px; color: #bbb; margin-bottom: 20px; }
+/* typing */
+.typing-card { background:white; border-radius:22px; padding:24px 20px; box-shadow:0 6px 20px rgba(0,0,0,.12); margin-bottom:13px; text-align:center; }
+.typing-word { font-size:34px; font-weight:800; color:#111827; margin-bottom:5px; }
+.typing-sub  { font-size:12px; color:#bbb; margin-bottom:18px; }
 .typing-input {
-  width: 100%; padding: 14px 16px; border: 2px solid #e2e2e2;
-  border-radius: 13px; font-size: 18px; font-weight: 600;
-  text-align: center; outline: none; transition: border-color .2s;
-  -webkit-appearance: none; background: white; color: #111;
+  width:100%; padding:13px 15px; border:2px solid #e2e2e2; border-radius:12px;
+  font-size:17px; font-weight:600; text-align:center; outline:none;
+  -webkit-appearance:none; background:white; color:#111; transition:border-color .2s;
 }
-.typing-input:focus { border-color: #c8001d; }
-.typing-input.correct { border-color: #28a745; background: #d4edda; color: #145424; }
-.typing-input.wrong   { border-color: #dc3545; background: #f8d7da; color: #6b1520; }
-.typing-fb { margin-top: 11px; font-size: 14px; font-weight: 700; min-height: 20px; }
-.fb-ok  { color: #28a745; }
-.fb-err { color: #dc3545; }
+.typing-input:focus { border-color:#c8001d; }
+.typing-input.correct { border-color:#28a745; background:#d4edda; color:#145424; }
+.typing-input.wrong   { border-color:#dc3545; background:#f8d7da; color:#6b1520; }
+.typing-fb { margin-top:10px; font-size:14px; font-weight:700; min-height:18px; }
+.fb-ok  { color:#28a745; } .fb-err { color:#dc3545; }
 
-/* ── Result screen ── */
-.result-screen {
-  text-align: center; background: white;
-  border-radius: 22px; padding: 44px 24px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-}
-.result-emoji { font-size: 68px; margin-bottom: 14px; }
-.result-title { font-size: 24px; font-weight: 800; color: #111827; margin-bottom: 8px; }
-.result-score { font-size: 52px; font-weight: 800; color: #c8001d; margin-bottom: 6px; }
-.result-sub   { font-size: 15px; color: #666; margin-bottom: 28px; }
-.btn-full { width: 100%; }
+/* empty state */
+.empty-state { text-align:center; background:white; border-radius:20px; padding:40px 20px; box-shadow:0 4px 16px rgba(0,0,0,.10); }
+.empty-state .emoji { font-size:48px; margin-bottom:12px; }
+.empty-state p { color:#666; font-size:15px; }
 
-.hidden { display: none !important; }
+/* result */
+.result-screen { text-align:center; background:white; border-radius:22px; padding:40px 22px; box-shadow:0 6px 20px rgba(0,0,0,.12); }
+.result-emoji { font-size:64px; margin-bottom:12px; }
+.result-title { font-size:23px; font-weight:800; color:#111827; margin-bottom:7px; }
+.result-score { font-size:50px; font-weight:800; color:#c8001d; margin-bottom:5px; }
+.result-sub   { font-size:14px; color:#666; margin-bottom:24px; }
 
-@media (max-width: 360px) {
-  .word-idn, .quiz-word, .typing-word { font-size: 28px; }
-  .word-eng { font-size: 18px; }
-}
+.hidden { display:none !important; }
+@media(max-width:360px){ .word-idn,.quiz-word,.typing-word{font-size:26px} .word-eng{font-size:17px} }
 </style>
 </head>
 <body>
-
 <header>
   <h1>🇮🇩 Indonesian Word Quiz</h1>
-  <p>Belajar Bahasa Indonesia · 101 words</p>
+  <p>Belajar Bahasa Indonesia · 1000 words · CEFR A1–B2</p>
 </header>
-
 <div class="container">
 
-  <!-- Mode tabs -->
+  <!-- mode tabs -->
   <div class="mode-tabs">
     <button class="mode-tab active" onclick="setMode('flashcard')">Flashcard</button>
     <button class="mode-tab" onclick="setMode('quiz')">4-Choice</button>
     <button class="mode-tab" onclick="setMode('typing')">Typing</button>
   </div>
 
-  <!-- Category filter -->
-  <div class="cat-filter" id="catFilter">
-    <button class="cat-btn active" onclick="setCategory(this,'all')">All</button>
-    <button class="cat-btn" onclick="setCategory(this,'greeting')">Greetings</button>
-    <button class="cat-btn" onclick="setCategory(this,'question')">Questions</button>
-    <button class="cat-btn" onclick="setCategory(this,'verb')">Verbs</button>
-    <button class="cat-btn" onclick="setCategory(this,'noun')">Nouns</button>
-    <button class="cat-btn" onclick="setCategory(this,'adjective')">Adjectives</button>
+  <!-- level filter -->
+  <div class="filter-block">
+    <span class="filter-label">Level</span>
+    <div class="lvl-pills">
+      <button class="lvl-pill active" onclick="setLevel(this,'all')">All</button>
+      <button class="lvl-pill" onclick="setLevel(this,'A1')">A1</button>
+      <button class="lvl-pill" onclick="setLevel(this,'A2')">A2</button>
+      <button class="lvl-pill" onclick="setLevel(this,'B1')">B1</button>
+      <button class="lvl-pill" onclick="setLevel(this,'B2')">B2</button>
+    </div>
   </div>
 
-  <!-- Progress -->
+  <!-- genre filter -->
+  <div class="filter-block">
+    <span class="filter-label">Genre</span>
+    <select class="genre-select" id="genreSelect" onchange="setGenre(this.value)">
+      <option value="all">All Genres</option>
+      <optgroup label="── Language ──">
+        <option value="greeting">Greeting</option>
+        <option value="pronoun">Pronoun</option>
+        <option value="number">Number</option>
+        <option value="question">Question Word</option>
+      </optgroup>
+      <optgroup label="── Grammar ──">
+        <option value="verb">Verb</option>
+        <option value="adjective">Adjective</option>
+        <option value="adverb">Adverb</option>
+        <option value="noun">General Noun</option>
+      </optgroup>
+      <optgroup label="── People & Life ──">
+        <option value="family">Family</option>
+        <option value="body">Body</option>
+        <option value="emotion">Emotion</option>
+        <option value="occupation">Occupation</option>
+      </optgroup>
+      <optgroup label="── Daily Life ──">
+        <option value="home">Home &amp; Living</option>
+        <option value="food">Food</option>
+        <option value="drink">Drink</option>
+        <option value="color">Color</option>
+        <option value="time">Time</option>
+        <option value="weather">Weather</option>
+      </optgroup>
+      <optgroup label="── World ──">
+        <option value="place">Place</option>
+        <option value="transport">Transport</option>
+        <option value="travel">Travel</option>
+        <option value="tourism">Tourism</option>
+        <option value="business">Business</option>
+        <option value="news">News &amp; Society</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <!-- progress -->
   <div class="progress-area">
+    <div class="filter-stats" id="filterStats">1000 words · All levels · All genres</div>
     <div class="progress-info">
-      <span class="progress-text" id="progressText">1 / 101</span>
+      <span class="progress-text" id="progressText">1 / 1000</span>
       <span class="score-badge" id="scoreText"></span>
     </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width:0%"></div>
-    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
   </div>
 
-  <!-- Action row -->
+  <!-- actions -->
   <div class="action-row">
     <button class="btn-sm" onclick="shuffleWords()">🔀 Shuffle</button>
     <button class="btn-sm" onclick="resetQuiz()">↩ Restart</button>
   </div>
 
-  <!-- ═══ FLASHCARD MODE ═══ -->
+  <!-- ═══ FLASHCARD ═══ -->
   <div id="flashcardMode">
     <div class="flash-card" id="flashCard" onclick="toggleCard()">
-      <span class="cat-badge" id="flashCat"></span>
+      <span class="cat-badge" id="flashCat"></span><span class="lvl-badge" id="flashLvl"></span>
       <div class="word-idn" id="flashWord"></div>
       <div class="tap-hint" id="flashHint">Tap to reveal</div>
       <div class="divider hidden" id="flashDiv"></div>
@@ -241,37 +243,44 @@ header p  { font-size: 12px; opacity: 0.82; margin-top: 3px; }
     </div>
   </div>
 
-  <!-- ═══ QUIZ MODE ═══ -->
+  <!-- ═══ QUIZ ═══ -->
   <div id="quizMode" class="hidden">
     <div class="quiz-question">
       <div class="quiz-label">What does this word mean?</div>
-      <span class="cat-badge" id="quizCat"></span>
+      <div><span class="cat-badge" id="quizCat"></span><span class="lvl-badge" id="quizLvl"></span></div>
       <div class="quiz-word" id="quizWord"></div>
     </div>
     <div class="quiz-options" id="quizOptions"></div>
     <button class="btn btn-primary btn-full hidden" id="quizNext" onclick="nextQuestion()">Next →</button>
   </div>
 
-  <!-- ═══ TYPING MODE ═══ -->
+  <!-- ═══ TYPING ═══ -->
   <div id="typingMode" class="hidden">
     <div class="typing-card">
-      <span class="cat-badge" id="typingCat"></span>
+      <div><span class="cat-badge" id="typingCat"></span><span class="lvl-badge" id="typingLvl"></span></div>
       <div class="typing-word" id="typingWord"></div>
       <div class="typing-sub">Type the English meaning</div>
       <input type="text" class="typing-input" id="typingInput"
-             placeholder="Type here..."
-             autocomplete="off" autocorrect="off"
+             placeholder="Type here..." autocomplete="off" autocorrect="off"
              autocapitalize="off" spellcheck="false">
       <div class="typing-fb" id="typingFb"></div>
     </div>
     <div class="nav-buttons">
-      <button class="btn btn-secondary" id="skipBtn"   onclick="typingSkip()">Skip</button>
-      <button class="btn btn-primary"   id="checkBtn"  onclick="typingSubmit()">Check ✓</button>
+      <button class="btn btn-secondary" id="skipBtn"  onclick="typingSkip()">Skip</button>
+      <button class="btn btn-primary"   id="checkBtn" onclick="typingSubmit()">Check ✓</button>
     </div>
     <button class="btn btn-primary btn-full hidden" id="typingNext" onclick="nextQuestion()">Next →</button>
   </div>
 
-  <!-- ═══ RESULT SCREEN ═══ -->
+  <!-- ═══ EMPTY ═══ -->
+  <div id="emptyState" class="hidden">
+    <div class="empty-state">
+      <div class="emoji">🔍</div>
+      <p>No words match this filter.<br>Try a different level or genre.</p>
+    </div>
+  </div>
+
+  <!-- ═══ RESULT ═══ -->
   <div id="resultScreen" class="hidden">
     <div class="result-screen">
       <div class="result-emoji" id="resEmoji">🎉</div>
@@ -285,481 +294,1375 @@ header p  { font-size: 12px; opacity: 0.82; margin-top: 3px; }
 </div><!-- /container -->
 
 <script>
-/* ══════════════════════════════════════════
-   WORD LIST  (101 words)
-══════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   WORD DATA  ~1000 words
+   {w:Indonesian, m:English, c:category, l:CEFR}
+════════════════════════════════════════ */
 const WORDS = [
-  // ── Greetings (14) ──
-  {w:"Selamat pagi",   m:"Good morning",       c:"greeting"},
-  {w:"Selamat siang",  m:"Good afternoon",     c:"greeting"},
-  {w:"Selamat sore",   m:"Good late afternoon",c:"greeting"},
-  {w:"Selamat malam",  m:"Good evening",       c:"greeting"},
-  {w:"Halo",           m:"Hello",              c:"greeting"},
-  {w:"Hai",            m:"Hi",                 c:"greeting"},
-  {w:"Terima kasih",   m:"Thank you",          c:"greeting"},
-  {w:"Sama-sama",      m:"You're welcome",     c:"greeting"},
-  {w:"Selamat tinggal",m:"Goodbye",            c:"greeting"},
-  {w:"Maaf",           m:"Sorry",              c:"greeting"},
-  {w:"Permisi",        m:"Excuse me",          c:"greeting"},
-  {w:"Tolong",         m:"Please",             c:"greeting"},
-  {w:"Ya",             m:"Yes",                c:"greeting"},
-  {w:"Tidak",          m:"No",                 c:"greeting"},
+/* ── GREETING ── */
+{w:"Selamat pagi",m:"Good morning",c:"greeting",l:"A1"},
+{w:"Selamat siang",m:"Good afternoon",c:"greeting",l:"A1"},
+{w:"Selamat sore",m:"Good late afternoon",c:"greeting",l:"A1"},
+{w:"Selamat malam",m:"Good evening",c:"greeting",l:"A1"},
+{w:"Halo",m:"Hello",c:"greeting",l:"A1"},
+{w:"Hai",m:"Hi",c:"greeting",l:"A1"},
+{w:"Terima kasih",m:"Thank you",c:"greeting",l:"A1"},
+{w:"Sama-sama",m:"You're welcome",c:"greeting",l:"A1"},
+{w:"Selamat tinggal",m:"Goodbye",c:"greeting",l:"A1"},
+{w:"Maaf",m:"Sorry",c:"greeting",l:"A1"},
+{w:"Permisi",m:"Excuse me",c:"greeting",l:"A1"},
+{w:"Tolong",m:"Please",c:"greeting",l:"A1"},
+{w:"Ya",m:"Yes",c:"greeting",l:"A1"},
+{w:"Tidak",m:"No",c:"greeting",l:"A1"},
+{w:"Selamat datang",m:"Welcome",c:"greeting",l:"A1"},
+{w:"Sampai jumpa",m:"See you later",c:"greeting",l:"A1"},
+{w:"Bagaimana kabar?",m:"How are you?",c:"greeting",l:"A2"},
+{w:"Baik-baik saja",m:"I'm fine",c:"greeting",l:"A2"},
+{w:"Selamat jalan",m:"Bon voyage",c:"greeting",l:"A2"},
+{w:"Senang bertemu",m:"Nice to meet you",c:"greeting",l:"A2"},
 
-  // ── Question words (9) ──
-  {w:"Apa",       m:"What",         c:"question"},
-  {w:"Siapa",     m:"Who",          c:"question"},
-  {w:"Di mana",   m:"Where",        c:"question"},
-  {w:"Kapan",     m:"When",         c:"question"},
-  {w:"Mengapa",   m:"Why",          c:"question"},
-  {w:"Kenapa",    m:"Why (informal)",c:"question"},
-  {w:"Bagaimana", m:"How",          c:"question"},
-  {w:"Berapa",    m:"How many",     c:"question"},
-  {w:"Mana",      m:"Which",        c:"question"},
+/* ── PRONOUN ── */
+{w:"saya",m:"I (formal)",c:"pronoun",l:"A1"},
+{w:"aku",m:"I (informal)",c:"pronoun",l:"A1"},
+{w:"kamu",m:"you (informal)",c:"pronoun",l:"A1"},
+{w:"Anda",m:"you (formal)",c:"pronoun",l:"A1"},
+{w:"dia",m:"he / she",c:"pronoun",l:"A1"},
+{w:"mereka",m:"they",c:"pronoun",l:"A1"},
+{w:"kita",m:"we (inclusive)",c:"pronoun",l:"A1"},
+{w:"kami",m:"we (exclusive)",c:"pronoun",l:"A1"},
+{w:"ini",m:"this",c:"pronoun",l:"A1"},
+{w:"itu",m:"that",c:"pronoun",l:"A1"},
+{w:"kalian",m:"you all",c:"pronoun",l:"A2"},
+{w:"beliau",m:"he / she (honorific)",c:"pronoun",l:"A2"},
+{w:"sendiri",m:"alone / by oneself",c:"pronoun",l:"A2"},
+{w:"masing-masing",m:"each / respectively",c:"pronoun",l:"A2"},
+{w:"satu sama lain",m:"each other",c:"pronoun",l:"A2"},
 
-  // ── Verbs (30) ──
-  {w:"makan",      m:"to eat",        c:"verb"},
-  {w:"minum",      m:"to drink",      c:"verb"},
-  {w:"pergi",      m:"to go",         c:"verb"},
-  {w:"datang",     m:"to come",       c:"verb"},
-  {w:"tidur",      m:"to sleep",      c:"verb"},
-  {w:"bangun",     m:"to wake up",    c:"verb"},
-  {w:"bekerja",    m:"to work",       c:"verb"},
-  {w:"belajar",    m:"to study",      c:"verb"},
-  {w:"membaca",    m:"to read",       c:"verb"},
-  {w:"menulis",    m:"to write",      c:"verb"},
-  {w:"berbicara",  m:"to speak",      c:"verb"},
-  {w:"mendengar",  m:"to listen",     c:"verb"},
-  {w:"melihat",    m:"to see",        c:"verb"},
-  {w:"membeli",    m:"to buy",        c:"verb"},
-  {w:"menjual",    m:"to sell",       c:"verb"},
-  {w:"membawa",    m:"to bring",      c:"verb"},
-  {w:"mencari",    m:"to search",     c:"verb"},
-  {w:"menemukan",  m:"to find",       c:"verb"},
-  {w:"bermain",    m:"to play",       c:"verb"},
-  {w:"berlari",    m:"to run",        c:"verb"},
-  {w:"berjalan",   m:"to walk",       c:"verb"},
-  {w:"memasak",    m:"to cook",       c:"verb"},
-  {w:"mencuci",    m:"to wash",       c:"verb"},
-  {w:"duduk",      m:"to sit",        c:"verb"},
-  {w:"berdiri",    m:"to stand",      c:"verb"},
-  {w:"tahu",       m:"to know",       c:"verb"},
-  {w:"mau",        m:"to want",       c:"verb"},
-  {w:"bisa",       m:"to be able to", c:"verb"},
-  {w:"suka",       m:"to like",       c:"verb"},
-  {w:"cinta",      m:"to love",       c:"verb"},
+/* ── NUMBER ── */
+{w:"nol",m:"zero",c:"number",l:"A1"},
+{w:"satu",m:"one",c:"number",l:"A1"},
+{w:"dua",m:"two",c:"number",l:"A1"},
+{w:"tiga",m:"three",c:"number",l:"A1"},
+{w:"empat",m:"four",c:"number",l:"A1"},
+{w:"lima",m:"five",c:"number",l:"A1"},
+{w:"enam",m:"six",c:"number",l:"A1"},
+{w:"tujuh",m:"seven",c:"number",l:"A1"},
+{w:"delapan",m:"eight",c:"number",l:"A1"},
+{w:"sembilan",m:"nine",c:"number",l:"A1"},
+{w:"sepuluh",m:"ten",c:"number",l:"A1"},
+{w:"sebelas",m:"eleven",c:"number",l:"A1"},
+{w:"dua belas",m:"twelve",c:"number",l:"A1"},
+{w:"dua puluh",m:"twenty",c:"number",l:"A1"},
+{w:"seratus",m:"one hundred",c:"number",l:"A1"},
+{w:"seribu",m:"one thousand",c:"number",l:"A1"},
+{w:"pertama",m:"first",c:"number",l:"A2"},
+{w:"kedua",m:"second",c:"number",l:"A2"},
+{w:"setengah",m:"half",c:"number",l:"A2"},
+{w:"sejuta",m:"one million",c:"number",l:"A2"},
 
-  // ── Nouns (27) ──
-  {w:"rumah",    m:"house",       c:"noun"},
-  {w:"sekolah",  m:"school",      c:"noun"},
-  {w:"kantor",   m:"office",      c:"noun"},
-  {w:"pasar",    m:"market",      c:"noun"},
-  {w:"toko",     m:"shop",        c:"noun"},
-  {w:"restoran", m:"restaurant",  c:"noun"},
-  {w:"makanan",  m:"food",        c:"noun"},
-  {w:"minuman",  m:"drink",       c:"noun"},
-  {w:"air",      m:"water",       c:"noun"},
-  {w:"nasi",     m:"rice",        c:"noun"},
-  {w:"buku",     m:"book",        c:"noun"},
-  {w:"meja",     m:"table",       c:"noun"},
-  {w:"kursi",    m:"chair",       c:"noun"},
-  {w:"pintu",    m:"door",        c:"noun"},
-  {w:"mobil",    m:"car",         c:"noun"},
-  {w:"uang",     m:"money",       c:"noun"},
-  {w:"waktu",    m:"time",        c:"noun"},
-  {w:"hari",     m:"day",         c:"noun"},
-  {w:"orang",    m:"person",      c:"noun"},
-  {w:"anak",     m:"child",       c:"noun"},
-  {w:"keluarga", m:"family",      c:"noun"},
-  {w:"teman",    m:"friend",      c:"noun"},
-  {w:"ibu",      m:"mother",      c:"noun"},
-  {w:"ayah",     m:"father",      c:"noun"},
-  {w:"nama",     m:"name",        c:"noun"},
-  {w:"kota",     m:"city",        c:"noun"},
-  {w:"jalan",    m:"road",        c:"noun"},
+/* ── QUESTION ── */
+{w:"Apa",m:"What",c:"question",l:"A1"},
+{w:"Siapa",m:"Who",c:"question",l:"A1"},
+{w:"Di mana",m:"Where",c:"question",l:"A1"},
+{w:"Kapan",m:"When",c:"question",l:"A1"},
+{w:"Mengapa",m:"Why",c:"question",l:"A1"},
+{w:"Kenapa",m:"Why (informal)",c:"question",l:"A1"},
+{w:"Bagaimana",m:"How",c:"question",l:"A1"},
+{w:"Berapa",m:"How many / How much",c:"question",l:"A1"},
+{w:"Mana",m:"Which",c:"question",l:"A1"},
 
-  // ── Adjectives (21) ──
-  {w:"besar",   m:"big",       c:"adjective"},
-  {w:"kecil",   m:"small",     c:"adjective"},
-  {w:"tinggi",  m:"tall",      c:"adjective"},
-  {w:"pendek",  m:"short",     c:"adjective"},
-  {w:"baik",    m:"good",      c:"adjective"},
-  {w:"buruk",   m:"bad",       c:"adjective"},
-  {w:"cantik",  m:"beautiful", c:"adjective"},
-  {w:"pintar",  m:"smart",     c:"adjective"},
-  {w:"baru",    m:"new",       c:"adjective"},
-  {w:"lama",    m:"old",       c:"adjective"},
-  {w:"mahal",   m:"expensive", c:"adjective"},
-  {w:"murah",   m:"cheap",     c:"adjective"},
-  {w:"panas",   m:"hot",       c:"adjective"},
-  {w:"dingin",  m:"cold",      c:"adjective"},
-  {w:"cepat",   m:"fast",      c:"adjective"},
-  {w:"lambat",  m:"slow",      c:"adjective"},
-  {w:"banyak",  m:"many",      c:"adjective"},
-  {w:"sedikit", m:"few",       c:"adjective"},
-  {w:"senang",  m:"happy",     c:"adjective"},
-  {w:"sedih",   m:"sad",       c:"adjective"},
-  {w:"lelah",   m:"tired",     c:"adjective"},
-];
+/* ── COLOR ── */
+{w:"merah",m:"red",c:"color",l:"A1"},
+{w:"putih",m:"white",c:"color",l:"A1"},
+{w:"hitam",m:"black",c:"color",l:"A1"},
+{w:"biru",m:"blue",c:"color",l:"A1"},
+{w:"hijau",m:"green",c:"color",l:"A1"},
+{w:"kuning",m:"yellow",c:"color",l:"A1"},
+{w:"oranye",m:"orange",c:"color",l:"A1"},
+{w:"ungu",m:"purple",c:"color",l:"A1"},
+{w:"coklat",m:"brown",c:"color",l:"A1"},
+{w:"abu-abu",m:"gray",c:"color",l:"A1"},
+{w:"merah muda",m:"pink",c:"color",l:"A1"},
+{w:"biru tua",m:"dark blue / navy",c:"color",l:"A2"},
+{w:"emas",m:"gold",c:"color",l:"A2"},
+{w:"perak",m:"silver",c:"color",l:"A2"},
+{w:"krem",m:"cream / beige",c:"color",l:"A2"},
 
-/* ══════════════════════════════════════════
+/* ── FAMILY ── */
+{w:"ibu",m:"mother",c:"family",l:"A1"},
+{w:"ayah",m:"father",c:"family",l:"A1"},
+{w:"kakak",m:"older sibling",c:"family",l:"A1"},
+{w:"adik",m:"younger sibling",c:"family",l:"A1"},
+{w:"anak",m:"child",c:"family",l:"A1"},
+{w:"suami",m:"husband",c:"family",l:"A1"},
+{w:"istri",m:"wife",c:"family",l:"A1"},
+{w:"kakek",m:"grandfather",c:"family",l:"A1"},
+{w:"nenek",m:"grandmother",c:"family",l:"A1"},
+{w:"paman",m:"uncle",c:"family",l:"A1"},
+{w:"bibi",m:"aunt",c:"family",l:"A1"},
+{w:"sepupu",m:"cousin",c:"family",l:"A1"},
+{w:"saudara",m:"sibling / relative",c:"family",l:"A1"},
+{w:"keluarga",m:"family",c:"family",l:"A1"},
+{w:"orang tua",m:"parents",c:"family",l:"A1"},
+{w:"cucu",m:"grandchild",c:"family",l:"A2"},
+{w:"keponakan",m:"nephew / niece",c:"family",l:"A2"},
+{w:"mertua",m:"parent-in-law",c:"family",l:"A2"},
+{w:"menantu",m:"son / daughter-in-law",c:"family",l:"A2"},
+{w:"kakak ipar",m:"brother / sister-in-law",c:"family",l:"A2"},
+{w:"saudara tiri",m:"step-sibling",c:"family",l:"A2"},
+{w:"anak sulung",m:"eldest child",c:"family",l:"B1"},
+
+/* ── BODY ── */
+{w:"kepala",m:"head",c:"body",l:"A1"},
+{w:"mata",m:"eye",c:"body",l:"A1"},
+{w:"hidung",m:"nose",c:"body",l:"A1"},
+{w:"mulut",m:"mouth",c:"body",l:"A1"},
+{w:"telinga",m:"ear",c:"body",l:"A1"},
+{w:"tangan",m:"hand",c:"body",l:"A1"},
+{w:"kaki",m:"foot / leg",c:"body",l:"A1"},
+{w:"jari",m:"finger",c:"body",l:"A1"},
+{w:"rambut",m:"hair",c:"body",l:"A1"},
+{w:"gigi",m:"tooth / teeth",c:"body",l:"A1"},
+{w:"leher",m:"neck",c:"body",l:"A2"},
+{w:"bahu",m:"shoulder",c:"body",l:"A2"},
+{w:"dada",m:"chest",c:"body",l:"A2"},
+{w:"perut",m:"stomach / belly",c:"body",l:"A2"},
+{w:"punggung",m:"back",c:"body",l:"A2"},
+{w:"lutut",m:"knee",c:"body",l:"A2"},
+{w:"siku",m:"elbow",c:"body",l:"A2"},
+{w:"wajah",m:"face",c:"body",l:"A2"},
+{w:"bibir",m:"lips",c:"body",l:"A2"},
+{w:"lidah",m:"tongue",c:"body",l:"A2"},
+{w:"paru-paru",m:"lung",c:"body",l:"B1"},
+{w:"jantung",m:"heart",c:"body",l:"B1"},
+{w:"hati",m:"liver",c:"body",l:"B1"},
+{w:"otak",m:"brain",c:"body",l:"B1"},
+{w:"tulang",m:"bone",c:"body",l:"B1"},
+{w:"kulit",m:"skin",c:"body",l:"B1"},
+{w:"darah",m:"blood",c:"body",l:"B1"},
+{w:"otot",m:"muscle",c:"body",l:"B1"},
+{w:"jempol",m:"thumb",c:"body",l:"B1"},
+{w:"kuku",m:"nail / claw",c:"body",l:"B1"},
+{w:"ginjal",m:"kidney",c:"body",l:"B2"},
+{w:"usus",m:"intestine",c:"body",l:"B2"},
+{w:"pankreas",m:"pancreas",c:"body",l:"B2"},
+{w:"saraf",m:"nerve",c:"body",l:"B2"},
+{w:"pembuluh darah",m:"blood vessel",c:"body",l:"B2"},
+{w:"tengkorak",m:"skull",c:"body",l:"B2"},
+{w:"tulang belakang",m:"spine",c:"body",l:"B2"},
+{w:"kelenjar",m:"gland",c:"body",l:"B2"},
+{w:"limpa",m:"spleen",c:"body",l:"B2"},
+{w:"pergelangan",m:"wrist / ankle",c:"body",l:"B2"},
+
+/* ── HOME ── */
+{w:"rumah",m:"house / home",c:"home",l:"A1"},
+{w:"kamar",m:"room",c:"home",l:"A1"},
+{w:"dapur",m:"kitchen",c:"home",l:"A1"},
+{w:"kamar mandi",m:"bathroom",c:"home",l:"A1"},
+{w:"pintu",m:"door",c:"home",l:"A1"},
+{w:"jendela",m:"window",c:"home",l:"A1"},
+{w:"meja",m:"table",c:"home",l:"A1"},
+{w:"kursi",m:"chair",c:"home",l:"A1"},
+{w:"tempat tidur",m:"bed",c:"home",l:"A1"},
+{w:"lemari",m:"wardrobe / cabinet",c:"home",l:"A1"},
+{w:"lantai",m:"floor",c:"home",l:"A2"},
+{w:"atap",m:"roof",c:"home",l:"A2"},
+{w:"dinding",m:"wall",c:"home",l:"A2"},
+{w:"tangga",m:"stairs",c:"home",l:"A2"},
+{w:"ruang tamu",m:"living room",c:"home",l:"A2"},
+{w:"kamar tidur",m:"bedroom",c:"home",l:"A2"},
+{w:"garasi",m:"garage",c:"home",l:"A2"},
+{w:"halaman",m:"yard / garden",c:"home",l:"A2"},
+{w:"sofa",m:"sofa",c:"home",l:"A2"},
+{w:"kulkas",m:"refrigerator",c:"home",l:"A2"},
+{w:"kompor",m:"stove",c:"home",l:"A2"},
+{w:"kunci",m:"key",c:"home",l:"A2"},
+{w:"lampu",m:"lamp / light",c:"home",l:"A2"},
+{w:"kipas angin",m:"fan",c:"home",l:"A2"},
+{w:"wastafel",m:"sink",c:"home",l:"A2"},
+{w:"AC",m:"air conditioner",c:"home",l:"B1"},
+{w:"mesin cuci",m:"washing machine",c:"home",l:"B1"},
+{w:"televisi",m:"television",c:"home",l:"B1"},
+{w:"pagar",m:"fence",c:"home",l:"B1"},
+{w:"balkon",m:"balcony",c:"home",l:"B1"},
+{w:"teras",m:"terrace / porch",c:"home",l:"B1"},
+{w:"ruang makan",m:"dining room",c:"home",l:"B1"},
+{w:"bantal",m:"pillow",c:"home",l:"B1"},
+{w:"selimut",m:"blanket",c:"home",l:"B1"},
+{w:"cermin",m:"mirror",c:"home",l:"B1"},
+{w:"apartemen",m:"apartment",c:"home",l:"B2"},
+{w:"vila",m:"villa",c:"home",l:"B2"},
+{w:"renovasi",m:"renovation",c:"home",l:"B2"},
+{w:"furnitur",m:"furniture",c:"home",l:"B2"},
+{w:"denah",m:"floor plan",c:"home",l:"B2"},
+
+/* ── FOOD ── */
+{w:"nasi",m:"rice (cooked)",c:"food",l:"A1"},
+{w:"roti",m:"bread",c:"food",l:"A1"},
+{w:"telur",m:"egg",c:"food",l:"A1"},
+{w:"daging",m:"meat",c:"food",l:"A1"},
+{w:"ikan",m:"fish",c:"food",l:"A1"},
+{w:"ayam",m:"chicken",c:"food",l:"A1"},
+{w:"sayur",m:"vegetable",c:"food",l:"A1"},
+{w:"buah",m:"fruit",c:"food",l:"A1"},
+{w:"gula",m:"sugar",c:"food",l:"A1"},
+{w:"garam",m:"salt",c:"food",l:"A1"},
+{w:"makanan",m:"food",c:"food",l:"A1"},
+{w:"mi",m:"noodle",c:"food",l:"A2"},
+{w:"sup",m:"soup",c:"food",l:"A2"},
+{w:"sate",m:"satay",c:"food",l:"A2"},
+{w:"nasi goreng",m:"fried rice",c:"food",l:"A2"},
+{w:"mi goreng",m:"fried noodles",c:"food",l:"A2"},
+{w:"tempe",m:"tempeh",c:"food",l:"A2"},
+{w:"tahu",m:"tofu",c:"food",l:"A2"},
+{w:"sambal",m:"chili sauce",c:"food",l:"A2"},
+{w:"kerupuk",m:"crackers",c:"food",l:"A2"},
+{w:"pisang",m:"banana",c:"food",l:"A2"},
+{w:"mangga",m:"mango",c:"food",l:"A2"},
+{w:"jeruk",m:"orange",c:"food",l:"A2"},
+{w:"apel",m:"apple",c:"food",l:"A2"},
+{w:"semangka",m:"watermelon",c:"food",l:"A2"},
+{w:"anggur",m:"grape",c:"food",l:"A2"},
+{w:"kentang",m:"potato",c:"food",l:"A2"},
+{w:"tomat",m:"tomato",c:"food",l:"A2"},
+{w:"bawang",m:"onion",c:"food",l:"A2"},
+{w:"cabai",m:"chili pepper",c:"food",l:"A2"},
+{w:"keju",m:"cheese",c:"food",l:"A2"},
+{w:"mentega",m:"butter",c:"food",l:"A2"},
+{w:"tepung",m:"flour",c:"food",l:"A2"},
+{w:"minyak",m:"oil",c:"food",l:"A2"},
+{w:"kecap",m:"soy sauce",c:"food",l:"A2"},
+{w:"santan",m:"coconut milk",c:"food",l:"A2"},
+{w:"bakso",m:"meatball soup",c:"food",l:"B1"},
+{w:"gado-gado",m:"peanut sauce salad",c:"food",l:"B1"},
+{w:"soto",m:"traditional broth soup",c:"food",l:"B1"},
+{w:"rendang",m:"beef rendang",c:"food",l:"B1"},
+{w:"opor ayam",m:"chicken in coconut milk",c:"food",l:"B1"},
+{w:"gudeg",m:"jackfruit stew",c:"food",l:"B1"},
+{w:"pempek",m:"fish cake",c:"food",l:"B1"},
+{w:"nasi uduk",m:"coconut steamed rice",c:"food",l:"B1"},
+{w:"lontong",m:"rice cake",c:"food",l:"B1"},
+{w:"rawon",m:"black beef broth",c:"food",l:"B1"},
+{w:"martabak",m:"stuffed pancake",c:"food",l:"B1"},
+{w:"klepon",m:"glutinous rice cake",c:"food",l:"B1"},
+{w:"rempah-rempah",m:"spices",c:"food",l:"B2"},
+{w:"bumbu",m:"seasoning / spice mix",c:"food",l:"B2"},
+{w:"fermentasi",m:"fermentation",c:"food",l:"B2"},
+{w:"kukus",m:"steamed",c:"food",l:"B2"},
+{w:"rebus",m:"boiled",c:"food",l:"B2"},
+{w:"bakar",m:"grilled / roasted",c:"food",l:"B2"},
+{w:"mentah",m:"raw",c:"food",l:"B2"},
+{w:"matang",m:"ripe / cooked",c:"food",l:"B2"},
+{w:"halal",m:"halal",c:"food",l:"B1"},
+{w:"vegetarian",m:"vegetarian",c:"food",l:"B1"},
+{w:"kolak",m:"sweet coconut dessert",c:"food",l:"B1"},
+{w:"rujak",m:"spicy fruit salad",c:"food",l:"B1"},
+{w:"pecel",m:"peanut sauce vegetables",c:"food",l:"B1"},
+{w:"nasi padang",m:"Padang rice",c:"food",l:"B1"},
+{w:"soto ayam",m:"chicken broth soup",c:"food",l:"B1"},
+
+/* ── DRINK ── */
+{w:"air",m:"water",c:"drink",l:"A1"},
+{w:"susu",m:"milk",c:"drink",l:"A1"},
+{w:"jus",m:"juice",c:"drink",l:"A1"},
+{w:"teh",m:"tea",c:"drink",l:"A1"},
+{w:"kopi",m:"coffee",c:"drink",l:"A1"},
+{w:"minuman",m:"drink / beverage",c:"drink",l:"A1"},
+{w:"air mineral",m:"mineral water",c:"drink",l:"A2"},
+{w:"es teh",m:"iced tea",c:"drink",l:"A2"},
+{w:"es kopi",m:"iced coffee",c:"drink",l:"A2"},
+{w:"sirup",m:"cordial / syrup",c:"drink",l:"A2"},
+{w:"minuman ringan",m:"soft drink",c:"drink",l:"A2"},
+{w:"bir",m:"beer",c:"drink",l:"A2"},
+{w:"jus jeruk",m:"orange juice",c:"drink",l:"A2"},
+{w:"susu coklat",m:"chocolate milk",c:"drink",l:"A2"},
+{w:"air kelapa",m:"coconut water",c:"drink",l:"A2"},
+{w:"minuman beralkohol",m:"alcoholic drink",c:"drink",l:"B1"},
+{w:"minuman bersoda",m:"carbonated drink",c:"drink",l:"B1"},
+{w:"kopi susu",m:"coffee with milk",c:"drink",l:"B1"},
+{w:"jamu",m:"herbal medicine drink",c:"drink",l:"B1"},
+{w:"wedang jahe",m:"ginger hot drink",c:"drink",l:"B1"},
+
+/* ── TRANSPORT ── */
+{w:"mobil",m:"car",c:"transport",l:"A1"},
+{w:"motor",m:"motorcycle",c:"transport",l:"A1"},
+{w:"bus",m:"bus",c:"transport",l:"A1"},
+{w:"kereta",m:"train",c:"transport",l:"A1"},
+{w:"pesawat",m:"airplane",c:"transport",l:"A1"},
+{w:"kapal",m:"ship",c:"transport",l:"A1"},
+{w:"taksi",m:"taxi",c:"transport",l:"A1"},
+{w:"sepeda",m:"bicycle",c:"transport",l:"A1"},
+{w:"ojek",m:"motorcycle taxi",c:"transport",l:"A2"},
+{w:"becak",m:"pedicab",c:"transport",l:"A2"},
+{w:"kereta api",m:"railway train",c:"transport",l:"A2"},
+{w:"kapal laut",m:"ocean ship",c:"transport",l:"A2"},
+{w:"feri",m:"ferry",c:"transport",l:"A2"},
+{w:"stasiun",m:"train station",c:"transport",l:"A2"},
+{w:"bandara",m:"airport",c:"transport",l:"A2"},
+{w:"pelabuhan",m:"harbor / port",c:"transport",l:"A2"},
+{w:"halte",m:"bus stop",c:"transport",l:"A2"},
+{w:"tiket",m:"ticket",c:"transport",l:"A2"},
+{w:"bensin",m:"gasoline",c:"transport",l:"A2"},
+{w:"MRT",m:"mass rapid transit",c:"transport",l:"B1"},
+{w:"angkutan umum",m:"public transport",c:"transport",l:"B1"},
+{w:"kemacetan",m:"traffic jam",c:"transport",l:"B1"},
+{w:"parkir",m:"parking",c:"transport",l:"B1"},
+{w:"penerbangan",m:"flight",c:"transport",l:"B1"},
+{w:"kargo",m:"cargo",c:"transport",l:"B1"},
+{w:"rute",m:"route",c:"transport",l:"B1"},
+{w:"jadwal keberangkatan",m:"departure schedule",c:"transport",l:"B1"},
+{w:"kapal pesiar",m:"cruise ship",c:"transport",l:"B2"},
+{w:"helikopter",m:"helicopter",c:"transport",l:"B2"},
+{w:"kereta cepat",m:"high-speed train",c:"transport",l:"B2"},
+
+/* ── OCCUPATION ── */
+{w:"guru",m:"teacher",c:"occupation",l:"A1"},
+{w:"dokter",m:"doctor",c:"occupation",l:"A1"},
+{w:"polisi",m:"police officer",c:"occupation",l:"A1"},
+{w:"tentara",m:"soldier",c:"occupation",l:"A1"},
+{w:"petani",m:"farmer",c:"occupation",l:"A1"},
+{w:"perawat",m:"nurse",c:"occupation",l:"A2"},
+{w:"insinyur",m:"engineer",c:"occupation",l:"A2"},
+{w:"arsitek",m:"architect",c:"occupation",l:"A2"},
+{w:"pilot",m:"pilot",c:"occupation",l:"A2"},
+{w:"sopir",m:"driver",c:"occupation",l:"A2"},
+{w:"pedagang",m:"trader / merchant",c:"occupation",l:"A2"},
+{w:"koki",m:"chef / cook",c:"occupation",l:"A2"},
+{w:"pramusaji",m:"waiter / waitress",c:"occupation",l:"A2"},
+{w:"kasir",m:"cashier",c:"occupation",l:"A2"},
+{w:"satpam",m:"security guard",c:"occupation",l:"A2"},
+{w:"direktur",m:"director",c:"occupation",l:"A2"},
+{w:"manajer",m:"manager",c:"occupation",l:"A2"},
+{w:"sekretaris",m:"secretary",c:"occupation",l:"A2"},
+{w:"akuntan",m:"accountant",c:"occupation",l:"A2"},
+{w:"pengacara",m:"lawyer",c:"occupation",l:"A2"},
+{w:"hakim",m:"judge",c:"occupation",l:"B1"},
+{w:"jaksa",m:"prosecutor",c:"occupation",l:"B1"},
+{w:"dokter gigi",m:"dentist",c:"occupation",l:"B1"},
+{w:"apoteker",m:"pharmacist",c:"occupation",l:"B1"},
+{w:"bidan",m:"midwife",c:"occupation",l:"B1"},
+{w:"psikiater",m:"psychiatrist",c:"occupation",l:"B1"},
+{w:"fotografer",m:"photographer",c:"occupation",l:"B1"},
+{w:"desainer",m:"designer",c:"occupation",l:"B1"},
+{w:"programmer",m:"programmer",c:"occupation",l:"B1"},
+{w:"jurnalis",m:"journalist",c:"occupation",l:"B1"},
+{w:"wartawan",m:"reporter",c:"occupation",l:"B1"},
+{w:"politisi",m:"politician",c:"occupation",l:"B1"},
+{w:"ilmuwan",m:"scientist",c:"occupation",l:"B1"},
+{w:"peneliti",m:"researcher",c:"occupation",l:"B1"},
+{w:"dosen",m:"university lecturer",c:"occupation",l:"B1"},
+{w:"seniman",m:"artist",c:"occupation",l:"B1"},
+{w:"musisi",m:"musician",c:"occupation",l:"B1"},
+{w:"aktor",m:"actor",c:"occupation",l:"B1"},
+{w:"notaris",m:"notary",c:"occupation",l:"B2"},
+{w:"diplomat",m:"diplomat",c:"occupation",l:"B2"},
+{w:"auditor",m:"auditor",c:"occupation",l:"B2"},
+{w:"konsultan",m:"consultant",c:"occupation",l:"B2"},
+{w:"wirausaha",m:"entrepreneur",c:"occupation",l:"B2"},
+{w:"analis",m:"analyst",c:"occupation",l:"B2"},
+{w:"mediator",m:"mediator",c:"occupation",l:"B2"},
+{w:"arkeolog",m:"archaeologist",c:"occupation",l:"B2"},
+{w:"astronot",m:"astronaut",c:"occupation",l:"B2"},
+{w:"ekonom",m:"economist",c:"occupation",l:"B2"},
+{w:"sosiolog",m:"sociologist",c:"occupation",l:"B2"},
+
+/* ── WEATHER ── */
+{w:"hujan",m:"rain",c:"weather",l:"A1"},
+{w:"panas",m:"hot",c:"weather",l:"A1"},
+{w:"dingin",m:"cold",c:"weather",l:"A1"},
+{w:"angin",m:"wind",c:"weather",l:"A1"},
+{w:"matahari",m:"sun",c:"weather",l:"A1"},
+{w:"mendung",m:"cloudy",c:"weather",l:"A2"},
+{w:"banjir",m:"flood",c:"weather",l:"A2"},
+{w:"kemarau",m:"dry season",c:"weather",l:"A2"},
+{w:"musim hujan",m:"rainy season",c:"weather",l:"A2"},
+{w:"petir",m:"thunder / lightning",c:"weather",l:"A2"},
+{w:"badai",m:"storm",c:"weather",l:"A2"},
+{w:"kabut",m:"fog / mist",c:"weather",l:"A2"},
+{w:"salju",m:"snow",c:"weather",l:"A2"},
+{w:"embun",m:"dew",c:"weather",l:"A2"},
+{w:"gerimis",m:"drizzle",c:"weather",l:"A2"},
+{w:"kelembapan",m:"humidity",c:"weather",l:"B1"},
+{w:"suhu",m:"temperature",c:"weather",l:"B1"},
+{w:"derajat",m:"degree",c:"weather",l:"B1"},
+{w:"prakiraan cuaca",m:"weather forecast",c:"weather",l:"B1"},
+{w:"angin kencang",m:"strong wind",c:"weather",l:"B1"},
+{w:"hujan lebat",m:"heavy rain",c:"weather",l:"B1"},
+{w:"tornado",m:"tornado",c:"weather",l:"B1"},
+{w:"gempa bumi",m:"earthquake",c:"weather",l:"B1"},
+{w:"tsunami",m:"tsunami",c:"weather",l:"B1"},
+{w:"gunung meletus",m:"volcanic eruption",c:"weather",l:"B1"},
+{w:"perubahan iklim",m:"climate change",c:"weather",l:"B2"},
+{w:"pemanasan global",m:"global warming",c:"weather",l:"B2"},
+{w:"cuaca ekstrem",m:"extreme weather",c:"weather",l:"B2"},
+{w:"El Niño",m:"El Niño",c:"weather",l:"B2"},
+{w:"musim kering",m:"extended dry season",c:"weather",l:"B2"},
+
+/* ── TIME ── */
+{w:"hari",m:"day",c:"time",l:"A1"},
+{w:"malam",m:"night",c:"time",l:"A1"},
+{w:"pagi",m:"morning",c:"time",l:"A1"},
+{w:"siang",m:"noon / daytime",c:"time",l:"A1"},
+{w:"sore",m:"late afternoon",c:"time",l:"A1"},
+{w:"sekarang",m:"now",c:"time",l:"A1"},
+{w:"kemarin",m:"yesterday",c:"time",l:"A1"},
+{w:"besok",m:"tomorrow",c:"time",l:"A1"},
+{w:"minggu",m:"week",c:"time",l:"A1"},
+{w:"bulan",m:"month",c:"time",l:"A1"},
+{w:"tahun",m:"year",c:"time",l:"A1"},
+{w:"jam",m:"hour / clock",c:"time",l:"A2"},
+{w:"menit",m:"minute",c:"time",l:"A2"},
+{w:"detik",m:"second",c:"time",l:"A2"},
+{w:"hari ini",m:"today",c:"time",l:"A2"},
+{w:"nanti",m:"later",c:"time",l:"A2"},
+{w:"sudah",m:"already",c:"time",l:"A2"},
+{w:"belum",m:"not yet",c:"time",l:"A2"},
+{w:"segera",m:"soon",c:"time",l:"A2"},
+{w:"kadang-kadang",m:"sometimes",c:"time",l:"A2"},
+{w:"selalu",m:"always",c:"time",l:"A2"},
+{w:"sering",m:"often",c:"time",l:"A2"},
+{w:"lusa",m:"day after tomorrow",c:"time",l:"A2"},
+{w:"terlambat",m:"late",c:"time",l:"B1"},
+{w:"tepat waktu",m:"on time",c:"time",l:"B1"},
+{w:"waktu luang",m:"free time",c:"time",l:"B1"},
+{w:"jadwal",m:"schedule",c:"time",l:"B1"},
+{w:"tenggat waktu",m:"deadline",c:"time",l:"B1"},
+{w:"semester",m:"semester",c:"time",l:"B1"},
+{w:"dekade",m:"decade",c:"time",l:"B1"},
+{w:"abad",m:"century",c:"time",l:"B1"},
+{w:"durasi",m:"duration",c:"time",l:"B2"},
+{w:"kronologi",m:"chronology",c:"time",l:"B2"},
+{w:"sementara",m:"temporary / meanwhile",c:"time",l:"B2"},
+{w:"sesekali",m:"occasionally",c:"time",l:"B2"},
+{w:"berkelanjutan",m:"ongoing / sustainable",c:"time",l:"B2"},
+{w:"periode",m:"period",c:"time",l:"B2"},
+{w:"interval",m:"interval",c:"time",l:"B2"},
+{w:"era",m:"era",c:"time",l:"B2"},
+{w:"waktu",m:"time",c:"time",l:"A1"},
+{w:"lebih awal",m:"early / ahead of time",c:"time",l:"B1"},
+
+/* ── PLACE ── */
+{w:"sekolah",m:"school",c:"place",l:"A1"},
+{w:"kantor",m:"office",c:"place",l:"A1"},
+{w:"pasar",m:"market",c:"place",l:"A1"},
+{w:"toko",m:"shop",c:"place",l:"A1"},
+{w:"restoran",m:"restaurant",c:"place",l:"A1"},
+{w:"rumah sakit",m:"hospital",c:"place",l:"A1"},
+{w:"bank",m:"bank",c:"place",l:"A1"},
+{w:"hotel",m:"hotel",c:"place",l:"A1"},
+{w:"jalan",m:"road / street",c:"place",l:"A1"},
+{w:"kota",m:"city",c:"place",l:"A1"},
+{w:"desa",m:"village",c:"place",l:"A2"},
+{w:"pantai",m:"beach",c:"place",l:"A2"},
+{w:"gunung",m:"mountain",c:"place",l:"A2"},
+{w:"hutan",m:"forest",c:"place",l:"A2"},
+{w:"sungai",m:"river",c:"place",l:"A2"},
+{w:"danau",m:"lake",c:"place",l:"A2"},
+{w:"taman",m:"park / garden",c:"place",l:"A2"},
+{w:"museum",m:"museum",c:"place",l:"A2"},
+{w:"masjid",m:"mosque",c:"place",l:"A2"},
+{w:"gereja",m:"church",c:"place",l:"A2"},
+{w:"kuil",m:"temple",c:"place",l:"A2"},
+{w:"mal",m:"mall",c:"place",l:"A2"},
+{w:"apotek",m:"pharmacy",c:"place",l:"A2"},
+{w:"kantor pos",m:"post office",c:"place",l:"A2"},
+{w:"perpustakaan",m:"library",c:"place",l:"A2"},
+{w:"stadion",m:"stadium",c:"place",l:"A2"},
+{w:"bioskop",m:"cinema",c:"place",l:"A2"},
+{w:"kebun binatang",m:"zoo",c:"place",l:"A2"},
+{w:"kolam renang",m:"swimming pool",c:"place",l:"A2"},
+{w:"lapangan",m:"field / court",c:"place",l:"A2"},
+{w:"istana",m:"palace",c:"place",l:"B1"},
+{w:"benteng",m:"fort / fortress",c:"place",l:"B1"},
+{w:"mercusuar",m:"lighthouse",c:"place",l:"B1"},
+{w:"air terjun",m:"waterfall",c:"place",l:"B1"},
+{w:"gua",m:"cave",c:"place",l:"B1"},
+{w:"padang pasir",m:"desert",c:"place",l:"B1"},
+{w:"pulau",m:"island",c:"place",l:"B1"},
+{w:"selat",m:"strait",c:"place",l:"B1"},
+{w:"teluk",m:"bay",c:"place",l:"B1"},
+{w:"pegunungan",m:"mountain range",c:"place",l:"B1"},
+{w:"sawah",m:"rice field",c:"place",l:"B1"},
+{w:"perbatasan",m:"border",c:"place",l:"B1"},
+{w:"pusat kota",m:"city center",c:"place",l:"B1"},
+{w:"pinggiran kota",m:"suburb",c:"place",l:"B1"},
+{w:"alun-alun",m:"town square",c:"place",l:"B1"},
+{w:"simpang",m:"intersection",c:"place",l:"B1"},
+{w:"kawasan industri",m:"industrial zone",c:"place",l:"B2"},
+{w:"kawasan wisata",m:"tourist area",c:"place",l:"B2"},
+{w:"wilayah",m:"region",c:"place",l:"B2"},
+{w:"provinsi",m:"province",c:"place",l:"B2"},
+{w:"ekosistem",m:"ecosystem",c:"place",l:"B2"},
+{w:"kawasan lindung",m:"protected area",c:"place",l:"B2"},
+{w:"zona",m:"zone",c:"place",l:"B2"},
+{w:"metropolitan",m:"metropolitan area",c:"place",l:"B2"},
+{w:"perkampungan",m:"settlement / neighborhood",c:"place",l:"B2"},
+{w:"kecamatan",m:"sub-district",c:"place",l:"B2"},
+{w:"kebun",m:"garden / plantation",c:"place",l:"A2"},
+{w:"terminal",m:"bus terminal",c:"place",l:"A2"},
+
+/* ── EMOTION ── */
+{w:"senang",m:"happy",c:"emotion",l:"A1"},
+{w:"sedih",m:"sad",c:"emotion",l:"A1"},
+{w:"marah",m:"angry",c:"emotion",l:"A1"},
+{w:"takut",m:"afraid / scared",c:"emotion",l:"A1"},
+{w:"cinta",m:"love",c:"emotion",l:"A1"},
+{w:"kecewa",m:"disappointed",c:"emotion",l:"A2"},
+{w:"terkejut",m:"surprised",c:"emotion",l:"A2"},
+{w:"bosan",m:"bored",c:"emotion",l:"A2"},
+{w:"lelah",m:"tired",c:"emotion",l:"A2"},
+{w:"lapar",m:"hungry",c:"emotion",l:"A2"},
+{w:"haus",m:"thirsty",c:"emotion",l:"A2"},
+{w:"sakit",m:"sick / painful",c:"emotion",l:"A2"},
+{w:"sehat",m:"healthy",c:"emotion",l:"A2"},
+{w:"khawatir",m:"worried",c:"emotion",l:"A2"},
+{w:"malu",m:"embarrassed / shy",c:"emotion",l:"A2"},
+{w:"bangga",m:"proud",c:"emotion",l:"A2"},
+{w:"rindu",m:"missing someone",c:"emotion",l:"A2"},
+{w:"bahagia",m:"joyful / blissful",c:"emotion",l:"A2"},
+{w:"semangat",m:"enthusiastic",c:"emotion",l:"A2"},
+{w:"tenang",m:"calm",c:"emotion",l:"A2"},
+{w:"gelisah",m:"anxious / restless",c:"emotion",l:"B1"},
+{w:"frustrasi",m:"frustrated",c:"emotion",l:"B1"},
+{w:"cemburu",m:"jealous",c:"emotion",l:"B1"},
+{w:"iri",m:"envious",c:"emotion",l:"B1"},
+{w:"heran",m:"amazed / astonished",c:"emotion",l:"B1"},
+{w:"lega",m:"relieved",c:"emotion",l:"B1"},
+{w:"tertekan",m:"stressed / pressured",c:"emotion",l:"B1"},
+{w:"percaya diri",m:"confident",c:"emotion",l:"B1"},
+{w:"putus asa",m:"hopeless",c:"emotion",l:"B1"},
+{w:"menyesal",m:"regretful",c:"emotion",l:"B1"},
+{w:"canggung",m:"awkward",c:"emotion",l:"B1"},
+{w:"sungkan",m:"reluctant / hesitant",c:"emotion",l:"B1"},
+{w:"kasihan",m:"pitying / poor thing",c:"emotion",l:"B1"},
+{w:"apatis",m:"apathetic",c:"emotion",l:"B2"},
+{w:"melankolis",m:"melancholic",c:"emotion",l:"B2"},
+{w:"euforia",m:"euphoric",c:"emotion",l:"B2"},
+{w:"ambivalen",m:"ambivalent",c:"emotion",l:"B2"},
+{w:"empati",m:"empathy",c:"emotion",l:"B2"},
+{w:"nostalgia",m:"nostalgia",c:"emotion",l:"B2"},
+{w:"antusias",m:"enthusiastic",c:"emotion",l:"B1"},
+
+/* ── TRAVEL ── */
+{w:"hotel",m:"hotel",c:"travel",l:"A1"},
+{w:"tiket",m:"ticket",c:"travel",l:"A1"},
+{w:"peta",m:"map",c:"travel",l:"A1"},
+{w:"pasport",m:"passport",c:"travel",l:"A1"},
+{w:"tas",m:"bag",c:"travel",l:"A1"},
+{w:"visa",m:"visa",c:"travel",l:"A2"},
+{w:"koper",m:"suitcase",c:"travel",l:"A2"},
+{w:"check-in",m:"check-in",c:"travel",l:"A2"},
+{w:"check-out",m:"check-out",c:"travel",l:"A2"},
+{w:"reservasi",m:"reservation",c:"travel",l:"A2"},
+{w:"penginapan",m:"accommodation",c:"travel",l:"A2"},
+{w:"wisatawan",m:"tourist",c:"travel",l:"A2"},
+{w:"perjalanan",m:"journey / trip",c:"travel",l:"A2"},
+{w:"liburan",m:"vacation / holiday",c:"travel",l:"A2"},
+{w:"tur",m:"tour",c:"travel",l:"A2"},
+{w:"pemandu wisata",m:"tour guide",c:"travel",l:"A2"},
+{w:"oleh-oleh",m:"souvenir",c:"travel",l:"A2"},
+{w:"pertukaran uang",m:"currency exchange",c:"travel",l:"A2"},
+{w:"foto",m:"photo",c:"travel",l:"A2"},
+{w:"kenangan",m:"memory / souvenir",c:"travel",l:"A2"},
+{w:"boarding pass",m:"boarding pass",c:"travel",l:"B1"},
+{w:"imigrasi",m:"immigration",c:"travel",l:"B1"},
+{w:"bea cukai",m:"customs",c:"travel",l:"B1"},
+{w:"asuransi perjalanan",m:"travel insurance",c:"travel",l:"B1"},
+{w:"penerbangan domestik",m:"domestic flight",c:"travel",l:"B1"},
+{w:"penerbangan internasional",m:"international flight",c:"travel",l:"B1"},
+{w:"transit",m:"transit",c:"travel",l:"B1"},
+{w:"kelas ekonomi",m:"economy class",c:"travel",l:"B1"},
+{w:"kelas bisnis",m:"business class",c:"travel",l:"B1"},
+{w:"kursi jendela",m:"window seat",c:"travel",l:"B1"},
+{w:"kursi lorong",m:"aisle seat",c:"travel",l:"B1"},
+{w:"bagasi",m:"baggage / luggage",c:"travel",l:"B1"},
+{w:"jet lag",m:"jet lag",c:"travel",l:"B1"},
+{w:"hostel",m:"hostel",c:"travel",l:"B1"},
+{w:"petualangan",m:"adventure",c:"travel",l:"B1"},
+{w:"destinasi",m:"destination",c:"travel",l:"B1"},
+{w:"rencana perjalanan",m:"itinerary",c:"travel",l:"B2"},
+{w:"agensi perjalanan",m:"travel agency",c:"travel",l:"B2"},
+{w:"paket wisata",m:"tour package",c:"travel",l:"B2"},
+{w:"backpacker",m:"backpacker",c:"travel",l:"B2"},
+{w:"perjalanan bisnis",m:"business trip",c:"travel",l:"B2"},
+{w:"ekowisata",m:"ecotourism",c:"travel",l:"B2"},
+{w:"visa on arrival",m:"visa on arrival",c:"travel",l:"B2"},
+{w:"glamping",m:"glamping",c:"travel",l:"B2"},
+{w:"ekspedisi",m:"expedition",c:"travel",l:"B2"},
+{w:"wisata mandiri",m:"independent travel",c:"travel",l:"B2"},
+
+/* ── TOURISM ── */
+{w:"tempat wisata",m:"tourist attraction",c:"tourism",l:"A2"},
+{w:"situs bersejarah",m:"historical site",c:"tourism",l:"A2"},
+{w:"monumen",m:"monument",c:"tourism",l:"A2"},
+{w:"patung",m:"statue",c:"tourism",l:"A2"},
+{w:"taman nasional",m:"national park",c:"tourism",l:"A2"},
+{w:"candi",m:"Buddhist / Hindu temple",c:"tourism",l:"A2"},
+{w:"keraton",m:"royal palace / kraton",c:"tourism",l:"A2"},
+{w:"lukisan",m:"painting",c:"tourism",l:"A2"},
+{w:"kerajinan tangan",m:"handicraft",c:"tourism",l:"A2"},
+{w:"batik",m:"batik fabric art",c:"tourism",l:"A2"},
+{w:"warisan budaya",m:"cultural heritage",c:"tourism",l:"B1"},
+{w:"tradisi",m:"tradition",c:"tourism",l:"B1"},
+{w:"adat istiadat",m:"customs / traditions",c:"tourism",l:"B1"},
+{w:"upacara adat",m:"traditional ceremony",c:"tourism",l:"B1"},
+{w:"festival",m:"festival",c:"tourism",l:"B1"},
+{w:"pertunjukan seni",m:"art performance",c:"tourism",l:"B1"},
+{w:"gamelan",m:"gamelan music",c:"tourism",l:"B1"},
+{w:"wayang",m:"shadow puppet",c:"tourism",l:"B1"},
+{w:"tari tradisional",m:"traditional dance",c:"tourism",l:"B1"},
+{w:"kuliner lokal",m:"local cuisine",c:"tourism",l:"B1"},
+{w:"wisata bahari",m:"marine tourism",c:"tourism",l:"B2"},
+{w:"agrowisata",m:"agro-tourism",c:"tourism",l:"B2"},
+{w:"pariwisata berkelanjutan",m:"sustainable tourism",c:"tourism",l:"B2"},
+{w:"destinasi wisata",m:"tourist destination",c:"tourism",l:"B2"},
+{w:"warisan UNESCO",m:"UNESCO heritage",c:"tourism",l:"B2"},
+{w:"promosi wisata",m:"tourism promotion",c:"tourism",l:"B2"},
+{w:"infrastruktur pariwisata",m:"tourism infrastructure",c:"tourism",l:"B2"},
+{w:"pemandu lokal",m:"local guide",c:"tourism",l:"B2"},
+{w:"daya tarik wisata",m:"tourist appeal",c:"tourism",l:"B2"},
+{w:"komunitas wisata",m:"tourism community",c:"tourism",l:"B2"},
+
+/* ── BUSINESS ── */
+{w:"uang",m:"money",c:"business",l:"A1"},
+{w:"harga",m:"price",c:"business",l:"A2"},
+{w:"diskon",m:"discount",c:"business",l:"A2"},
+{w:"gratis",m:"free (no charge)",c:"business",l:"A2"},
+{w:"tanda terima",m:"receipt",c:"business",l:"A2"},
+{w:"kontrak",m:"contract",c:"business",l:"A2"},
+{w:"rapat",m:"meeting",c:"business",l:"A2"},
+{w:"faktur",m:"invoice",c:"business",l:"A2"},
+{w:"pembayaran",m:"payment",c:"business",l:"A2"},
+{w:"pelanggan",m:"customer",c:"business",l:"A2"},
+{w:"perusahaan",m:"company",c:"business",l:"B1"},
+{w:"bisnis",m:"business",c:"business",l:"B1"},
+{w:"anggaran",m:"budget",c:"business",l:"B1"},
+{w:"laba",m:"profit",c:"business",l:"B1"},
+{w:"rugi",m:"loss",c:"business",l:"B1"},
+{w:"investasi",m:"investment",c:"business",l:"B1"},
+{w:"saham",m:"stock / share",c:"business",l:"B1"},
+{w:"modal",m:"capital",c:"business",l:"B1"},
+{w:"hutang",m:"debt",c:"business",l:"B1"},
+{w:"kredit",m:"credit",c:"business",l:"B1"},
+{w:"bunga",m:"interest (finance)",c:"business",l:"B1"},
+{w:"pajak",m:"tax",c:"business",l:"B1"},
+{w:"penawaran",m:"offer / quotation",c:"business",l:"B1"},
+{w:"permintaan",m:"demand / request",c:"business",l:"B1"},
+{w:"negosiasi",m:"negotiation",c:"business",l:"B1"},
+{w:"kemitraan",m:"partnership",c:"business",l:"B1"},
+{w:"ekspor",m:"export",c:"business",l:"B1"},
+{w:"impor",m:"import",c:"business",l:"B1"},
+{w:"pemasaran",m:"marketing",c:"business",l:"B1"},
+{w:"target pasar",m:"target market",c:"business",l:"B1"},
+{w:"presentasi",m:"presentation",c:"business",l:"B1"},
+{w:"supplier",m:"supplier",c:"business",l:"B1"},
+{w:"laporan keuangan",m:"financial report",c:"business",l:"B2"},
+{w:"neraca",m:"balance sheet",c:"business",l:"B2"},
+{w:"arus kas",m:"cash flow",c:"business",l:"B2"},
+{w:"modal ventura",m:"venture capital",c:"business",l:"B2"},
+{w:"startup",m:"startup",c:"business",l:"B2"},
+{w:"inovasi",m:"innovation",c:"business",l:"B2"},
+{w:"produktivitas",m:"productivity",c:"business",l:"B2"},
+{w:"efisiensi",m:"efficiency",c:"business",l:"B2"},
+{w:"manajemen",m:"management",c:"business",l:"B2"},
+{w:"kepemimpinan",m:"leadership",c:"business",l:"B2"},
+{w:"merger",m:"merger",c:"business",l:"B2"},
+{w:"akuisisi",m:"acquisition",c:"business",l:"B2"},
+{w:"branding",m:"branding",c:"business",l:"B2"},
+{w:"segmentasi pasar",m:"market segmentation",c:"business",l:"B2"},
+{w:"strategi bisnis",m:"business strategy",c:"business",l:"B2"},
+{w:"kewirausahaan",m:"entrepreneurship",c:"business",l:"B2"},
+
+/* ── NEWS ── */
+{w:"berita",m:"news",c:"news",l:"B1"},
+{w:"artikel",m:"article",c:"news",l:"B1"},
+{w:"laporan",m:"report",c:"news",l:"B1"},
+{w:"siaran",m:"broadcast",c:"news",l:"B1"},
+{w:"media sosial",m:"social media",c:"news",l:"B1"},
+{w:"internet",m:"internet",c:"news",l:"B1"},
+{w:"jurnalisme",m:"journalism",c:"news",l:"B1"},
+{w:"editor",m:"editor",c:"news",l:"B1"},
+{w:"headline",m:"headline",c:"news",l:"B1"},
+{w:"opini",m:"opinion",c:"news",l:"B1"},
+{w:"wawancara",m:"interview",c:"news",l:"B1"},
+{w:"konferensi pers",m:"press conference",c:"news",l:"B1"},
+{w:"siaran langsung",m:"live broadcast",c:"news",l:"B1"},
+{w:"dokumenter",m:"documentary",c:"news",l:"B1"},
+{w:"propaganda",m:"propaganda",c:"news",l:"B1"},
+{w:"kebebasan pers",m:"press freedom",c:"news",l:"B1"},
+{w:"portal berita",m:"news portal",c:"news",l:"B1"},
+{w:"investigasi",m:"investigation",c:"news",l:"B1"},
+{w:"sensor",m:"censorship",c:"news",l:"B1"},
+{w:"penerbit",m:"publisher",c:"news",l:"B1"},
+{w:"kebijakan",m:"policy",c:"news",l:"B2"},
+{w:"pemerintah",m:"government",c:"news",l:"B2"},
+{w:"parlemen",m:"parliament",c:"news",l:"B2"},
+{w:"undang-undang",m:"law / legislation",c:"news",l:"B2"},
+{w:"peraturan",m:"regulation",c:"news",l:"B2"},
+{w:"demokrasi",m:"democracy",c:"news",l:"B2"},
+{w:"korupsi",m:"corruption",c:"news",l:"B2"},
+{w:"skandal",m:"scandal",c:"news",l:"B2"},
+{w:"krisis",m:"crisis",c:"news",l:"B2"},
+{w:"pemilihan umum",m:"general election",c:"news",l:"B2"},
+{w:"referendum",m:"referendum",c:"news",l:"B2"},
+{w:"demonstrasi",m:"demonstration / protest",c:"news",l:"B2"},
+{w:"kerusuhan",m:"riot / unrest",c:"news",l:"B2"},
+{w:"bencana",m:"disaster",c:"news",l:"B2"},
+{w:"konflik",m:"conflict",c:"news",l:"B2"},
+{w:"perdamaian",m:"peace",c:"news",l:"B2"},
+{w:"sanksi",m:"sanction",c:"news",l:"B2"},
+{w:"embargo",m:"embargo",c:"news",l:"B2"},
+{w:"hubungan internasional",m:"international relations",c:"news",l:"B2"},
+{w:"transparansi",m:"transparency",c:"news",l:"B2"},
+{w:"akuntabilitas",m:"accountability",c:"news",l:"B2"},
+{w:"ketimpangan",m:"inequality",c:"news",l:"B2"},
+{w:"kemiskinan",m:"poverty",c:"news",l:"B2"},
+{w:"pengangguran",m:"unemployment",c:"news",l:"B2"},
+{w:"inflasi",m:"inflation",c:"news",l:"B2"},
+{w:"resesi",m:"recession",c:"news",l:"B2"},
+{w:"globalisasi",m:"globalization",c:"news",l:"B2"},
+{w:"nasionalisme",m:"nationalism",c:"news",l:"B2"},
+{w:"multikulturalisme",m:"multiculturalism",c:"news",l:"B2"},
+{w:"diplomasi",m:"diplomacy",c:"news",l:"B2"},
+
+/* ── VERB ── */
+{w:"makan",m:"to eat",c:"verb",l:"A1"},
+{w:"minum",m:"to drink",c:"verb",l:"A1"},
+{w:"pergi",m:"to go",c:"verb",l:"A1"},
+{w:"datang",m:"to come",c:"verb",l:"A1"},
+{w:"tidur",m:"to sleep",c:"verb",l:"A1"},
+{w:"bangun",m:"to wake up",c:"verb",l:"A1"},
+{w:"bekerja",m:"to work",c:"verb",l:"A1"},
+{w:"belajar",m:"to study",c:"verb",l:"A1"},
+{w:"membaca",m:"to read",c:"verb",l:"A1"},
+{w:"menulis",m:"to write",c:"verb",l:"A1"},
+{w:"berbicara",m:"to speak",c:"verb",l:"A1"},
+{w:"mendengar",m:"to listen",c:"verb",l:"A1"},
+{w:"melihat",m:"to see",c:"verb",l:"A1"},
+{w:"membeli",m:"to buy",c:"verb",l:"A1"},
+{w:"menjual",m:"to sell",c:"verb",l:"A1"},
+{w:"membawa",m:"to bring",c:"verb",l:"A1"},
+{w:"mencari",m:"to search",c:"verb",l:"A1"},
+{w:"menemukan",m:"to find",c:"verb",l:"A1"},
+{w:"bermain",m:"to play",c:"verb",l:"A1"},
+{w:"berlari",m:"to run",c:"verb",l:"A1"},
+{w:"berjalan",m:"to walk",c:"verb",l:"A1"},
+{w:"memasak",m:"to cook",c:"verb",l:"A1"},
+{w:"mencuci",m:"to wash",c:"verb",l:"A1"},
+{w:"duduk",m:"to sit",c:"verb",l:"A1"},
+{w:"berdiri",m:"to stand",c:"verb",l:"A1"},
+{w:"tahu",m:"to know",c:"verb",l:"A1"},
+{w:"mau",m:"to want",c:"verb",l:"A1"},
+{w:"bisa",m:"can / to be able to",c:"verb",l:"A1"},
+{w:"suka",m:"to like",c:"verb",l:"A1"},
+{w:"cinta",m:"to love",c:"verb",l:"A1"},
+{w:"menggunakan",m:"to use",c:"verb",l:"A2"},
+{w:"membuka",m:"to open",c:"verb",l:"A2"},
+{w:"menutup",m:"to close",c:"verb",l:"A2"},
+{w:"mengambil",m:"to take",c:"verb",l:"A2"},
+{w:"memberikan",m:"to give",c:"verb",l:"A2"},
+{w:"meminta",m:"to ask for",c:"verb",l:"A2"},
+{w:"menjawab",m:"to answer",c:"verb",l:"A2"},
+{w:"bertanya",m:"to ask a question",c:"verb",l:"A2"},
+{w:"menunggu",m:"to wait",c:"verb",l:"A2"},
+{w:"membantu",m:"to help",c:"verb",l:"A2"},
+{w:"mencoba",m:"to try",c:"verb",l:"A2"},
+{w:"mulai",m:"to start",c:"verb",l:"A2"},
+{w:"selesai",m:"to finish",c:"verb",l:"A2"},
+{w:"kembali",m:"to return",c:"verb",l:"A2"},
+{w:"tinggal",m:"to stay / to live",c:"verb",l:"A2"},
+{w:"pindah",m:"to move",c:"verb",l:"A2"},
+{w:"berhenti",m:"to stop",c:"verb",l:"A2"},
+{w:"bayar",m:"to pay",c:"verb",l:"A2"},
+{w:"pesan",m:"to order / to book",c:"verb",l:"A2"},
+{w:"naik",m:"to ride / to go up",c:"verb",l:"A2"},
+{w:"turun",m:"to get off / to go down",c:"verb",l:"A2"},
+{w:"masuk",m:"to enter",c:"verb",l:"A2"},
+{w:"keluar",m:"to exit",c:"verb",l:"A2"},
+{w:"menelepon",m:"to call (phone)",c:"verb",l:"A2"},
+{w:"mengirim",m:"to send",c:"verb",l:"A2"},
+{w:"menerima",m:"to receive",c:"verb",l:"A2"},
+{w:"menyimpan",m:"to save / to store",c:"verb",l:"A2"},
+{w:"memilih",m:"to choose",c:"verb",l:"A2"},
+{w:"berbagi",m:"to share",c:"verb",l:"A2"},
+{w:"mengunjungi",m:"to visit",c:"verb",l:"A2"},
+{w:"menjelaskan",m:"to explain",c:"verb",l:"B1"},
+{w:"memahami",m:"to understand",c:"verb",l:"B1"},
+{w:"mengingat",m:"to remember",c:"verb",l:"B1"},
+{w:"melupakan",m:"to forget",c:"verb",l:"B1"},
+{w:"memutuskan",m:"to decide",c:"verb",l:"B1"},
+{w:"merencanakan",m:"to plan",c:"verb",l:"B1"},
+{w:"menyiapkan",m:"to prepare",c:"verb",l:"B1"},
+{w:"mengatur",m:"to arrange / to manage",c:"verb",l:"B1"},
+{w:"mengelola",m:"to manage",c:"verb",l:"B1"},
+{w:"memimpin",m:"to lead",c:"verb",l:"B1"},
+{w:"mengikuti",m:"to follow / to attend",c:"verb",l:"B1"},
+{w:"mengajarkan",m:"to teach",c:"verb",l:"B1"},
+{w:"melatih",m:"to train",c:"verb",l:"B1"},
+{w:"meningkatkan",m:"to improve / to increase",c:"verb",l:"B1"},
+{w:"mengurangi",m:"to reduce",c:"verb",l:"B1"},
+{w:"mengubah",m:"to change",c:"verb",l:"B1"},
+{w:"mempertahankan",m:"to maintain / to defend",c:"verb",l:"B1"},
+{w:"mencapai",m:"to achieve",c:"verb",l:"B1"},
+{w:"menghadapi",m:"to face",c:"verb",l:"B1"},
+{w:"mengatasi",m:"to overcome",c:"verb",l:"B1"},
+{w:"bergabung",m:"to join",c:"verb",l:"B1"},
+{w:"bekerja sama",m:"to cooperate",c:"verb",l:"B1"},
+{w:"berkomunikasi",m:"to communicate",c:"verb",l:"B1"},
+{w:"melaporkan",m:"to report",c:"verb",l:"B1"},
+{w:"mendukung",m:"to support",c:"verb",l:"B1"},
+{w:"menolak",m:"to refuse",c:"verb",l:"B1"},
+{w:"menyetujui",m:"to approve",c:"verb",l:"B1"},
+{w:"mengembangkan",m:"to develop",c:"verb",l:"B1"},
+{w:"menyelesaikan",m:"to complete / to solve",c:"verb",l:"B1"},
+{w:"bernegosiasi",m:"to negotiate",c:"verb",l:"B1"},
+{w:"menganalisis",m:"to analyze",c:"verb",l:"B2"},
+{w:"mengevaluasi",m:"to evaluate",c:"verb",l:"B2"},
+{w:"mengimplementasikan",m:"to implement",c:"verb",l:"B2"},
+{w:"berkolaborasi",m:"to collaborate",c:"verb",l:"B2"},
+{w:"mengoptimalkan",m:"to optimize",c:"verb",l:"B2"},
+{w:"memfasilitasi",m:"to facilitate",c:"verb",l:"B2"},
+{w:"mengintegrasikan",m:"to integrate",c:"verb",l:"B2"},
+{w:"memprioritaskan",m:"to prioritize",c:"verb",l:"B2"},
+{w:"mendelegasikan",m:"to delegate",c:"verb",l:"B2"},
+{w:"mengalokasikan",m:"to allocate",c:"verb",l:"B2"},
+{w:"merekomendasikan",m:"to recommend",c:"verb",l:"B2"},
+{w:"memperkirakan",m:"to estimate",c:"verb",l:"B2"},
+{w:"memanfaatkan",m:"to utilize",c:"verb",l:"B2"},
+{w:"memberdayakan",m:"to empower",c:"verb",l:"B2"},
+{w:"mempertimbangkan",m:"to consider",c:"verb",l:"B2"},
+{w:"menginterpretasikan",m:"to interpret",c:"verb",l:"B2"},
+{w:"mentransformasikan",m:"to transform",c:"verb",l:"B2"},
+{w:"mengkoordinasikan",m:"to coordinate",c:"verb",l:"B2"},
+{w:"menginvestigasi",m:"to investigate",c:"verb",l:"B2"},
+{w:"menstandardisasi",m:"to standardize",c:"verb",l:"B2"},
+{w:"mengadvokasi",m:"to advocate",c:"verb",l:"B2"},
+{w:"memediasi",m:"to mediate",c:"verb",l:"B2"},
+{w:"merestrukturisasi",m:"to restructure",c:"verb",l:"B2"},
+{w:"mengaudit",m:"to audit",c:"verb",l:"B2"},
+{w:"mengarsipkan",m:"to archive",c:"verb",l:"B2"},
+{w:"mensertifikasi",m:"to certify",c:"verb",l:"B2"},
+{w:"mengklasifikasikan",m:"to classify",c:"verb",l:"B2"},
+{w:"mengkategorikan",m:"to categorize",c:"verb",l:"B2"},
+{w:"mempresentasikan",m:"to present",c:"verb",l:"B2"},
+
+/* ── ADJECTIVE ── */
+{w:"besar",m:"big",c:"adjective",l:"A1"},
+{w:"kecil",m:"small",c:"adjective",l:"A1"},
+{w:"tinggi",m:"tall / high",c:"adjective",l:"A1"},
+{w:"pendek",m:"short",c:"adjective",l:"A1"},
+{w:"baik",m:"good",c:"adjective",l:"A1"},
+{w:"buruk",m:"bad",c:"adjective",l:"A1"},
+{w:"cantik",m:"beautiful",c:"adjective",l:"A1"},
+{w:"pintar",m:"smart",c:"adjective",l:"A1"},
+{w:"baru",m:"new",c:"adjective",l:"A1"},
+{w:"lama",m:"old / long (time)",c:"adjective",l:"A1"},
+{w:"mahal",m:"expensive",c:"adjective",l:"A1"},
+{w:"murah",m:"cheap",c:"adjective",l:"A1"},
+{w:"cepat",m:"fast",c:"adjective",l:"A1"},
+{w:"lambat",m:"slow",c:"adjective",l:"A1"},
+{w:"banyak",m:"many / a lot",c:"adjective",l:"A1"},
+{w:"sedikit",m:"few / a little",c:"adjective",l:"A1"},
+{w:"bersih",m:"clean",c:"adjective",l:"A1"},
+{w:"kotor",m:"dirty",c:"adjective",l:"A1"},
+{w:"enak",m:"delicious / nice",c:"adjective",l:"A1"},
+{w:"jelek",m:"ugly / bad",c:"adjective",l:"A1"},
+{w:"kuat",m:"strong",c:"adjective",l:"A2"},
+{w:"lemah",m:"weak",c:"adjective",l:"A2"},
+{w:"keras",m:"hard / loud",c:"adjective",l:"A2"},
+{w:"lembut",m:"soft / gentle",c:"adjective",l:"A2"},
+{w:"berat",m:"heavy",c:"adjective",l:"A2"},
+{w:"ringan",m:"light (weight)",c:"adjective",l:"A2"},
+{w:"gelap",m:"dark",c:"adjective",l:"A2"},
+{w:"terang",m:"bright / light",c:"adjective",l:"A2"},
+{w:"ramai",m:"crowded / lively",c:"adjective",l:"A2"},
+{w:"sepi",m:"quiet / deserted",c:"adjective",l:"A2"},
+{w:"dekat",m:"near / close",c:"adjective",l:"A2"},
+{w:"jauh",m:"far",c:"adjective",l:"A2"},
+{w:"penuh",m:"full",c:"adjective",l:"A2"},
+{w:"kosong",m:"empty",c:"adjective",l:"A2"},
+{w:"bagus",m:"nice / good",c:"adjective",l:"A2"},
+{w:"modern",m:"modern",c:"adjective",l:"A2"},
+{w:"tradisional",m:"traditional",c:"adjective",l:"A2"},
+{w:"mudah",m:"easy",c:"adjective",l:"A2"},
+{w:"sulit",m:"difficult",c:"adjective",l:"A2"},
+{w:"aman",m:"safe",c:"adjective",l:"A2"},
+{w:"bijaksana",m:"wise",c:"adjective",l:"B1"},
+{w:"jujur",m:"honest",c:"adjective",l:"B1"},
+{w:"rajin",m:"diligent",c:"adjective",l:"B1"},
+{w:"malas",m:"lazy",c:"adjective",l:"B1"},
+{w:"berani",m:"brave",c:"adjective",l:"B1"},
+{w:"dermawan",m:"generous",c:"adjective",l:"B1"},
+{w:"sabar",m:"patient",c:"adjective",l:"B1"},
+{w:"kreatif",m:"creative",c:"adjective",l:"B1"},
+{w:"inovatif",m:"innovative",c:"adjective",l:"B1"},
+{w:"efektif",m:"effective",c:"adjective",l:"B1"},
+{w:"efisien",m:"efficient",c:"adjective",l:"B1"},
+{w:"kompetitif",m:"competitive",c:"adjective",l:"B1"},
+{w:"profesional",m:"professional",c:"adjective",l:"B1"},
+{w:"logis",m:"logical",c:"adjective",l:"B1"},
+{w:"sistematis",m:"systematic",c:"adjective",l:"B1"},
+{w:"ambisius",m:"ambitious",c:"adjective",l:"B2"},
+{w:"konservatif",m:"conservative",c:"adjective",l:"B2"},
+{w:"progresif",m:"progressive",c:"adjective",l:"B2"},
+{w:"kontroversial",m:"controversial",c:"adjective",l:"B2"},
+{w:"komprehensif",m:"comprehensive",c:"adjective",l:"B2"},
+{w:"konsisten",m:"consistent",c:"adjective",l:"B2"},
+{w:"fleksibel",m:"flexible",c:"adjective",l:"B2"},
+{w:"signifikan",m:"significant",c:"adjective",l:"B2"},
+{w:"fundamental",m:"fundamental",c:"adjective",l:"B2"},
+{w:"objektif",m:"objective",c:"adjective",l:"B2"},
+
+/* ── ADVERB ── */
+{w:"sangat",m:"very",c:"adverb",l:"A1"},
+{w:"juga",m:"also / too",c:"adverb",l:"A1"},
+{w:"hanya",m:"only",c:"adverb",l:"A1"},
+{w:"tidak pernah",m:"never",c:"adverb",l:"A1"},
+{w:"di sini",m:"here",c:"adverb",l:"A1"},
+{w:"di sana",m:"there",c:"adverb",l:"A1"},
+{w:"di mana saja",m:"anywhere",c:"adverb",l:"A1"},
+{w:"sudah",m:"already",c:"adverb",l:"A1"},
+{w:"belum",m:"not yet",c:"adverb",l:"A1"},
+{w:"tidak",m:"not",c:"adverb",l:"A1"},
+{w:"segera",m:"soon",c:"adverb",l:"A2"},
+{w:"baru saja",m:"just now",c:"adverb",l:"A2"},
+{w:"masih",m:"still",c:"adverb",l:"A2"},
+{w:"lagi",m:"again / more",c:"adverb",l:"A2"},
+{w:"terlalu",m:"too much",c:"adverb",l:"A2"},
+{w:"hampir",m:"almost",c:"adverb",l:"A2"},
+{w:"paling",m:"most (superlative)",c:"adverb",l:"A2"},
+{w:"lebih",m:"more (comparative)",c:"adverb",l:"A2"},
+{w:"kurang",m:"less",c:"adverb",l:"A2"},
+{w:"cukup",m:"enough",c:"adverb",l:"A2"},
+{w:"benar-benar",m:"really / truly",c:"adverb",l:"A2"},
+{w:"langsung",m:"directly / immediately",c:"adverb",l:"A2"},
+{w:"pelan-pelan",m:"slowly",c:"adverb",l:"A2"},
+{w:"bersama",m:"together",c:"adverb",l:"A2"},
+{w:"mungkin",m:"maybe / possibly",c:"adverb",l:"A2"},
+{w:"seharusnya",m:"should / ought to",c:"adverb",l:"B1"},
+{w:"pasti",m:"certainly",c:"adverb",l:"B1"},
+{w:"tentunya",m:"of course",c:"adverb",l:"B1"},
+{w:"sayangnya",m:"unfortunately",c:"adverb",l:"B1"},
+{w:"untungnya",m:"fortunately",c:"adverb",l:"B1"},
+{w:"sebaliknya",m:"on the contrary",c:"adverb",l:"B1"},
+{w:"akhirnya",m:"finally",c:"adverb",l:"B1"},
+{w:"secara",m:"in terms of / in a way",c:"adverb",l:"B1"},
+{w:"khususnya",m:"especially",c:"adverb",l:"B1"},
+{w:"umumnya",m:"generally",c:"adverb",l:"B1"},
+{w:"biasanya",m:"usually",c:"adverb",l:"B1"},
+{w:"jarang",m:"rarely",c:"adverb",l:"B1"},
+{w:"sesekali",m:"occasionally",c:"adverb",l:"B1"},
+{w:"sepenuhnya",m:"fully / completely",c:"adverb",l:"B1"},
+{w:"sebagian",m:"partially",c:"adverb",l:"B1"},
+{w:"saling",m:"mutually / each other",c:"adverb",l:"B1"},
+{w:"bersamaan",m:"simultaneously",c:"adverb",l:"B1"},
+{w:"secara keseluruhan",m:"overall",c:"adverb",l:"B1"},
+{w:"pada akhirnya",m:"ultimately",c:"adverb",l:"B2"},
+{w:"secara signifikan",m:"significantly",c:"adverb",l:"B2"},
+
+/* ── NOUN (general) ── */
+{w:"nama",m:"name",c:"noun",l:"A1"},
+{w:"orang",m:"person / people",c:"noun",l:"A1"},
+{w:"teman",m:"friend",c:"noun",l:"A1"},
+{w:"buku",m:"book",c:"noun",l:"A1"},
+{w:"tempat",m:"place",c:"noun",l:"A2"},
+{w:"hal",m:"thing / matter",c:"noun",l:"A2"},
+{w:"cara",m:"way / method",c:"noun",l:"A2"},
+{w:"alasan",m:"reason",c:"noun",l:"A2"},
+{w:"masalah",m:"problem",c:"noun",l:"A2"},
+{w:"solusi",m:"solution",c:"noun",l:"A2"},
+{w:"pertanyaan",m:"question",c:"noun",l:"A2"},
+{w:"jawaban",m:"answer",c:"noun",l:"A2"},
+{w:"contoh",m:"example",c:"noun",l:"A2"},
+{w:"informasi",m:"information",c:"noun",l:"A2"},
+{w:"kata",m:"word",c:"noun",l:"A2"},
+{w:"kalimat",m:"sentence",c:"noun",l:"A2"},
+{w:"bahasa",m:"language",c:"noun",l:"A2"},
+{w:"cerita",m:"story",c:"noun",l:"A2"},
+{w:"surat",m:"letter",c:"noun",l:"A2"},
+{w:"nomor",m:"number (ID/phone)",c:"noun",l:"A2"},
+{w:"alamat",m:"address",c:"noun",l:"A2"},
+{w:"telepon",m:"telephone",c:"noun",l:"A2"},
+{w:"komputer",m:"computer",c:"noun",l:"A2"},
+{w:"ponsel",m:"cell phone",c:"noun",l:"A2"},
+{w:"foto",m:"photo",c:"noun",l:"A2"},
+{w:"gambar",m:"picture / image",c:"noun",l:"A2"},
+{w:"suara",m:"sound / voice",c:"noun",l:"A2"},
+{w:"pikiran",m:"thought",c:"noun",l:"A2"},
+{w:"ide",m:"idea",c:"noun",l:"A2"},
+{w:"pendapat",m:"opinion",c:"noun",l:"A2"},
+{w:"hasil",m:"result / outcome",c:"noun",l:"B1"},
+{w:"proses",m:"process",c:"noun",l:"B1"},
+{w:"sistem",m:"system",c:"noun",l:"B1"},
+{w:"program",m:"program",c:"noun",l:"B1"},
+{w:"proyek",m:"project",c:"noun",l:"B1"},
+{w:"rencana",m:"plan",c:"noun",l:"B1"},
+{w:"tujuan",m:"goal / aim",c:"noun",l:"B1"},
+{w:"keputusan",m:"decision",c:"noun",l:"B1"},
+{w:"perubahan",m:"change",c:"noun",l:"B1"},
+{w:"perkembangan",m:"development",c:"noun",l:"B1"},
+{w:"kemajuan",m:"progress",c:"noun",l:"B1"},
+{w:"tantangan",m:"challenge",c:"noun",l:"B1"},
+{w:"peluang",m:"opportunity",c:"noun",l:"B1"},
+{w:"risiko",m:"risk",c:"noun",l:"B1"},
+{w:"dampak",m:"impact",c:"noun",l:"B1"},
+{w:"pengaruh",m:"influence",c:"noun",l:"B1"},
+{w:"hubungan",m:"relationship",c:"noun",l:"B1"},
+{w:"kerjasama",m:"cooperation",c:"noun",l:"B1"},
+{w:"komunikasi",m:"communication",c:"noun",l:"B1"},
+{w:"pendidikan",m:"education",c:"noun",l:"B1"},
+{w:"penelitian",m:"research",c:"noun",l:"B1"},
+{w:"teknologi",m:"technology",c:"noun",l:"B1"},
+{w:"masyarakat",m:"society",c:"noun",l:"B1"},
+{w:"budaya",m:"culture",c:"noun",l:"B1"},
+{w:"sejarah",m:"history",c:"noun",l:"B1"},
+{w:"ekonomi",m:"economy",c:"noun",l:"B1"},
+{w:"hukum",m:"law",c:"noun",l:"B1"},
+{w:"lingkungan",m:"environment",c:"noun",l:"B1"},
+{w:"kesehatan",m:"health",c:"noun",l:"B1"},
+{w:"keamanan",m:"security",c:"noun",l:"B1"},
+{w:"kebebasan",m:"freedom",c:"noun",l:"B2"},
+{w:"keadilan",m:"justice",c:"noun",l:"B2"},
+{w:"kepercayaan",m:"trust",c:"noun",l:"B2"},
+{w:"nilai",m:"value",c:"noun",l:"B2"},
+{w:"standar",m:"standard",c:"noun",l:"B2"},
+{w:"kualitas",m:"quality",c:"noun",l:"B2"},
+{w:"kapasitas",m:"capacity",c:"noun",l:"B2"},
+{w:"integritas",m:"integrity",c:"noun",l:"B2"},
+{w:"akuntabilitas",m:"accountability",c:"noun",l:"B2"},
+{w:"transparansi",m:"transparency",c:"noun",l:"B2"},
+]; /* END WORDS */
+
+/* ════════════════════════════════════════
    CONFIG
-══════════════════════════════════════════ */
+════════════════════════════════════════ */
 const CAT_CLASS = {
-  greeting:"cat-greeting", question:"cat-question",
-  verb:"cat-verb", noun:"cat-noun", adjective:"cat-adjective"
+  greeting:"cat-greeting", pronoun:"cat-pronoun", number:"cat-number",
+  question:"cat-question", color:"cat-color",   family:"cat-family",
+  body:"cat-body",         home:"cat-home",      food:"cat-food",
+  drink:"cat-drink",       transport:"cat-transport", occupation:"cat-occupation",
+  weather:"cat-weather",   time:"cat-time",      place:"cat-place",
+  emotion:"cat-emotion",   travel:"cat-travel",  tourism:"cat-tourism",
+  business:"cat-business", news:"cat-news",
+  verb:"cat-verb",         adjective:"cat-adjective",
+  adverb:"cat-adverb",     noun:"cat-noun"
 };
 const CAT_LABEL = {
-  greeting:"Greeting", question:"Question",
-  verb:"Verb", noun:"Noun", adjective:"Adjective"
+  greeting:"Greeting",   pronoun:"Pronoun",    number:"Number",
+  question:"Question",   color:"Color",        family:"Family",
+  body:"Body",           home:"Home",          food:"Food",
+  drink:"Drink",         transport:"Transport",occupation:"Occupation",
+  weather:"Weather",     time:"Time",          place:"Place",
+  emotion:"Emotion",     travel:"Travel",      tourism:"Tourism",
+  business:"Business",   news:"News",
+  verb:"Verb",           adjective:"Adjective",
+  adverb:"Adverb",       noun:"Noun"
 };
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    STATE
-══════════════════════════════════════════ */
-let mode     = 'flashcard';
-let filtered = [...WORDS];
-let deck     = [];
-let idx      = 0;
-let score    = {ok:0, total:0};
-let revealed = false;
-let answered = false;
+════════════════════════════════════════ */
+let mode    = 'flashcard';
+let selLvl  = 'all';
+let selGenre= 'all';
+let filtered= [...WORDS];
+let deck    = [];
+let idx     = 0;
+let score   = {ok:0,total:0};
+let revealed= false;
+let answered= false;
 
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    UTILS
-══════════════════════════════════════════ */
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
+════════════════════════════════════════ */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
   }
   return a;
 }
-
-function normAnswer(s) {
+function normAnswer(s){
   return s.trim().toLowerCase()
-          .replace(/^to\s+/,'')
-          .replace(/\s*\(.*?\)\s*/g,'')
-          .trim();
+    .replace(/^to\s+/,'')
+    .replace(/\s*\(.*?\)\s*/g,'')
+    .replace(/\s*\/.*$/,'') // take first alternative
+    .trim();
+}
+function isCorrect(input,meaning){
+  const user=normAnswer(input);
+  if(!user)return false;
+  return meaning.split(/[\/,]/).map(normAnswer).filter(Boolean).some(a=>a===user);
+}
+function setBadge(el,cat){
+  el.textContent=CAT_LABEL[cat]||cat;
+  el.className='cat-badge '+(CAT_CLASS[cat]||'');
+}
+function setLvlBadge(el,l){
+  el.textContent=l;
+  el.className='lvl-badge lvl-'+l;
 }
 
-function isCorrect(userInput, meaning) {
-  const user = normAnswer(userInput);
-  if (!user) return false;
-  return meaning.split(/[\/,]/)
-    .map(normAnswer)
-    .filter(Boolean)
-    .some(a => a === user);
-}
-
-/* ══════════════════════════════════════════
-   CATEGORY BADGE HELPER
-══════════════════════════════════════════ */
-function setBadge(el, cat) {
-  el.textContent = CAT_LABEL[cat] || cat;
-  el.className = 'cat-badge ' + (CAT_CLASS[cat] || '');
-}
-
-/* ══════════════════════════════════════════
-   PROGRESS
-══════════════════════════════════════════ */
-function updateProgress() {
-  const total = deck.length;
-  const cur   = Math.min(idx+1, total);
-  document.getElementById('progressText').textContent = cur + ' / ' + total;
-  document.getElementById('progressFill').style.width = (cur/total*100) + '%';
-  const sb = document.getElementById('scoreText');
-  sb.textContent = (mode !== 'flashcard' && score.total > 0)
-    ? score.ok + '/' + score.total : '';
-}
-
-/* ══════════════════════════════════════════
-   MODE SWITCHING
-══════════════════════════════════════════ */
-function setMode(m) {
-  mode = m;
-  document.querySelectorAll('.mode-tab').forEach((btn,i) => {
-    btn.classList.toggle('active', ['flashcard','quiz','typing'][i] === m);
+/* ════════════════════════════════════════
+   FILTERS
+════════════════════════════════════════ */
+function applyFilters(){
+  filtered=WORDS.filter(w=>{
+    const lOk=selLvl==='all'||w.l===selLvl;
+    const gOk=selGenre==='all'||w.c===selGenre;
+    return lOk&&gOk;
   });
-  resetState();
+  deck=shuffle(filtered.length?filtered:WORDS);
+  idx=0; score={ok:0,total:0}; revealed=false; answered=false;
+  updateFilterStats();
+}
+function updateFilterStats(){
+  const n=filtered.length;
+  const lStr=selLvl==='all'?'All levels':selLvl;
+  const gStr=selGenre==='all'?'All genres':(CAT_LABEL[selGenre]||selGenre);
+  document.getElementById('filterStats').textContent=n+' words · '+lStr+' · '+gStr;
+}
+function setLevel(btn,lvl){
+  selLvl=lvl;
+  document.querySelectorAll('.lvl-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+  showPanel();
+  renderCurrent();
+}
+function setGenre(genre){
+  selGenre=genre;
+  applyFilters();
   showPanel();
   renderCurrent();
 }
 
-function showPanel() {
-  const panels = ['flashcardMode','quizMode','typingMode','resultScreen'];
-  panels.forEach(id => document.getElementById(id).classList.add('hidden'));
-  if (mode === 'flashcard') document.getElementById('flashcardMode').classList.remove('hidden');
-  else if (mode === 'quiz') document.getElementById('quizMode').classList.remove('hidden');
+/* ════════════════════════════════════════
+   MODE
+════════════════════════════════════════ */
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.mode-tab').forEach((b,i)=>{
+    b.classList.toggle('active',['flashcard','quiz','typing'][i]===m);
+  });
+  score={ok:0,total:0};
+  deck=shuffle(filtered.length?filtered:WORDS);
+  idx=0; revealed=false; answered=false;
+  showPanel();
+  renderCurrent();
+}
+function showPanel(){
+  ['flashcardMode','quizMode','typingMode','emptyState','resultScreen']
+    .forEach(id=>document.getElementById(id).classList.add('hidden'));
+  if(!filtered.length){
+    document.getElementById('emptyState').classList.remove('hidden');
+    return;
+  }
+  if(mode==='flashcard') document.getElementById('flashcardMode').classList.remove('hidden');
+  else if(mode==='quiz') document.getElementById('quizMode').classList.remove('hidden');
   else document.getElementById('typingMode').classList.remove('hidden');
 }
 
-/* ══════════════════════════════════════════
-   CATEGORY SWITCHING
-══════════════════════════════════════════ */
-function setCategory(btn, cat) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  filtered = cat === 'all' ? [...WORDS] : WORDS.filter(w => w.c === cat);
-  resetState();
-  document.getElementById('resultScreen').classList.add('hidden');
-  showPanel();
-  renderCurrent();
+/* ════════════════════════════════════════
+   PROGRESS
+════════════════════════════════════════ */
+function updateProgress(){
+  const total=deck.length, cur=Math.min(idx+1,total);
+  document.getElementById('progressText').textContent=cur+' / '+total;
+  document.getElementById('progressFill').style.width=(cur/total*100)+'%';
+  const sb=document.getElementById('scoreText');
+  sb.textContent=(mode!=='flashcard'&&score.total>0)?(score.ok+'/'+score.total):'';
 }
 
-/* ══════════════════════════════════════════
-   RESET / SHUFFLE
-══════════════════════════════════════════ */
-function resetState() {
-  deck     = shuffle(filtered);
-  idx      = 0;
-  score    = {ok:0, total:0};
-  revealed = false;
-  answered = false;
-}
-
-function shuffleWords() {
-  resetState();
-  document.getElementById('resultScreen').classList.add('hidden');
-  showPanel();
-  renderCurrent();
-}
-
-function resetQuiz() {
-  resetState();
-  document.getElementById('resultScreen').classList.add('hidden');
-  showPanel();
-  renderCurrent();
-}
-
-/* ══════════════════════════════════════════
-   RENDER DISPATCH
-══════════════════════════════════════════ */
-function renderCurrent() {
-  if (idx >= deck.length) { showResult(); return; }
+/* ════════════════════════════════════════
+   RENDER
+════════════════════════════════════════ */
+function renderCurrent(){
+  if(idx>=deck.length){showResult();return;}
   updateProgress();
-  const w = deck[idx];
-  if (mode === 'flashcard') renderFlash(w);
-  else if (mode === 'quiz') renderQuiz(w);
+  const w=deck[idx];
+  if(mode==='flashcard')renderFlash(w);
+  else if(mode==='quiz')renderQuiz(w);
   else renderTyping(w);
 }
 
-/* ══════════════════════════════════════════
-   FLASHCARD
-══════════════════════════════════════════ */
-function renderFlash(w) {
-  revealed = false;
-  setBadge(document.getElementById('flashCat'), w.c);
-  document.getElementById('flashWord').textContent    = w.w;
-  document.getElementById('flashMeaning').textContent = w.m;
+/* flashcard */
+function renderFlash(w){
+  revealed=false;
+  setBadge(document.getElementById('flashCat'),w.c);
+  setLvlBadge(document.getElementById('flashLvl'),w.l);
+  document.getElementById('flashWord').textContent=w.w;
+  document.getElementById('flashMeaning').textContent=w.m;
   document.getElementById('flashHint').classList.remove('hidden');
   document.getElementById('flashDiv').classList.add('hidden');
   document.getElementById('flashMeaning').classList.add('hidden');
-  document.getElementById('prevBtn').disabled = idx === 0;
-  document.getElementById('nextBtn').disabled = false;
+  document.getElementById('prevBtn').disabled=idx===0;
+}
+function toggleCard(){
+  revealed=!revealed;
+  document.getElementById('flashHint').classList.toggle('hidden',revealed);
+  document.getElementById('flashDiv').classList.toggle('hidden',!revealed);
+  document.getElementById('flashMeaning').classList.toggle('hidden',!revealed);
+}
+function prevCard(){if(idx>0){idx--;renderCurrent();}}
+function nextCard(){
+  if(idx<deck.length-1){idx++;renderCurrent();}else showResult();
 }
 
-function toggleCard() {
-  revealed = !revealed;
-  document.getElementById('flashHint').classList.toggle('hidden', revealed);
-  document.getElementById('flashDiv').classList.toggle('hidden', !revealed);
-  document.getElementById('flashMeaning').classList.toggle('hidden', !revealed);
-}
-
-function prevCard() { if (idx > 0) { idx--; renderCurrent(); } }
-function nextCard() {
-  if (idx < deck.length-1) { idx++; renderCurrent(); }
-  else showResult();
-}
-
-/* ══════════════════════════════════════════
-   QUIZ (4-CHOICE)
-══════════════════════════════════════════ */
-function renderQuiz(w) {
-  answered = false;
-  setBadge(document.getElementById('quizCat'), w.c);
-  document.getElementById('quizWord').textContent = w.w;
+/* quiz */
+function renderQuiz(w){
+  answered=false;
+  setBadge(document.getElementById('quizCat'),w.c);
+  setLvlBadge(document.getElementById('quizLvl'),w.l);
+  document.getElementById('quizWord').textContent=w.w;
   document.getElementById('quizNext').classList.add('hidden');
-
-  // Pick 3 distractors
-  const distractors = shuffle(WORDS.filter(x => x !== w && x.m !== w.m)).slice(0,3);
-  const opts = shuffle([w, ...distractors]);
-
-  const container = document.getElementById('quizOptions');
-  container.innerHTML = '';
-  opts.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn';
-    btn.textContent = opt.m;
-    btn.onclick = () => selectOpt(btn, opt === w, w);
-    container.appendChild(btn);
+  const pool=shuffle(WORDS.filter(x=>x!==w&&x.m!==w.m)).slice(0,3);
+  const opts=shuffle([w,...pool]);
+  const con=document.getElementById('quizOptions');
+  con.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.textContent=opt.m;
+    btn.onclick=()=>selectOpt(btn,opt===w,w);
+    con.appendChild(btn);
   });
 }
-
-function selectOpt(btn, correct, word) {
-  if (answered) return;
-  answered = true;
-  score.total++;
-  if (correct) {
-    btn.classList.add('correct');
-    score.ok++;
-  } else {
+function selectOpt(btn,correct,word){
+  if(answered)return;
+  answered=true; score.total++;
+  if(correct){btn.classList.add('correct');score.ok++;}
+  else{
     btn.classList.add('wrong');
-    document.querySelectorAll('.opt-btn').forEach(b => {
-      if (b.textContent === word.m) b.classList.add('correct');
+    document.querySelectorAll('.opt-btn').forEach(b=>{
+      if(b.textContent===word.m)b.classList.add('correct');
     });
   }
-  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
   document.getElementById('quizNext').classList.remove('hidden');
   updateProgress();
 }
 
-/* ══════════════════════════════════════════
-   TYPING
-══════════════════════════════════════════ */
-function renderTyping(w) {
-  answered = false;
-  setBadge(document.getElementById('typingCat'), w.c);
-  document.getElementById('typingWord').textContent = w.w;
-
-  const inp = document.getElementById('typingInput');
-  inp.value = '';
-  inp.className = 'typing-input';
-  inp.disabled = false;
-  inp.placeholder = 'Type here...';
-
-  document.getElementById('typingFb').textContent = '';
-  document.getElementById('typingFb').className = 'typing-fb';
+/* typing */
+function renderTyping(w){
+  answered=false;
+  setBadge(document.getElementById('typingCat'),w.c);
+  setLvlBadge(document.getElementById('typingLvl'),w.l);
+  document.getElementById('typingWord').textContent=w.w;
+  const inp=document.getElementById('typingInput');
+  inp.value=''; inp.className='typing-input'; inp.disabled=false; inp.placeholder='Type here...';
+  document.getElementById('typingFb').textContent='';
+  document.getElementById('typingFb').className='typing-fb';
   document.getElementById('checkBtn').classList.remove('hidden');
   document.getElementById('skipBtn').classList.remove('hidden');
   document.getElementById('typingNext').classList.add('hidden');
-
-  setTimeout(() => { inp.focus(); inp.scrollIntoView({block:'nearest'}); }, 150);
+  setTimeout(()=>{inp.focus();inp.scrollIntoView({block:'nearest'});},150);
 }
-
-function typingSubmit() {
-  if (answered) return;
-  const inp = document.getElementById('typingInput');
-  const w   = deck[idx];
-  if (!inp.value.trim()) return;
-
-  answered = true;
-  score.total++;
-  const ok = isCorrect(inp.value, w.m);
-
-  if (ok) {
-    inp.className = 'typing-input correct';
-    document.getElementById('typingFb').textContent = 'Correct!';
-    document.getElementById('typingFb').className   = 'typing-fb fb-ok';
+function typingSubmit(){
+  if(answered)return;
+  const inp=document.getElementById('typingInput');
+  const w=deck[idx];
+  if(!inp.value.trim())return;
+  answered=true; score.total++;
+  const ok=isCorrect(inp.value,w.m);
+  if(ok){
+    inp.className='typing-input correct';
+    document.getElementById('typingFb').textContent='Correct!';
+    document.getElementById('typingFb').className='typing-fb fb-ok';
     score.ok++;
-  } else {
-    inp.className = 'typing-input wrong';
-    document.getElementById('typingFb').textContent = 'Answer: "' + w.m + '"';
-    document.getElementById('typingFb').className   = 'typing-fb fb-err';
+  }else{
+    inp.className='typing-input wrong';
+    document.getElementById('typingFb').textContent='Answer: "'+w.m+'"';
+    document.getElementById('typingFb').className='typing-fb fb-err';
   }
-
-  inp.disabled = true;
+  inp.disabled=true;
   document.getElementById('checkBtn').classList.add('hidden');
   document.getElementById('skipBtn').classList.add('hidden');
   document.getElementById('typingNext').classList.remove('hidden');
   updateProgress();
 }
-
-function typingSkip() {
-  if (answered) return;
-  const w = deck[idx];
-  const inp = document.getElementById('typingInput');
-  answered = true;
-  score.total++;
-
-  inp.className = 'typing-input wrong';
-  document.getElementById('typingFb').textContent = 'Answer: "' + w.m + '"';
-  document.getElementById('typingFb').className   = 'typing-fb fb-err';
-  inp.disabled = true;
+function typingSkip(){
+  if(answered)return;
+  const w=deck[idx];
+  const inp=document.getElementById('typingInput');
+  answered=true; score.total++;
+  inp.className='typing-input wrong'; inp.disabled=true;
+  document.getElementById('typingFb').textContent='Answer: "'+w.m+'"';
+  document.getElementById('typingFb').className='typing-fb fb-err';
   document.getElementById('checkBtn').classList.add('hidden');
   document.getElementById('skipBtn').classList.add('hidden');
   document.getElementById('typingNext').classList.remove('hidden');
   updateProgress();
 }
-
-/* ══════════════════════════════════════════
-   NEXT (quiz & typing)
-══════════════════════════════════════════ */
-function nextQuestion() {
+function nextQuestion(){
   idx++;
-  if (idx >= deck.length) showResult();
+  if(idx>=deck.length)showResult();
   else renderCurrent();
 }
 
-/* ══════════════════════════════════════════
-   RESULT SCREEN
-══════════════════════════════════════════ */
-function showResult() {
-  ['flashcardMode','quizMode','typingMode'].forEach(id =>
-    document.getElementById(id).classList.add('hidden'));
-  document.getElementById('resultScreen').classList.remove('hidden');
-
-  if (mode === 'flashcard') {
-    document.getElementById('resEmoji').textContent = '🎓';
-    document.getElementById('resScore').textContent = deck.length + ' words';
-    document.getElementById('resSub').textContent   = 'You reviewed all the cards!';
-    return;
-  }
-
-  const pct = score.total ? Math.round(score.ok/score.total*100) : 0;
-  document.getElementById('resScore').textContent = score.ok + '/' + score.total;
-
-  let emoji, msg;
-  if (pct >= 90) { emoji='🏆'; msg='Excellent! Luar biasa!'; }
-  else if (pct >= 70) { emoji='🎉'; msg='Great job! Bagus sekali!'; }
-  else if (pct >= 50) { emoji='👍'; msg='Good effort! Terus berlatih!'; }
-  else { emoji='📚'; msg='Keep studying! Semangat!'; }
-
-  document.getElementById('resEmoji').textContent = emoji;
-  document.getElementById('resSub').textContent   = pct + '% — ' + msg;
+/* ════════════════════════════════════════
+   SHUFFLE / RESTART
+════════════════════════════════════════ */
+function shuffleWords(){
+  deck=shuffle(filtered.length?filtered:WORDS);
+  idx=0; score={ok:0,total:0}; revealed=false; answered=false;
+  document.getElementById('resultScreen').classList.add('hidden');
+  showPanel(); renderCurrent();
+}
+function resetQuiz(){
+  deck=shuffle(filtered.length?filtered:WORDS);
+  idx=0; score={ok:0,total:0}; revealed=false; answered=false;
+  document.getElementById('resultScreen').classList.add('hidden');
+  showPanel(); renderCurrent();
 }
 
-/* ══════════════════════════════════════════
-   KEYBOARD SHORTCUTS
-══════════════════════════════════════════ */
-document.addEventListener('keydown', e => {
-  if (mode === 'typing') {
-    if (e.key === 'Enter') {
-      if (!answered) typingSubmit();
-      else nextQuestion();
-    }
+/* ════════════════════════════════════════
+   RESULT
+════════════════════════════════════════ */
+function showResult(){
+  ['flashcardMode','quizMode','typingMode'].forEach(id=>
+    document.getElementById(id).classList.add('hidden'));
+  document.getElementById('resultScreen').classList.remove('hidden');
+  if(mode==='flashcard'){
+    document.getElementById('resEmoji').textContent='🎓';
+    document.getElementById('resScore').textContent=deck.length+' words';
+    document.getElementById('resSub').textContent='You reviewed all the cards!';
     return;
   }
-  if (mode === 'flashcard') {
-    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleCard(); }
-    if (e.key === 'ArrowRight') nextCard();
-    if (e.key === 'ArrowLeft')  prevCard();
+  const pct=score.total?Math.round(score.ok/score.total*100):0;
+  document.getElementById('resScore').textContent=score.ok+'/'+score.total;
+  let emoji,msg;
+  if(pct>=90){emoji='🏆';msg='Excellent! Luar biasa!';}
+  else if(pct>=70){emoji='🎉';msg='Great job! Bagus sekali!';}
+  else if(pct>=50){emoji='👍';msg='Good effort! Terus berlatih!';}
+  else{emoji='📚';msg='Keep studying! Semangat!';}
+  document.getElementById('resEmoji').textContent=emoji;
+  document.getElementById('resSub').textContent=pct+'% — '+msg;
+}
+
+/* ════════════════════════════════════════
+   KEYBOARD
+════════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if(mode==='typing'){
+    if(e.key==='Enter'){if(!answered)typingSubmit();else nextQuestion();}
     return;
   }
-  if (mode === 'quiz') {
-    if (e.key === 'Enter' && answered) nextQuestion();
+  if(mode==='flashcard'){
+    if(e.key===' '||e.key==='Enter'){e.preventDefault();toggleCard();}
+    if(e.key==='ArrowRight')nextCard();
+    if(e.key==='ArrowLeft')prevCard();
+    return;
   }
+  if(mode==='quiz'&&e.key==='Enter'&&answered)nextQuestion();
 });
 
-/* ══════════════════════════════════════════
-   UPDATE CATEGORY BUTTON COUNTS
-══════════════════════════════════════════ */
-(function initCatCounts() {
-  const counts = {};
-  WORDS.forEach(w => counts[w.c] = (counts[w.c]||0)+1);
-  const btns = document.querySelectorAll('.cat-btn');
-  btns[0].textContent = 'All (' + WORDS.length + ')';
-  ['greeting','question','verb','noun','adjective'].forEach((cat,i) => {
-    const label = CAT_LABEL[cat] + 's';
-    btns[i+1].textContent = label + ' (' + (counts[cat]||0) + ')';
-  });
-})();
-
-/* ══════════════════════════════════════════
+/* ════════════════════════════════════════
    INIT
-══════════════════════════════════════════ */
-filtered = [...WORDS];
-resetState();
+════════════════════════════════════════ */
+applyFilters();
+showPanel();
 renderCurrent();
 </script>
 </body>
