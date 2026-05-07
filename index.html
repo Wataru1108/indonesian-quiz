@@ -1395,6 +1395,48 @@ function isCorrect(input,meaning){
   if(!user)return false;
   return meaning.split(/[\/,]/).map(normAnswer).filter(Boolean).some(a=>a===user);
 }
+/* ════════════════════════════════════════
+   SOUND  (Web Audio API, no external files)
+════════════════════════════════════════ */
+let _actx=null;
+function _ctx(){
+  if(!_actx) _actx=new(window.AudioContext||window.webkitAudioContext)();
+  if(_actx.state==='suspended') _actx.resume();
+  return _actx;
+}
+function playCorrect(){
+  try{
+    const ctx=_ctx(), t=ctx.currentTime;
+    // two-note ascending sweep: ピコーン
+    [[523,880,0,0.13],[880,1318,0.10,0.22]].forEach(([f0,f1,d,dur])=>{
+      const osc=ctx.createOscillator(), g=ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.type='sine';
+      osc.frequency.setValueAtTime(f0,t+d);
+      osc.frequency.linearRampToValueAtTime(f1,t+d+dur*0.75);
+      g.gain.setValueAtTime(0,t+d);
+      g.gain.linearRampToValueAtTime(0.13,t+d+0.01);
+      g.gain.linearRampToValueAtTime(0,t+d+dur);
+      osc.start(t+d); osc.stop(t+d+dur+0.05);
+    });
+  }catch(e){}
+}
+function playWrong(){
+  try{
+    const ctx=_ctx(), t=ctx.currentTime;
+    const osc=ctx.createOscillator(), g=ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.type='square';
+    osc.frequency.setValueAtTime(220,t);
+    osc.frequency.linearRampToValueAtTime(90,t+0.22);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.09,t+0.015);
+    g.gain.linearRampToValueAtTime(0.09,t+0.18);
+    g.gain.linearRampToValueAtTime(0,t+0.28);
+    osc.start(t); osc.stop(t+0.32);
+  }catch(e){}
+}
+
 function setBadge(el,cat){
   el.textContent=CAT_LABEL[cat]||cat;
   el.className='cat-badge '+(CAT_CLASS[cat]||'');
@@ -1532,9 +1574,9 @@ function renderQuiz(w){
 function selectOpt(btn,correct,word){
   if(answered)return;
   answered=true; score.total++;
-  if(correct){btn.classList.add('correct');score.ok++;}
+  if(correct){btn.classList.add('correct');score.ok++;playCorrect();}
   else{
-    btn.classList.add('wrong');
+    btn.classList.add('wrong');playWrong();
     document.querySelectorAll('.opt-btn').forEach(b=>{
       if(b.textContent===word.m)b.classList.add('correct');
     });
@@ -1570,9 +1612,9 @@ function typingSubmit(){
     inp.className='typing-input correct';
     document.getElementById('typingFb').textContent='Correct!';
     document.getElementById('typingFb').className='typing-fb fb-ok';
-    score.ok++;
+    score.ok++;playCorrect();
   }else{
-    inp.className='typing-input wrong';
+    inp.className='typing-input wrong';playWrong();
     document.getElementById('typingFb').textContent='Answer: "'+w.m+'"';
     document.getElementById('typingFb').className='typing-fb fb-err';
   }
@@ -1586,7 +1628,7 @@ function typingSkip(){
   if(answered)return;
   const w=deck[idx];
   const inp=document.getElementById('typingInput');
-  answered=true; score.total++;
+  answered=true; score.total++;playWrong();
   inp.className='typing-input wrong'; inp.disabled=true;
   document.getElementById('typingFb').textContent='Answer: "'+w.m+'"';
   document.getElementById('typingFb').className='typing-fb fb-err';
