@@ -1407,17 +1407,18 @@ function _ctx(){
 function playCorrect(){
   try{
     const ctx=_ctx(), t=ctx.currentTime;
-    // two-note ascending sweep: ピコーン
-    [[523,880,0,0.13],[880,1318,0.10,0.22]].forEach(([f0,f1,d,dur])=>{
+    // snappy 4-note arpeggio: C5→E5→A5→E6
+    // [freq, delay, decay, volume]
+    [[523,0,0.15,0.13],[659,0.07,0.13,0.14],[880,0.14,0.13,0.15],[1318,0.21,0.22,0.19]]
+    .forEach(([freq,d,decay,vol])=>{
       const osc=ctx.createOscillator(), g=ctx.createGain();
       osc.connect(g); g.connect(ctx.destination);
       osc.type='sine';
-      osc.frequency.setValueAtTime(f0,t+d);
-      osc.frequency.linearRampToValueAtTime(f1,t+d+dur*0.75);
+      osc.frequency.setValueAtTime(freq,t+d);
       g.gain.setValueAtTime(0,t+d);
-      g.gain.linearRampToValueAtTime(0.13,t+d+0.01);
-      g.gain.linearRampToValueAtTime(0,t+d+dur);
-      osc.start(t+d); osc.stop(t+d+dur+0.05);
+      g.gain.linearRampToValueAtTime(vol,t+d+0.006); // 6ms punch attack
+      g.gain.linearRampToValueAtTime(0,t+d+decay);   // fast decay
+      osc.start(t+d); osc.stop(t+d+decay+0.05);
     });
   }catch(e){}
 }
