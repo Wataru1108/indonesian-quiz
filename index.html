@@ -22,7 +22,7 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
 
 /* mode tabs */
 .mode-tabs { display:flex; background:white; border-radius:13px; padding:4px; margin-bottom:11px; box-shadow:0 1px 6px rgba(0,0,0,.10); }
-.mode-tab  { flex:1; padding:10px 4px; border:none; background:none; border-radius:9px; font-size:13px; font-weight:700; color:#777; cursor:pointer; transition:all .2s; }
+.mode-tab  { flex:1; padding:10px 2px; border:none; background:none; border-radius:9px; font-size:12px; font-weight:700; color:#777; cursor:pointer; transition:all .2s; }
 .mode-tab.active { background:#c8001d; color:white; }
 
 /* filter rows */
@@ -156,6 +156,38 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
 .quest-chip { background:#c8001d; color:white; font-size:12px; font-weight:800; padding:5px 11px; border-radius:20px; }
 .quest-complete-card { background:white; border-radius:22px; padding:40px 22px; box-shadow:0 6px 20px rgba(0,0,0,.12); text-align:center; margin-top:8px; }
 
+/* ── SENTENCE BUILDER ── */
+.sent-card { background:white; border-radius:22px; padding:22px 18px 20px; box-shadow:0 6px 20px rgba(0,0,0,.12); margin-bottom:10px; }
+.sent-top  { display:flex; align-items:center; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
+.sent-dir  { font-size:11px; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+.sent-trans { font-size:18px; font-weight:700; color:#111827; line-height:1.5; }
+.genre-daily  { background:#e8f5e9; color:#1b5e20; }
+.genre-work   { background:#e8eaf6; color:#1a237e; }
+.genre-news   { background:#efebe9; color:#3e2723; }
+.genre-travel { background:#fff8e1; color:#5c3d00; }
+.sent-genre-row { display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
+.sent-gpill { padding:7px 13px; border:2px solid #e0e0e0; border-radius:20px; background:white; font-size:12px; font-weight:700; color:#555; cursor:pointer; transition:all .2s; }
+.sent-gpill.active { border-color:#c8001d; background:#c8001d; color:white; }
+.sent-answer-lbl { font-size:11px; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:.7px; margin-bottom:6px; display:block; }
+.sent-answer-box {
+  min-height:64px; background:white; border-radius:14px;
+  border:2px dashed #d5d5d5; padding:10px 12px;
+  display:flex; flex-wrap:wrap; gap:7px; align-content:flex-start;
+  margin-bottom:6px; box-shadow:0 1px 4px rgba(0,0,0,.05);
+  transition:border-color .25s,background .25s;
+}
+.sent-answer-box.state-ok  { border-color:#28a745; border-style:solid; background:#f0fff4; }
+.sent-answer-box.state-err { border-color:#dc3545; border-style:solid; background:#fff5f5; }
+.sent-placeholder { color:#ccc; font-size:13px; align-self:center; font-style:italic; }
+.sent-fb { min-height:22px; font-size:14px; font-weight:700; text-align:center; margin:6px 0 8px; }
+.sent-fb.ok  { color:#28a745; }
+.sent-fb.err { color:#dc3545; }
+.sent-bank { background:white; border-radius:16px; padding:13px 12px; box-shadow:0 1px 5px rgba(0,0,0,.08); margin-bottom:11px; display:flex; flex-wrap:wrap; gap:8px; min-height:56px; align-content:flex-start; }
+.word-chip { padding:9px 15px; background:#eef2ff; border:2px solid #c7d2f5; border-radius:10px; font-size:15px; font-weight:700; color:#1e3a8a; cursor:pointer; transition:all .15s; user-select:none; }
+.word-chip:active { transform:scale(.93); }
+.word-chip-ans { padding:9px 15px; background:#1e3a8a; border:2px solid #1e3a8a; border-radius:10px; font-size:15px; font-weight:700; color:white; cursor:pointer; transition:all .15s; user-select:none; }
+.word-chip-ans:active { transform:scale(.93); }
+
 /* empty state */
 .empty-state { text-align:center; background:white; border-radius:20px; padding:40px 20px; box-shadow:0 4px 16px rgba(0,0,0,.10); }
 .empty-state .emoji { font-size:48px; margin-bottom:12px; }
@@ -237,11 +269,13 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
 
   <!-- mode tabs -->
   <div class="mode-tabs">
-    <button class="mode-tab active" onclick="setMode('flashcard')">Flashcard</button>
-    <button class="mode-tab" onclick="setMode('quiz')">4-Choice</button>
-    <button class="mode-tab" onclick="setMode('typing')">Typing</button>
+    <button class="mode-tab active" onclick="setMode('flashcard')">Flash</button>
+    <button class="mode-tab" onclick="setMode('quiz')">Quiz</button>
+    <button class="mode-tab" onclick="setMode('typing')">Type</button>
+    <button class="mode-tab" onclick="setMode('sentence')">Sentence</button>
   </div>
 
+  <div id="wordFilters">
   <!-- level filter -->
   <div class="filter-block">
     <span class="filter-label">Level</span>
@@ -295,6 +329,7 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
       </optgroup>
     </select>
   </div>
+  </div><!-- /wordFilters -->
 
   <!-- progress -->
   <div class="progress-area">
@@ -357,6 +392,37 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
       <button class="btn btn-primary"   id="checkBtn" onclick="typingSubmit()">Check ✓</button>
     </div>
     <button class="btn btn-primary btn-full hidden" id="typingNext" onclick="nextQuestion()">Next →</button>
+  </div>
+
+  <!-- ═══ SENTENCE ═══ -->
+  <div id="sentenceMode" class="hidden">
+    <div class="sent-card">
+      <div class="sent-top">
+        <span class="cat-badge" id="sentGenreBadge"></span>
+        <span class="lvl-badge" id="sentLvlBadge"></span>
+        <button class="speak-btn" onclick="sentSpeak()" title="Pronounce">🔊</button>
+      </div>
+      <div class="sent-dir">Translate into Indonesian</div>
+      <div class="sent-trans" id="sentTrans"></div>
+    </div>
+    <div class="sent-genre-row">
+      <button class="sent-gpill active" onclick="setSentGenre(this,'all')">All</button>
+      <button class="sent-gpill" onclick="setSentGenre(this,'daily')">Daily</button>
+      <button class="sent-gpill" onclick="setSentGenre(this,'work')">Work</button>
+      <button class="sent-gpill" onclick="setSentGenre(this,'news')">News</button>
+      <button class="sent-gpill" onclick="setSentGenre(this,'travel')">Travel</button>
+    </div>
+    <span class="sent-answer-lbl">Your answer</span>
+    <div class="sent-answer-box" id="sentAnswerBox">
+      <span class="sent-placeholder">Tap words below ↓</span>
+    </div>
+    <div class="sent-fb" id="sentFb"></div>
+    <div class="sent-bank" id="sentBank"></div>
+    <div class="nav-buttons" id="sentNavBtns">
+      <button class="btn btn-secondary" onclick="sentClear()">Clear</button>
+      <button class="btn btn-primary"   onclick="sentCheck()">Check ✓</button>
+    </div>
+    <button class="btn btn-primary btn-full hidden" id="sentNextBtn" onclick="sentNext()">Next →</button>
   </div>
 
   <!-- ═══ EMPTY ═══ -->
@@ -1583,8 +1649,9 @@ function setGenre(genre){
 function setMode(m){
   mode=m;
   document.querySelectorAll('.mode-tab').forEach((b,i)=>{
-    b.classList.toggle('active',['flashcard','quiz','typing'][i]===m);
+    b.classList.toggle('active',['flashcard','quiz','typing','sentence'][i]===m);
   });
+  if(m==='sentence'){initSentenceMode();return;}
   score={ok:0,total:0};
   deck=shuffle(filtered.length?filtered:WORDS);
   idx=0; revealed=false; answered=false;
@@ -1592,8 +1659,16 @@ function setMode(m){
   renderCurrent();
 }
 function showPanel(){
-  ['flashcardMode','quizMode','typingMode','emptyState','resultScreen']
+  ['flashcardMode','quizMode','typingMode','sentenceMode','emptyState','resultScreen']
     .forEach(id=>document.getElementById(id).classList.add('hidden'));
+  const wf=document.getElementById('wordFilters');
+  const fs=document.getElementById('filterStats');
+  if(mode==='sentence'){
+    wf.classList.add('hidden'); fs.classList.remove('hidden');
+    document.getElementById('sentenceMode').classList.remove('hidden');
+    return;
+  }
+  wf.classList.remove('hidden'); fs.classList.remove('hidden');
   if(!filtered.length){
     document.getElementById('emptyState').classList.remove('hidden');
     return;
@@ -1744,12 +1819,14 @@ function nextQuestion(){
    SHUFFLE / RESTART
 ════════════════════════════════════════ */
 function shuffleWords(){
+  if(mode==='sentence'){initSentenceMode();return;}
   deck=shuffle(filtered.length?filtered:WORDS);
   idx=0; score={ok:0,total:0}; revealed=false; answered=false;
   document.getElementById('resultScreen').classList.add('hidden');
   showPanel(); renderCurrent();
 }
 function resetQuiz(){
+  if(mode==='sentence'){initSentenceMode();return;}
   deck=shuffle(filtered.length?filtered:WORDS);
   idx=0; score={ok:0,total:0}; revealed=false; answered=false;
   document.getElementById('resultScreen').classList.add('hidden');
@@ -1796,6 +1873,204 @@ document.addEventListener('keydown',e=>{
   }
   if(mode==='quiz'&&e.key==='Enter'&&answered)nextQuestion();
 });
+
+/* ════════════════════════════════════════
+   SENTENCE BUILDER
+════════════════════════════════════════ */
+const SENT_GENRES={daily:'Daily',work:'Work',news:'News',travel:'Travel'};
+const SENT_GCLS  ={daily:'genre-daily',work:'genre-work',news:'genre-news',travel:'genre-travel'};
+const SENTENCES=[
+/* ── Daily ── */
+{s:"Saya tidak bisa datang ke pesta itu",t:"I can't come to that party",g:"daily",l:"B1"},
+{s:"Dia sudah menikah selama tiga tahun",t:"She has been married for three years",g:"daily",l:"B1"},
+{s:"Kami perlu membeli bahan makanan hari ini",t:"We need to buy groceries today",g:"daily",l:"B1"},
+{s:"Cuaca hari ini sangat panas dan lembab",t:"The weather today is very hot and humid",g:"daily",l:"B1"},
+{s:"Saya ingin belajar memasak masakan Indonesia",t:"I want to learn to cook Indonesian food",g:"daily",l:"B1"},
+{s:"Tolong matikan lampu sebelum keluar rumah",t:"Please turn off the lights before leaving the house",g:"daily",l:"B1"},
+{s:"Apakah kamu sudah sarapan pagi ini",t:"Have you had breakfast this morning",g:"daily",l:"B1"},
+{s:"Saya biasanya tidur sekitar pukul sebelas malam",t:"I usually sleep around eleven at night",g:"daily",l:"B1"},
+{s:"Mereka pindah ke kota baru bulan lalu",t:"They moved to a new city last month",g:"daily",l:"B2"},
+{s:"Rumah itu terlalu kecil untuk keluarga besar",t:"That house is too small for a large family",g:"daily",l:"B2"},
+{s:"Saya harus menelepon dokter besok pagi",t:"I have to call the doctor tomorrow morning",g:"daily",l:"B1"},
+{s:"Kami berencana mengadakan pesta ulang tahun minggu depan",t:"We plan to hold a birthday party next week",g:"daily",l:"B2"},
+{s:"Dia selalu melupakan janji yang sudah dibuat",t:"He always forgets the promises that were made",g:"daily",l:"B2"},
+/* ── Work ── */
+{s:"Rapat penting itu dijadwalkan pada hari Senin",t:"That important meeting is scheduled for Monday",g:"work",l:"B1"},
+{s:"Laporan keuangan harus diselesaikan sebelum akhir bulan",t:"The financial report must be completed before month end",g:"work",l:"B2"},
+{s:"Manajer kami meminta semua karyawan bekerja lembur",t:"Our manager asked all employees to work overtime",g:"work",l:"B2"},
+{s:"Perusahaan ini sedang mencari investor baru",t:"This company is looking for new investors",g:"work",l:"B1"},
+{s:"Saya perlu mengirim email kepada klien hari ini",t:"I need to send an email to the client today",g:"work",l:"B1"},
+{s:"Proyek ini harus selesai dalam dua minggu",t:"This project must be completed within two weeks",g:"work",l:"B1"},
+{s:"Tim kami berhasil mencapai target penjualan bulan ini",t:"Our team successfully achieved the sales target this month",g:"work",l:"B2"},
+{s:"Negosiasi kontrak dengan klien berjalan dengan lancar",t:"Contract negotiation with the client went smoothly",g:"work",l:"B2"},
+{s:"Dia mendapat promosi jabatan setelah bekerja keras",t:"He got a promotion after working hard",g:"work",l:"B2"},
+{s:"Kami membutuhkan lebih banyak dana untuk proyek ini",t:"We need more funds for this project",g:"work",l:"B1"},
+{s:"Presentasi produk baru akan dilakukan besok siang",t:"The new product presentation will be held tomorrow noon",g:"work",l:"B2"},
+{s:"Semua karyawan wajib menghadiri pelatihan minggu depan",t:"All employees must attend the training next week",g:"work",l:"B1"},
+{s:"Perusahaan kami membuka kantor cabang di Surabaya",t:"Our company is opening a branch office in Surabaya",g:"work",l:"B2"},
+/* ── News ── */
+{s:"Pemerintah mengumumkan kebijakan baru mengenai pajak",t:"The government announced a new policy on taxes",g:"news",l:"B2"},
+{s:"Bencana banjir melanda beberapa wilayah di Jawa",t:"Floods hit several areas in Java",g:"news",l:"B2"},
+{s:"Pemilihan umum akan diadakan pada bulan depan",t:"The general election will be held next month",g:"news",l:"B2"},
+{s:"Harga bahan bakar naik akibat krisis global",t:"Fuel prices rose due to the global crisis",g:"news",l:"B2"},
+{s:"Polisi berhasil menangkap tersangka kasus penipuan",t:"The police successfully arrested the fraud suspect",g:"news",l:"B2"},
+{s:"Demonstrasi berlangsung damai di pusat kota",t:"The demonstration took place peacefully in the city center",g:"news",l:"B2"},
+{s:"Pemerintah berencana membangun jalur kereta api baru",t:"The government plans to build a new railway line",g:"news",l:"B2"},
+{s:"Ekonomi negara mulai pulih setelah pandemi",t:"The country's economy is beginning to recover after the pandemic",g:"news",l:"B2"},
+{s:"Presiden mengadakan konferensi pers di istana negara",t:"The president held a press conference at the state palace",g:"news",l:"B2"},
+{s:"Inflasi meningkat tajam dalam beberapa bulan terakhir",t:"Inflation has risen sharply in recent months",g:"news",l:"B2"},
+{s:"Program pendidikan baru diluncurkan oleh kementerian",t:"A new education program was launched by the ministry",g:"news",l:"B2"},
+{s:"Kebakaran hutan menyebabkan kabut asap di beberapa daerah",t:"Forest fires caused smog in several areas",g:"news",l:"B2"},
+{s:"Perjanjian dagang baru ditandatangani oleh kedua negara",t:"A new trade agreement was signed by both countries",g:"news",l:"B2"},
+/* ── Travel ── */
+{s:"Kami memesan hotel dekat pantai untuk liburan",t:"We booked a hotel near the beach for the holiday",g:"travel",l:"B1"},
+{s:"Penerbangan ke Bali memakan waktu sekitar dua jam",t:"The flight to Bali takes about two hours",g:"travel",l:"B1"},
+{s:"Saya kehilangan paspor di bandara kemarin",t:"I lost my passport at the airport yesterday",g:"travel",l:"B1"},
+{s:"Tempat wisata itu ramai dikunjungi pada musim liburan",t:"That tourist spot is crowded during the holiday season",g:"travel",l:"B2"},
+{s:"Kami menyewa mobil untuk berkeliling kota Yogyakarta",t:"We rented a car to tour the city of Yogyakarta",g:"travel",l:"B1"},
+{s:"Pemandu wisata menjelaskan sejarah candi dengan detail",t:"The tour guide explained the history of the temple in detail",g:"travel",l:"B2"},
+{s:"Harga tiket masuk ke museum sangat terjangkau",t:"The admission price to the museum is very affordable",g:"travel",l:"B1"},
+{s:"Kami menghabiskan seminggu di Lombok menikmati pantai",t:"We spent a week in Lombok enjoying the beach",g:"travel",l:"B2"},
+{s:"Kuliner lokal di kota ini sangat beragam dan lezat",t:"The local cuisine in this city is very diverse and delicious",g:"travel",l:"B1"},
+{s:"Perjalanan dengan kapal feri memakan waktu empat jam",t:"The ferry trip takes four hours",g:"travel",l:"B1"},
+{s:"Saya ingin mengunjungi semua pulau di Indonesia",t:"I want to visit all the islands in Indonesia",g:"travel",l:"B1"},
+];
+
+let sentDeck=[],sentSentIdx=0,sentScore={ok:0,total:0};
+let sentTokens=[],sentBankOrder=[],sentBankUsed=[],sentAnswer=[];
+let sentAnswered=false,sentFirstTry=true,sentGenreFilter='all';
+
+function initSentenceMode(){
+  const pool=sentGenreFilter==='all'?[...SENTENCES]:SENTENCES.filter(s=>s.g===sentGenreFilter);
+  sentDeck=shuffle(pool);
+  sentSentIdx=0; sentScore={ok:0,total:0};
+  document.getElementById('resultScreen').classList.add('hidden');
+  showPanel();
+  renderSentCurrent();
+}
+function setSentGenre(btn,genre){
+  sentGenreFilter=genre;
+  document.querySelectorAll('.sent-gpill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  initSentenceMode();
+}
+function renderSentCurrent(){
+  if(sentSentIdx>=sentDeck.length){showSentResult();return;}
+  const s=sentDeck[sentSentIdx];
+  sentTokens=s.s.split(' ');
+  sentBankOrder=shuffle([...Array(sentTokens.length).keys()]);
+  sentBankUsed=new Array(sentTokens.length).fill(false);
+  sentAnswer=[]; sentAnswered=false; sentFirstTry=true;
+  const gb=document.getElementById('sentGenreBadge');
+  gb.textContent=SENT_GENRES[s.g]||s.g;
+  gb.className='cat-badge '+(SENT_GCLS[s.g]||'');
+  const lb=document.getElementById('sentLvlBadge');
+  lb.textContent=s.l; lb.className='lvl-badge lvl-'+s.l;
+  document.getElementById('sentTrans').textContent=s.t;
+  document.getElementById('sentAnswerBox').className='sent-answer-box';
+  const fb=document.getElementById('sentFb');
+  fb.textContent=''; fb.className='sent-fb';
+  document.getElementById('sentNextBtn').classList.add('hidden');
+  document.getElementById('sentNavBtns').classList.remove('hidden');
+  renderSentUI();
+  updateSentProgress();
+}
+function renderSentUI(){
+  const bank=document.getElementById('sentBank');
+  bank.innerHTML='';
+  sentBankOrder.forEach(i=>{
+    if(sentBankUsed[i])return;
+    const btn=document.createElement('button');
+    btn.className='word-chip'; btn.textContent=sentTokens[i];
+    btn.onclick=()=>sentBankTap(i);
+    bank.appendChild(btn);
+  });
+  const box=document.getElementById('sentAnswerBox');
+  const prevCls=box.className;
+  box.innerHTML=''; box.className=prevCls;
+  if(sentAnswer.length===0){
+    const ph=document.createElement('span');
+    ph.className='sent-placeholder'; ph.textContent='Tap words below ↓';
+    box.appendChild(ph);
+  }else{
+    sentAnswer.forEach((ti,pos)=>{
+      const btn=document.createElement('button');
+      btn.className='word-chip-ans'; btn.textContent=sentTokens[ti];
+      if(!sentAnswered) btn.onclick=()=>sentAnswerTap(pos);
+      box.appendChild(btn);
+    });
+  }
+}
+function sentBankTap(i){
+  if(sentAnswered)return;
+  sentBankUsed[i]=true; sentAnswer.push(i); renderSentUI();
+}
+function sentAnswerTap(pos){
+  if(sentAnswered)return;
+  sentBankUsed[sentAnswer[pos]]=false;
+  sentAnswer.splice(pos,1); renderSentUI();
+}
+function sentClear(){
+  if(sentAnswered)return;
+  sentBankUsed.fill(false); sentAnswer=[]; renderSentUI();
+}
+function sentCheck(){
+  if(sentAnswered||sentAnswer.length===0)return;
+  const userSent=sentAnswer.map(i=>sentTokens[i]).join(' ');
+  const correct=userSent===sentDeck[sentSentIdx].s;
+  if(correct){
+    sentAnswered=true; sentScore.total++;
+    if(sentFirstTry)sentScore.ok++;
+    playCorrect();
+    document.getElementById('sentAnswerBox').className='sent-answer-box state-ok';
+    const fb=document.getElementById('sentFb');
+    fb.textContent='✓ Benar! Correct!'; fb.className='sent-fb ok';
+    document.getElementById('sentNavBtns').classList.add('hidden');
+    document.getElementById('sentNextBtn').classList.remove('hidden');
+    updateSentProgress();
+  }else{
+    sentFirstTry=false; playWrong();
+    document.getElementById('sentAnswerBox').className='sent-answer-box state-err';
+    const fb=document.getElementById('sentFb');
+    fb.textContent='✗ Not quite — try again!'; fb.className='sent-fb err';
+    setTimeout(()=>{
+      sentBankUsed.fill(false); sentAnswer=[];
+      sentBankOrder=shuffle([...Array(sentTokens.length).keys()]);
+      document.getElementById('sentAnswerBox').className='sent-answer-box';
+      fb.textContent=''; fb.className='sent-fb';
+      renderSentUI();
+    },1200);
+  }
+}
+function sentNext(){
+  sentSentIdx++;
+  if(sentSentIdx>=sentDeck.length)showSentResult();
+  else{renderSentCurrent();updateSentProgress();}
+}
+function sentSpeak(){const s=sentDeck[sentSentIdx];if(s)speak(s.s);}
+function updateSentProgress(){
+  const total=sentDeck.length,cur=Math.min(sentSentIdx+1,total);
+  document.getElementById('progressText').textContent=cur+' / '+total;
+  document.getElementById('progressFill').style.width=(cur/total*100)+'%';
+  document.getElementById('filterStats').textContent=total+' sentences · '+
+    (sentGenreFilter==='all'?'All genres':(SENT_GENRES[sentGenreFilter]||sentGenreFilter));
+  const sb=document.getElementById('scoreText');
+  sb.textContent=sentScore.total>0?sentScore.ok+'/'+sentScore.total:'';
+}
+function showSentResult(){
+  ['flashcardMode','quizMode','typingMode','sentenceMode','emptyState'].forEach(id=>
+    document.getElementById(id).classList.add('hidden'));
+  document.getElementById('resultScreen').classList.remove('hidden');
+  const pct=sentScore.total?Math.round(sentScore.ok/sentScore.total*100):0;
+  document.getElementById('resScore').textContent=sentScore.ok+'/'+sentScore.total;
+  let emoji,msg;
+  if(pct>=90){emoji='🏆';msg='Excellent! Luar biasa!';}
+  else if(pct>=70){emoji='🎉';msg='Great job! Bagus sekali!';}
+  else if(pct>=50){emoji='👍';msg='Good effort! Terus berlatih!';}
+  else{emoji='📚';msg='Keep studying! Semangat!';}
+  document.getElementById('resEmoji').textContent=emoji;
+  document.getElementById('resSub').textContent=pct+'% first-try · '+msg;
+}
 
 /* ════════════════════════════════════════
    DAILY QUEST
