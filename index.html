@@ -127,6 +127,9 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
 .typing-input.wrong   { border-color:#dc3545; background:#f8d7da; color:#6b1520; }
 .typing-fb { margin-top:10px; font-size:14px; font-weight:700; min-height:18px; }
 .fb-ok  { color:#28a745; } .fb-err { color:#dc3545; }
+.speak-btn { background:none; border:none; cursor:pointer; font-size:22px; padding:6px 10px; opacity:.55; transition:opacity .2s,transform .1s; line-height:1; border-radius:8px; }
+.speak-btn:hover { opacity:1; background:rgba(0,0,0,.05); }
+.speak-btn:active { transform:scale(.88); }
 
 /* empty state */
 .empty-state { text-align:center; background:white; border-radius:20px; padding:40px 20px; box-shadow:0 4px 16px rgba(0,0,0,.10); }
@@ -233,6 +236,7 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
     <div class="flash-card" id="flashCard" onclick="toggleCard()">
       <span class="cat-badge" id="flashCat"></span><span class="lvl-badge" id="flashLvl"></span>
       <div class="word-idn" id="flashWord"></div>
+      <button class="speak-btn" onclick="event.stopPropagation();speak(deck[idx].w)" title="Pronounce">🔊</button>
       <div class="tap-hint" id="flashHint">Tap to reveal</div>
       <div class="divider hidden" id="flashDiv"></div>
       <div class="word-eng hidden" id="flashMeaning"></div>
@@ -249,6 +253,7 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
       <div class="quiz-label">What does this word mean?</div>
       <div><span class="cat-badge" id="quizCat"></span><span class="lvl-badge" id="quizLvl"></span></div>
       <div class="quiz-word" id="quizWord"></div>
+      <button class="speak-btn" onclick="speak(deck[idx].w)" title="Pronounce">🔊</button>
     </div>
     <div class="quiz-options" id="quizOptions"></div>
     <button class="btn btn-primary btn-full hidden" id="quizNext" onclick="nextQuestion()">Next →</button>
@@ -259,6 +264,7 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
     <div class="typing-card">
       <div><span class="cat-badge" id="typingCat"></span><span class="lvl-badge" id="typingLvl"></span></div>
       <div class="typing-word" id="typingWord"></div>
+      <button class="speak-btn" onclick="speak(deck[idx].w)" title="Pronounce">🔊</button>
       <div class="typing-sub">Type the English meaning</div>
       <input type="text" class="typing-input" id="typingInput"
              placeholder="Type here..." autocomplete="off" autocorrect="off"
@@ -302,24 +308,24 @@ const WORDS = [
 /* ── GREETING ── */
 {w:"Selamat pagi",m:"Good morning",c:"greeting",l:"A1"},
 {w:"Selamat siang",m:"Good afternoon",c:"greeting",l:"A1"},
-{w:"Selamat sore",m:"Good late afternoon",c:"greeting",l:"A1"},
+{w:"Selamat sore",m:"Good late afternoon",c:"greeting",l:"A1",aliases:["good afternoon","good evening"]},
 {w:"Selamat malam",m:"Good evening",c:"greeting",l:"A1"},
 {w:"Halo",m:"Hello",c:"greeting",l:"A1"},
 {w:"Hai",m:"Hi",c:"greeting",l:"A1"},
-{w:"Terima kasih",m:"Thank you",c:"greeting",l:"A1"},
-{w:"Sama-sama",m:"You're welcome",c:"greeting",l:"A1"},
-{w:"Selamat tinggal",m:"Goodbye",c:"greeting",l:"A1"},
+{w:"Terima kasih",m:"Thank you",c:"greeting",l:"A1",aliases:["thanks","thank you very much"]},
+{w:"Sama-sama",m:"You're welcome",c:"greeting",l:"A1",aliases:["welcome","my pleasure","no problem"]},
+{w:"Selamat tinggal",m:"Goodbye",c:"greeting",l:"A1",aliases:["bye","good bye","good-bye","farewell"]},
 {w:"Maaf",m:"Sorry",c:"greeting",l:"A1"},
 {w:"Permisi",m:"Excuse me",c:"greeting",l:"A1"},
 {w:"Tolong",m:"Please",c:"greeting",l:"A1"},
 {w:"Ya",m:"Yes",c:"greeting",l:"A1"},
 {w:"Tidak",m:"No",c:"greeting",l:"A1"},
 {w:"Selamat datang",m:"Welcome",c:"greeting",l:"A1"},
-{w:"Sampai jumpa",m:"See you later",c:"greeting",l:"A1"},
+{w:"Sampai jumpa",m:"See you later",c:"greeting",l:"A1",aliases:["see you","bye","goodbye","see ya"]},
 {w:"Bagaimana kabar?",m:"How are you?",c:"greeting",l:"A2"},
 {w:"Baik-baik saja",m:"I'm fine",c:"greeting",l:"A2"},
 {w:"Selamat jalan",m:"Bon voyage",c:"greeting",l:"A2"},
-{w:"Senang bertemu",m:"Nice to meet you",c:"greeting",l:"A2"},
+{w:"Senang bertemu",m:"Nice to meet you",c:"greeting",l:"A2",aliases:["pleased to meet you","nice meeting you","good to meet you"]},
 
 /* ── PRONOUN ── */
 {w:"saya",m:"I (formal)",c:"pronoun",l:"A1"},
@@ -381,7 +387,7 @@ const WORDS = [
 {w:"oranye",m:"orange",c:"color",l:"A1"},
 {w:"ungu",m:"purple",c:"color",l:"A1"},
 {w:"coklat",m:"brown",c:"color",l:"A1"},
-{w:"abu-abu",m:"gray",c:"color",l:"A1"},
+{w:"abu-abu",m:"gray",c:"color",l:"A1",aliases:["grey"]},
 {w:"merah muda",m:"pink",c:"color",l:"A1"},
 {w:"biru tua",m:"dark blue / navy",c:"color",l:"A2"},
 {w:"emas",m:"gold",c:"color",l:"A2"},
@@ -389,15 +395,15 @@ const WORDS = [
 {w:"krem",m:"cream / beige",c:"color",l:"A2"},
 
 /* ── FAMILY ── */
-{w:"ibu",m:"mother",c:"family",l:"A1"},
-{w:"ayah",m:"father",c:"family",l:"A1"},
+{w:"ibu",m:"mother",c:"family",l:"A1",aliases:["mom","mum","mama"]},
+{w:"ayah",m:"father",c:"family",l:"A1",aliases:["dad","papa","father"]},
 {w:"kakak",m:"older sibling",c:"family",l:"A1"},
 {w:"adik",m:"younger sibling",c:"family",l:"A1"},
 {w:"anak",m:"child",c:"family",l:"A1"},
 {w:"suami",m:"husband",c:"family",l:"A1"},
 {w:"istri",m:"wife",c:"family",l:"A1"},
-{w:"kakek",m:"grandfather",c:"family",l:"A1"},
-{w:"nenek",m:"grandmother",c:"family",l:"A1"},
+{w:"kakek",m:"grandfather",c:"family",l:"A1",aliases:["grandpa","grandad","granddad"]},
+{w:"nenek",m:"grandmother",c:"family",l:"A1",aliases:["grandma","gran","granny","grandmom"]},
 {w:"paman",m:"uncle",c:"family",l:"A1"},
 {w:"bibi",m:"aunt",c:"family",l:"A1"},
 {w:"sepupu",m:"cousin",c:"family",l:"A1"},
@@ -474,15 +480,15 @@ const WORDS = [
 {w:"garasi",m:"garage",c:"home",l:"A2"},
 {w:"halaman",m:"yard / garden",c:"home",l:"A2"},
 {w:"sofa",m:"sofa",c:"home",l:"A2"},
-{w:"kulkas",m:"refrigerator",c:"home",l:"A2"},
+{w:"kulkas",m:"refrigerator",c:"home",l:"A2",aliases:["fridge","icebox"]},
 {w:"kompor",m:"stove",c:"home",l:"A2"},
 {w:"kunci",m:"key",c:"home",l:"A2"},
 {w:"lampu",m:"lamp / light",c:"home",l:"A2"},
 {w:"kipas angin",m:"fan",c:"home",l:"A2"},
 {w:"wastafel",m:"sink",c:"home",l:"A2"},
-{w:"AC",m:"air conditioner",c:"home",l:"B1"},
+{w:"AC",m:"air conditioner",c:"home",l:"B1",aliases:["air conditioning","aircon","a/c","ac unit"]},
 {w:"mesin cuci",m:"washing machine",c:"home",l:"B1"},
-{w:"televisi",m:"television",c:"home",l:"B1"},
+{w:"televisi",m:"television",c:"home",l:"B1",aliases:["tv","telly","the tv"]},
 {w:"pagar",m:"fence",c:"home",l:"B1"},
 {w:"balkon",m:"balcony",c:"home",l:"B1"},
 {w:"teras",m:"terrace / porch",c:"home",l:"B1"},
@@ -584,14 +590,14 @@ const WORDS = [
 {w:"wedang jahe",m:"ginger hot drink",c:"drink",l:"B1"},
 
 /* ── TRANSPORT ── */
-{w:"mobil",m:"car",c:"transport",l:"A1"},
-{w:"motor",m:"motorcycle",c:"transport",l:"A1"},
+{w:"mobil",m:"car",c:"transport",l:"A1",aliases:["automobile","auto","vehicle"]},
+{w:"motor",m:"motorcycle",c:"transport",l:"A1",aliases:["motorbike","moped","bike"]},
 {w:"bus",m:"bus",c:"transport",l:"A1"},
 {w:"kereta",m:"train",c:"transport",l:"A1"},
-{w:"pesawat",m:"airplane",c:"transport",l:"A1"},
-{w:"kapal",m:"ship",c:"transport",l:"A1"},
+{w:"pesawat",m:"airplane",c:"transport",l:"A1",aliases:["plane","aeroplane","aircraft","aero plane"]},
+{w:"kapal",m:"ship",c:"transport",l:"A1",aliases:["boat","vessel"]},
 {w:"taksi",m:"taxi",c:"transport",l:"A1"},
-{w:"sepeda",m:"bicycle",c:"transport",l:"A1"},
+{w:"sepeda",m:"bicycle",c:"transport",l:"A1",aliases:["bike","pushbike","cycle"]},
 {w:"ojek",m:"motorcycle taxi",c:"transport",l:"A2"},
 {w:"becak",m:"pedicab",c:"transport",l:"A2"},
 {w:"kereta api",m:"railway train",c:"transport",l:"A2"},
@@ -1284,8 +1290,8 @@ const WORDS = [
 {w:"alamat",m:"address",c:"noun",l:"A2"},
 {w:"telepon",m:"telephone",c:"noun",l:"A2"},
 {w:"komputer",m:"computer",c:"noun",l:"A2"},
-{w:"ponsel",m:"cell phone",c:"noun",l:"A2"},
-{w:"foto",m:"photo",c:"noun",l:"A2"},
+{w:"ponsel",m:"cell phone",c:"noun",l:"A2",aliases:["mobile phone","mobile","cellphone","smartphone","handphone","phone"]},
+{w:"foto",m:"photo",c:"noun",l:"A2",aliases:["photograph","picture","photograph"]},
 {w:"gambar",m:"picture / image",c:"noun",l:"A2"},
 {w:"suara",m:"sound / voice",c:"noun",l:"A2"},
 {w:"pikiran",m:"thought",c:"noun",l:"A2"},
@@ -1390,10 +1396,11 @@ function normAnswer(s){
     .replace(/\s*\/.*$/,'') // take first alternative
     .trim();
 }
-function isCorrect(input,meaning){
+function isCorrect(input,word){
   const user=normAnswer(input);
   if(!user)return false;
-  return meaning.split(/[\/,]/).map(normAnswer).filter(Boolean).some(a=>a===user);
+  if(word.m.split(/[\/,]/).map(normAnswer).filter(Boolean).some(a=>a===user))return true;
+  return (word.aliases||[]).some(a=>normAnswer(a)===user);
 }
 /* ════════════════════════════════════════
    SOUND  (Web Audio API, no external files)
@@ -1436,6 +1443,13 @@ function playWrong(){
     g.gain.linearRampToValueAtTime(0,t+0.28);
     osc.start(t); osc.stop(t+0.32);
   }catch(e){}
+}
+function speak(text){
+  if(!('speechSynthesis' in window))return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='id-ID'; u.rate=0.9;
+  speechSynthesis.speak(u);
 }
 
 function setBadge(el,cat){
@@ -1608,7 +1622,7 @@ function typingSubmit(){
   const w=deck[idx];
   if(!inp.value.trim())return;
   answered=true; score.total++;
-  const ok=isCorrect(inp.value,w.m);
+  const ok=isCorrect(inp.value,w);
   if(ok){
     inp.className='typing-input correct';
     document.getElementById('typingFb').textContent='Correct!';
