@@ -131,6 +131,31 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
 .speak-btn:hover { opacity:1; background:rgba(0,0,0,.05); }
 .speak-btn:active { transform:scale(.88); }
 
+/* ── DAILY QUEST ── */
+.quest-block {
+  background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+  border-radius:18px; padding:16px 17px 15px; margin-bottom:11px;
+  box-shadow:0 4px 18px rgba(0,0,0,.25); color:white; position:relative; overflow:hidden;
+}
+.quest-deco { position:absolute; top:-30px; right:-20px; width:120px; height:120px; background:rgba(255,255,255,.05); border-radius:50%; pointer-events:none; }
+.quest-hdr  { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:11px; }
+.quest-label { font-size:10px; font-weight:700; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px; }
+.quest-title-txt { font-size:16px; font-weight:800; }
+.quest-streak-badge { background:linear-gradient(135deg,#f7c948,#ff8c42); color:#1a1a2e; font-size:12px; font-weight:800; padding:5px 11px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+.quest-prog-row { display:flex; align-items:center; gap:10px; margin-bottom:13px; }
+.quest-bar  { flex:1; height:8px; background:rgba(255,255,255,.18); border-radius:4px; overflow:hidden; }
+.quest-bar-fill { height:100%; background:linear-gradient(90deg,#f7c948,#ff8c42); border-radius:4px; transition:width .5s; }
+.quest-prog-txt { font-size:13px; font-weight:800; color:rgba(255,255,255,.85); white-space:nowrap; min-width:36px; text-align:right; }
+.quest-start-btn { width:100%; padding:12px; border:none; border-radius:12px; font-size:14px; font-weight:800; cursor:pointer; background:linear-gradient(135deg,#f7c948,#ff8c42); color:#1a1a2e; transition:all .15s; box-shadow:0 3px 12px rgba(247,201,72,.3); }
+.quest-start-btn:active { transform:scale(.97); }
+.quest-done-txt { text-align:center; font-size:13px; font-weight:600; color:rgba(255,255,255,.6); padding-top:2px; }
+.quest-nav { display:flex; align-items:center; gap:9px; margin-bottom:11px; }
+.quest-back-btn { background:white; border:none; border-radius:10px; padding:9px 14px; font-size:13px; font-weight:700; color:#444; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.10); transition:all .15s; }
+.quest-back-btn:active { transform:scale(.96); }
+.quest-mode-lbl { flex:1; font-size:14px; font-weight:800; color:#333; }
+.quest-chip { background:#c8001d; color:white; font-size:12px; font-weight:800; padding:5px 11px; border-radius:20px; }
+.quest-complete-card { background:white; border-radius:22px; padding:40px 22px; box-shadow:0 6px 20px rgba(0,0,0,.12); text-align:center; margin-top:8px; }
+
 /* empty state */
 .empty-state { text-align:center; background:white; border-radius:20px; padding:40px 20px; box-shadow:0 4px 16px rgba(0,0,0,.10); }
 .empty-state .emoji { font-size:48px; margin-bottom:12px; }
@@ -153,6 +178,62 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
   <p>Belajar Bahasa Indonesia · 1000 words · CEFR A1–B2</p>
 </header>
 <div class="container">
+
+  <!-- ═══ DAILY QUEST BLOCK ═══ -->
+  <div class="quest-block">
+    <div class="quest-deco"></div>
+    <div class="quest-hdr">
+      <div>
+        <div class="quest-label">Daily Quest</div>
+        <div class="quest-title-txt" id="questTitleTxt">🎯 Today's Quest</div>
+      </div>
+      <span class="quest-streak-badge hidden" id="questStreakBadge">🔥 1 day</span>
+    </div>
+    <div class="quest-prog-row">
+      <div class="quest-bar"><div class="quest-bar-fill" id="questBarFill" style="width:0%"></div></div>
+      <span class="quest-prog-txt" id="questProgTxt">0 / 10</span>
+    </div>
+    <button class="quest-start-btn" id="questStartBtn" onclick="startQuest()">Start Today's Quest →</button>
+    <div class="quest-done-txt hidden" id="questDoneTxt">✅ Completed! Come back tomorrow.</div>
+  </div>
+
+  <!-- ═══ QUEST QUIZ MODE ═══ -->
+  <div id="questMode" class="hidden">
+    <div class="quest-nav">
+      <button class="quest-back-btn" onclick="exitQuest()">← Back</button>
+      <span class="quest-mode-lbl">🎯 Today's Quest</span>
+      <span class="quest-chip" id="questChip">0 / 10</span>
+    </div>
+    <div class="progress-area" style="margin-bottom:10px;">
+      <div class="progress-info">
+        <span class="progress-text" id="questQLabel">Question 1 / 10</span>
+        <span class="score-badge" id="questCorrectBadge"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="questProgFill" style="width:0%"></div></div>
+    </div>
+    <div id="questQuizContent">
+      <div class="quiz-question">
+        <div class="quiz-label">What does this word mean?</div>
+        <div><span class="cat-badge" id="questCat"></span><span class="lvl-badge" id="questLvl"></span></div>
+        <div class="quiz-word" id="questWord"></div>
+        <button class="speak-btn" onclick="questSpeak()" title="Pronounce">🔊</button>
+      </div>
+      <div class="quiz-options" id="questOptions"></div>
+      <button class="btn btn-primary btn-full hidden" id="questNextBtn" onclick="questNextQ()">Next →</button>
+    </div>
+    <div id="questCompletePanel" class="hidden">
+      <div class="quest-complete-card">
+        <div class="result-emoji" id="questEmoji">🏆</div>
+        <div class="result-title">Today's Quest Complete!</div>
+        <div class="result-score" id="questFinalScore"></div>
+        <div class="result-sub" id="questFinalSub" style="margin-bottom:24px;"></div>
+        <button class="btn btn-primary btn-full" onclick="exitQuest()">Back to Study</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STUDY SECTION ═══ -->
+  <div id="studySection">
 
   <!-- mode tabs -->
   <div class="mode-tabs">
@@ -297,6 +378,7 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
     </div>
   </div>
 
+  </div><!-- /studySection -->
 </div><!-- /container -->
 
 <script>
@@ -1716,11 +1798,152 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ════════════════════════════════════════
+   DAILY QUEST
+════════════════════════════════════════ */
+const QUEST_KEY='iq_quest_v1';
+const QUEST_N=10;
+let questDeck=[],questIdx=0,questOk=0,questAnswered=false,questData=null;
+
+function todayStr(){return new Date().toISOString().slice(0,10);}
+
+function loadOrCreateQuest(){
+  const today=todayStr();
+  let d=null;
+  try{d=JSON.parse(localStorage.getItem(QUEST_KEY)||'null');}catch(e){}
+  if(d&&d.date===today)return d;
+  let prevStreak=0;
+  if(d&&d.completed){
+    const prev=new Date(today);prev.setDate(prev.getDate()-1);
+    if(d.date===prev.toISOString().slice(0,10))prevStreak=d.streak||0;
+  }
+  d={date:today,indices:shuffle([...Array(WORDS.length).keys()]).slice(0,QUEST_N),
+    progress:0,correct:0,completed:false,prevStreak:prevStreak,streak:0};
+  saveQuestData(d);return d;
+}
+function saveQuestData(d){try{localStorage.setItem(QUEST_KEY,JSON.stringify(d));}catch(e){}}
+
+function initQuest(){
+  questData=loadOrCreateQuest();
+  questDeck=questData.indices.map(i=>WORDS[i]);
+  renderQuestBlock();
+}
+
+function renderQuestBlock(){
+  const d=questData;
+  document.getElementById('questBarFill').style.width=(d.progress/QUEST_N*100)+'%';
+  document.getElementById('questProgTxt').textContent=d.progress+' / '+QUEST_N;
+  const streakEl=document.getElementById('questStreakBadge');
+  const btn=document.getElementById('questStartBtn');
+  const done=document.getElementById('questDoneTxt');
+  const title=document.getElementById('questTitleTxt');
+  if(d.completed){
+    title.textContent='✅ Today\'s Quest';
+    const s=d.streak;
+    streakEl.textContent='🔥 '+s+(s===1?' day':' days');
+    streakEl.classList.remove('hidden');
+    btn.classList.add('hidden');
+    done.classList.remove('hidden');
+  }else{
+    title.textContent='🎯 Today\'s Quest';
+    streakEl.classList.add('hidden');
+    done.classList.add('hidden');
+    btn.classList.remove('hidden');
+    btn.textContent=d.progress>0?'Continue Quest →':'Start Today\'s Quest →';
+  }
+}
+
+function startQuest(){
+  if(questData.completed)return;
+  questIdx=questData.progress;
+  questOk=questData.correct;
+  questAnswered=false;
+  document.getElementById('studySection').classList.add('hidden');
+  document.getElementById('questMode').classList.remove('hidden');
+  document.getElementById('questQuizContent').classList.remove('hidden');
+  document.getElementById('questCompletePanel').classList.add('hidden');
+  renderQuestQ();
+}
+
+function exitQuest(){
+  document.getElementById('questMode').classList.add('hidden');
+  document.getElementById('studySection').classList.remove('hidden');
+  renderQuestBlock();
+}
+
+function renderQuestQ(){
+  if(questIdx>=QUEST_N){finishQuest();return;}
+  questAnswered=false;
+  const w=questDeck[questIdx];
+  document.getElementById('questQLabel').textContent='Question '+(questIdx+1)+' / '+QUEST_N;
+  document.getElementById('questProgFill').style.width=(questIdx/QUEST_N*100)+'%';
+  document.getElementById('questChip').textContent=questIdx+' / '+QUEST_N;
+  document.getElementById('questCorrectBadge').textContent=questOk>0?questOk+' correct':'';
+  setBadge(document.getElementById('questCat'),w.c);
+  setLvlBadge(document.getElementById('questLvl'),w.l);
+  document.getElementById('questWord').textContent=w.w;
+  document.getElementById('questNextBtn').classList.add('hidden');
+  const pool=shuffle(WORDS.filter(x=>x!==w&&x.m!==w.m)).slice(0,3);
+  const opts=shuffle([w,...pool]);
+  const con=document.getElementById('questOptions');
+  con.innerHTML='';
+  opts.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='opt-btn';btn.textContent=opt.m;
+    btn.onclick=()=>questSelectOpt(btn,opt===w,w);
+    con.appendChild(btn);
+  });
+}
+
+function questSpeak(){const w=questDeck[questIdx];if(w)speak(w.w);}
+
+function questSelectOpt(btn,correct,word){
+  if(questAnswered)return;
+  questAnswered=true;
+  if(correct){btn.classList.add('correct');questOk++;playCorrect();}
+  else{
+    btn.classList.add('wrong');playWrong();
+    document.querySelectorAll('#questOptions .opt-btn').forEach(b=>{
+      if(b.textContent===word.m)b.classList.add('correct');
+    });
+  }
+  document.querySelectorAll('#questOptions .opt-btn').forEach(b=>b.disabled=true);
+  questIdx++;
+  questData.progress=questIdx;questData.correct=questOk;
+  saveQuestData(questData);
+  document.getElementById('questProgFill').style.width=(questIdx/QUEST_N*100)+'%';
+  document.getElementById('questChip').textContent=questIdx+' / '+QUEST_N;
+  document.getElementById('questCorrectBadge').textContent=questOk>0?questOk+' correct':'';
+  if(questIdx>=QUEST_N){setTimeout(finishQuest,700);}
+  else{document.getElementById('questNextBtn').classList.remove('hidden');}
+}
+
+function questNextQ(){renderQuestQ();}
+
+function finishQuest(){
+  const streak=(questData.prevStreak||0)+1;
+  questData.completed=true;questData.streak=streak;
+  saveQuestData(questData);
+  document.getElementById('questQuizContent').classList.add('hidden');
+  document.getElementById('questCompletePanel').classList.remove('hidden');
+  const pct=Math.round(questOk/QUEST_N*100);
+  document.getElementById('questFinalScore').textContent=questOk+' / '+QUEST_N+' correct';
+  let emoji,msg;
+  if(pct>=90){emoji='🏆';msg='Luar biasa! Perfect!';}
+  else if(pct>=70){emoji='🎉';msg='Bagus sekali! Great job!';}
+  else if(pct>=50){emoji='👍';msg='Terus berlatih! Keep going!';}
+  else{emoji='📚';msg='Semangat! Keep studying!';}
+  document.getElementById('questEmoji').textContent=emoji;
+  document.getElementById('questFinalSub').textContent=
+    '🔥 '+streak+(streak===1?' day':' days')+' streak · '+pct+'% — '+msg;
+}
+
+/* ════════════════════════════════════════
    INIT
 ════════════════════════════════════════ */
 applyFilters();
 showPanel();
 renderCurrent();
+initQuest();
 </script>
 </body>
 </html>
