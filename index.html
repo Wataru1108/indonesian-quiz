@@ -78,6 +78,9 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
 .lvl-C1{background:#e8d5f5;color:#5a0082}
 .lvl-warda{background:#ffe082;color:#5c3200}
 .lvl-sanjaya{background:#c8e6c9;color:#1b5e20}
+.lvl-review{background:#ffcdd2;color:#b71c1c}
+.flash-review-row{display:flex;gap:8px;margin-top:8px;}
+.flash-review-row .btn{flex:1;}
 
 /* flashcard */
 .flash-card {
@@ -297,6 +300,7 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
     <div class="lvl-pills-src">
       <button class="lvl-pill" onclick="setLevel(this,'warda')">Warda</button>
       <button class="lvl-pill" onclick="setLevel(this,'sanjaya')">Sanjaya</button>
+      <button class="lvl-pill" onclick="setLevel(this,'review')">復習</button>
     </div>
   </div>
 
@@ -377,6 +381,10 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
     <div class="nav-buttons">
       <button class="btn btn-secondary" id="prevBtn" onclick="prevCard()">← Prev</button>
       <button class="btn btn-primary"   id="nextBtn" onclick="nextCard()">Next →</button>
+    </div>
+    <div class="flash-review-row hidden" id="flashReviewRow">
+      <button class="btn btn-secondary" onclick="flashRate(false)">✗ Missed</button>
+      <button class="btn btn-primary"   onclick="flashRate(true)">✓ Got it</button>
     </div>
   </div>
 
@@ -3185,6 +3193,214 @@ const WORDS = [
 {w:"pelatihan",m:"training",c:"noun",l:"sanjaya",src:"sanjaya"},
 {w:"sejak",m:"since",c:"noun",l:"sanjaya",src:"sanjaya"},
 
+
+/* ═══ ADDED: 200 new words ═══ */
+/* ── News/Politics/Economy B2/C1 ── */
+{w:"kepala negara",m:"head of state",c:"noun",l:"B2"},
+{w:"penegakan hukum",m:"law enforcement",c:"noun",l:"B2"},
+{w:"jaksa agung",m:"attorney general",c:"noun",l:"C1"},
+{w:"mahkamah agung",m:"supreme court",c:"noun",l:"B2"},
+{w:"mahkamah konstitusi",m:"constitutional court",c:"noun",l:"B2"},
+{w:"pengawasan",m:"oversight / supervision",c:"noun",l:"B2"},
+{w:"alokasi anggaran",m:"budget allocation",c:"noun",l:"C1"},
+{w:"defisit fiskal",m:"fiscal deficit",c:"noun",l:"C1"},
+{w:"kebijakan fiskal",m:"fiscal policy",c:"noun",l:"C1"},
+{w:"stimulus fiskal",m:"fiscal stimulus",c:"noun",l:"C1"},
+{w:"pajak penghasilan",m:"income tax",c:"noun",l:"B2"},
+{w:"pajak pertambahan nilai",m:"value-added tax",c:"noun",l:"C1"},
+{w:"cukai",m:"excise tax",c:"noun",l:"C1"},
+{w:"bea masuk",m:"import duty",c:"noun",l:"C1"},
+{w:"wajib pajak",m:"taxpayer",c:"noun",l:"B2"},
+{w:"kepatuhan",m:"compliance",c:"noun",l:"B2"},
+{w:"privatisasi",m:"privatization",c:"noun",l:"C1"},
+{w:"nasionalisasi",m:"nationalization",c:"noun",l:"C1"},
+{w:"liberalisasi",m:"liberalization",c:"noun",l:"C1"},
+{w:"pengawasan perbankan",m:"banking supervision",c:"noun",l:"C1"},
+{w:"rekening giro",m:"current account",c:"noun",l:"C1"},
+{w:"obligasi pemerintah",m:"government bond",c:"noun",l:"C1"},
+{w:"reksadana",m:"mutual fund",c:"noun",l:"C1"},
+{w:"dana pensiun",m:"pension fund",c:"noun",l:"B2"},
+{w:"redistribusi",m:"redistribution",c:"noun",l:"C1"},
+{w:"tingkat pengangguran",m:"unemployment rate",c:"noun",l:"B2"},
+{w:"reforma agraria",m:"agrarian reform",c:"noun",l:"C1"},
+{w:"sengketa lahan",m:"land dispute",c:"noun",l:"C1"},
+{w:"moratorium",m:"moratorium",c:"noun",l:"C1"},
+{w:"wabah",m:"epidemic",c:"noun",l:"B2"},
+{w:"pandemi",m:"pandemic",c:"noun",l:"B2"},
+{w:"endemi",m:"endemic",c:"noun",l:"C1"},
+{w:"protokol",m:"protocol",c:"noun",l:"B2"},
+{w:"karantina",m:"quarantine",c:"noun",l:"B2"},
+{w:"ketahanan pangan",m:"food security",c:"noun",l:"C1"},
+{w:"digitalisasi",m:"digitalization",c:"noun",l:"B2"},
+{w:"transformasi digital",m:"digital transformation",c:"noun",l:"C1"},
+{w:"infrastruktur digital",m:"digital infrastructure",c:"noun",l:"C1"},
+{w:"keamanan siber",m:"cybersecurity",c:"noun",l:"C1"},
+{w:"privasi data",m:"data privacy",c:"noun",l:"C1"},
+{w:"regulasi teknologi",m:"technology regulation",c:"noun",l:"C1"},
+{w:"platform digital",m:"digital platform",c:"noun",l:"B2"},
+{w:"konten kreator",m:"content creator",c:"noun",l:"B2"},
+{w:"monetisasi",m:"monetization",c:"noun",l:"C1"},
+{w:"ekosistem digital",m:"digital ecosystem",c:"noun",l:"C1"},
+{w:"unicorn",m:"unicorn (startup)",c:"noun",l:"C1"},
+{w:"IPO",m:"initial public offering",c:"noun",l:"C1"},
+{w:"go public",m:"to go public (IPO)",c:"noun",l:"C1"},
+{w:"divestasi",m:"divestiture",c:"noun",l:"C1"},
+{w:"joint venture",m:"joint venture",c:"noun",l:"C1"},
+{w:"konsorsium",m:"consortium",c:"noun",l:"C1"},
+{w:"tender",m:"tender",c:"noun",l:"B2"},
+{w:"kontrak kerja sama",m:"cooperation contract",c:"noun",l:"B2"},
+{w:"uji kelayakan",m:"due diligence",c:"noun",l:"C1"},
+{w:"tata niaga",m:"trade regulation",c:"noun",l:"C1"},
+{w:"perdagangan bebas",m:"free trade",c:"noun",l:"B2"},
+{w:"zona perdagangan",m:"trade zone",c:"noun",l:"B2"},
+{w:"perjanjian dagang",m:"trade agreement",c:"noun",l:"B2"},
+{w:"proteksionisme",m:"protectionism",c:"noun",l:"C1"},
+{w:"ekspansi",m:"expansion",c:"noun",l:"B2"},
+{w:"diversifikasi ekonomi",m:"economic diversification",c:"noun",l:"C1"},
+{w:"komoditas unggulan",m:"leading commodity",c:"noun",l:"C1"},
+{w:"indeks kemiskinan",m:"poverty index",c:"noun",l:"C1"},
+{w:"gini ratio",m:"gini ratio",c:"noun",l:"C1"},
+{w:"mobilitas sosial",m:"social mobility",c:"noun",l:"C1"},
+{w:"hak perempuan",m:"women's rights",c:"noun",l:"B2"},
+{w:"kesetaraan gender",m:"gender equality",c:"noun",l:"B2"},
+{w:"perlindungan anak",m:"child protection",c:"noun",l:"B2"},
+{w:"statistik",m:"statistics",c:"noun",l:"B2"},
+{w:"survei nasional",m:"national survey",c:"noun",l:"B2"},
+{w:"metodologi",m:"methodology",c:"noun",l:"C1"},
+{w:"valid",m:"valid",c:"adjective",l:"B2"},
+{w:"korelasi",m:"correlation",c:"noun",l:"C1"},
+{w:"jalan tol",m:"toll road",c:"noun",l:"B1"},
+{w:"pelabuhan laut",m:"seaport",c:"noun",l:"B2"},
+{w:"rel kereta",m:"railway track",c:"noun",l:"B1"},
+{w:"jaringan listrik",m:"electricity grid",c:"noun",l:"B2"},
+{w:"air bersih",m:"clean water",c:"noun",l:"A2"},
+{w:"irigasi",m:"irrigation",c:"noun",l:"B2"},
+{w:"embargo perdagangan",m:"trade embargo",c:"noun",l:"C1"},
+{w:"dumping",m:"dumping",c:"noun",l:"C1"},
+{w:"kuota impor",m:"import quota",c:"noun",l:"C1"},
+{w:"informasi palsu",m:"misinformation",c:"noun",l:"C1"},
+{w:"hoaks",m:"hoax",c:"noun",l:"B2"},
+{w:"keamanan nasional",m:"national security",c:"noun",l:"B2"},
+{w:"ancaman keamanan",m:"security threat",c:"noun",l:"B2"},
+{w:"intelijen",m:"intelligence (agency)",c:"noun",l:"C1"},
+{w:"mediasi internasional",m:"international mediation",c:"noun",l:"C1"},
+{w:"perjanjian bilateral",m:"bilateral agreement",c:"noun",l:"B2"},
+{w:"perjanjian multilateral",m:"multilateral agreement",c:"noun",l:"C1"},
+{w:"komunike",m:"communiqué",c:"noun",l:"C1"},
+{w:"resolusi PBB",m:"UN resolution",c:"noun",l:"C1"},
+{w:"solidaritas internasional",m:"international solidarity",c:"noun",l:"C1"},
+{w:"kerja sama regional",m:"regional cooperation",c:"noun",l:"B2"},
+{w:"forum internasional",m:"international forum",c:"noun",l:"B2"},
+{w:"blokade",m:"blockade",c:"noun",l:"C1"},
+{w:"operasi militer",m:"military operation",c:"noun",l:"C1"},
+{w:"anggaran pertahanan",m:"defense budget",c:"noun",l:"B2"},
+{w:"pengadaan",m:"procurement",c:"noun",l:"C1"},
+{w:"otorisasi",m:"authorization",c:"noun",l:"C1"},
+
+/* ── Travel/Tourism A2/B1 ── */
+{w:"mesin ATM",m:"ATM machine",c:"noun",l:"A2"},
+{w:"uang tunai",m:"cash",c:"noun",l:"A2"},
+{w:"kode booking",m:"booking code",c:"noun",l:"A2"},
+{w:"terminal kedatangan",m:"arrivals terminal",c:"noun",l:"B1"},
+{w:"terminal keberangkatan",m:"departures terminal",c:"noun",l:"B1"},
+{w:"bagasi terdaftar",m:"checked luggage",c:"noun",l:"B1"},
+{w:"penanganan khusus",m:"special handling",c:"noun",l:"B1"},
+{w:"kondisi tiket",m:"ticket conditions",c:"noun",l:"B1"},
+{w:"syarat pembatalan",m:"cancellation terms",c:"noun",l:"B1"},
+{w:"taksi bandara",m:"airport taxi",c:"noun",l:"A2"},
+{w:"shuttle bus",m:"shuttle bus",c:"noun",l:"A2"},
+{w:"moda transportasi",m:"mode of transport",c:"noun",l:"B1"},
+{w:"wisata petualangan",m:"adventure tourism",c:"noun",l:"B1"},
+{w:"wisata alam",m:"nature tourism",c:"noun",l:"A2"},
+{w:"wisata budaya",m:"cultural tourism",c:"noun",l:"B1"},
+{w:"wisata religi",m:"religious tourism",c:"noun",l:"B1"},
+{w:"wisata gastronomi",m:"gastronomic tourism",c:"noun",l:"B1"},
+{w:"kuliner nusantara",m:"archipelago cuisine",c:"noun",l:"B1"},
+{w:"kerajinan lokal",m:"local handicraft",c:"noun",l:"A2"},
+{w:"gerabah",m:"pottery",c:"noun",l:"B1"},
+{w:"anyaman",m:"weaving / wickerwork",c:"noun",l:"B1"},
+{w:"workshop kerajinan",m:"craft workshop",c:"noun",l:"B1"},
+{w:"homestay",m:"homestay",c:"noun",l:"A2"},
+{w:"guest house",m:"guest house",c:"noun",l:"A2"},
+{w:"camping",m:"camping",c:"noun",l:"A2"},
+{w:"treking",m:"trekking",c:"noun",l:"B1"},
+{w:"hiking",m:"hiking",c:"noun",l:"B1"},
+{w:"mendaki gunung",m:"mountain climbing",c:"noun",l:"B1"},
+{w:"arung jeram",m:"white-water rafting",c:"noun",l:"B1"},
+{w:"surfing",m:"surfing",c:"noun",l:"A2"},
+{w:"spot foto",m:"photo spot",c:"noun",l:"A2"},
+{w:"pemandangan indah",m:"beautiful scenery",c:"noun",l:"A2"},
+{w:"pantai tersembunyi",m:"hidden beach",c:"noun",l:"B1"},
+{w:"hutan bakau",m:"mangrove forest",c:"noun",l:"B1"},
+{w:"danau kawah",m:"crater lake",c:"noun",l:"B1"},
+{w:"taman bawah laut",m:"underwater garden",c:"noun",l:"B1"},
+{w:"paket all-inclusive",m:"all-inclusive package",c:"noun",l:"B1"},
+{w:"jam operasional",m:"operating hours",c:"noun",l:"A2"},
+{w:"hari libur nasional",m:"national holiday",c:"noun",l:"A2"},
+{w:"cuaca setempat",m:"local weather",c:"noun",l:"A2"},
+{w:"nomor darurat",m:"emergency number",c:"noun",l:"A2"},
+{w:"pusat oleh-oleh",m:"souvenir center",c:"noun",l:"A2"},
+{w:"pertunjukan budaya",m:"cultural show",c:"noun",l:"B1"},
+{w:"festival lokal",m:"local festival",c:"noun",l:"A2"},
+{w:"kapal wisata",m:"tourist boat",c:"noun",l:"A2"},
+{w:"pemandian air panas",m:"hot spring bath",c:"noun",l:"B1"},
+{w:"parkir gratis",m:"free parking",c:"noun",l:"A2"},
+{w:"loker",m:"locker",c:"noun",l:"A2"},
+{w:"antrean tiket",m:"ticket queue",c:"noun",l:"A2"},
+{w:"kamera aksi",m:"action camera",c:"noun",l:"A2"},
+
+/* ── Emotion/Character A2/B1 ── */
+{w:"pemarah",m:"quick-tempered",c:"adjective",l:"A2"},
+{w:"pemaaf",m:"forgiving",c:"adjective",l:"A2"},
+{w:"sombong",m:"arrogant",c:"adjective",l:"A2"},
+{w:"murah hati",m:"generous",c:"adjective",l:"A2"},
+{w:"pelit",m:"stingy",c:"adjective",l:"A2"},
+{w:"boros",m:"wasteful / extravagant",c:"adjective",l:"A2"},
+{w:"hemat",m:"thrifty / economical",c:"adjective",l:"A2"},
+{w:"tekun",m:"diligent / persevering",c:"adjective",l:"B1"},
+{w:"gigih",m:"persistent / tenacious",c:"adjective",l:"B1"},
+{w:"santai",m:"relaxed / laid-back",c:"adjective",l:"A2"},
+{w:"serius",m:"serious",c:"adjective",l:"A2"},
+{w:"humoris",m:"humorous / funny",c:"adjective",l:"B1"},
+{w:"penyayang",m:"loving / caring",c:"adjective",l:"A2"},
+{w:"pendiam",m:"quiet / introverted",c:"adjective",l:"A2"},
+{w:"cerewet",m:"talkative / naggy",c:"adjective",l:"A2"},
+{w:"cuek",m:"indifferent / careless",c:"adjective",l:"A2"},
+{w:"sensitif",m:"sensitive",c:"adjective",l:"B1"},
+{w:"perhatian",m:"caring / attentive",c:"adjective",l:"B1"},
+{w:"tulus",m:"sincere",c:"adjective",l:"B1"},
+{w:"setia",m:"loyal",c:"adjective",l:"A2"},
+{w:"manja",m:"spoiled",c:"adjective",l:"A2"},
+{w:"keras kepala",m:"stubborn",c:"adjective",l:"B1"},
+{w:"mudah bergaul",m:"sociable / easy-going",c:"adjective",l:"B1"},
+{w:"optimis",m:"optimistic",c:"adjective",l:"B1"},
+{w:"pesimis",m:"pessimistic",c:"adjective",l:"B1"},
+{w:"idealis",m:"idealistic",c:"adjective",l:"B1"},
+{w:"realistis",m:"realistic",c:"adjective",l:"B1"},
+{w:"gembira",m:"joyful / cheerful",c:"adjective",l:"A2"},
+{w:"kaget",m:"shocked / startled",c:"adjective",l:"A2"},
+{w:"terharu",m:"moved / touched (emotionally)",c:"adjective",l:"B1"},
+{w:"gugup",m:"nervous",c:"adjective",l:"A2"},
+{w:"stres",m:"stressed",c:"adjective",l:"A2"},
+{w:"jengkel",m:"annoyed / irritated",c:"adjective",l:"B1"},
+{w:"cemas",m:"anxious",c:"adjective",l:"B1"},
+{w:"malu-malu",m:"bashful / shy",c:"adjective",l:"A2"},
+{w:"polos",m:"naive / innocent",c:"adjective",l:"A2"},
+{w:"tangguh",m:"tough / resilient",c:"adjective",l:"B1"},
+{w:"tabah",m:"steadfast / patient",c:"adjective",l:"B1"},
+{w:"ikhlas",m:"sincere / wholehearted",c:"adjective",l:"B1"},
+{w:"licik",m:"sly / cunning",c:"adjective",l:"B1"},
+{w:"gundah",m:"troubled / distressed",c:"adjective",l:"B1"},
+{w:"ceria",m:"cheerful / bright",c:"adjective",l:"A2"},
+{w:"galak",m:"fierce / strict",c:"adjective",l:"A2"},
+{w:"angkuh",m:"haughty / arrogant",c:"adjective",l:"B1"},
+{w:"pemalas",m:"lazy person",c:"noun",l:"A2"},
+{w:"pekerja keras",m:"hard worker",c:"noun",l:"A2"},
+{w:"riang",m:"lively / cheerful",c:"adjective",l:"A2"},
+{w:"acuh tak acuh",m:"indifferent",c:"adjective",l:"B1"},
+{w:"pemimpi",m:"dreamer",c:"noun",l:"A2"},
+{w:"acuh",m:"uncaring / dismissive",c:"adjective",l:"B1"},
+
 ]; /* END WORDS */
 
 /* ════════════════════════════════════════
@@ -3315,22 +3531,27 @@ function setLvlBadge(el,l){
    FILTERS
 ════════════════════════════════════════ */
 function applyFilters(){
-  filtered=WORDS.filter(w=>{
-    if(selLvl==='warda') return w.src==='warda';
-    if(selLvl==='sanjaya') return w.src==='sanjaya';
-    const lOk=selLvl==='all'||w.l===selLvl;
-    const gOk=selGenre==='all'||w.c===selGenre;
-    return lOk&&gOk;
-  });
+  if(selLvl==='review'){
+    const rv=loadReview();
+    filtered=WORDS.filter(w=>rv[w.w]);
+  }else{
+    filtered=WORDS.filter(w=>{
+      if(selLvl==='warda') return w.src==='warda';
+      if(selLvl==='sanjaya') return w.src==='sanjaya';
+      const lOk=selLvl==='all'||w.l===selLvl;
+      const gOk=selGenre==='all'||w.c===selGenre;
+      return lOk&&gOk;
+    });
+  }
   deck=shuffle(filtered.length?filtered:WORDS);
   idx=0; score={ok:0,total:0}; revealed=false; answered=false;
   updateFilterStats();
 }
 function updateFilterStats(){
   const n=filtered.length;
-  const lStr=selLvl==='warda'?'Warda':selLvl==='sanjaya'?'Sanjaya':selLvl==='all'?'All levels':selLvl;
+  const lStr=selLvl==='review'?'復習':selLvl==='warda'?'Warda':selLvl==='sanjaya'?'Sanjaya':selLvl==='all'?'All levels':selLvl;
   const gStr=selGenre==='all'?'All genres':(CAT_LABEL[selGenre]||selGenre);
-  document.getElementById('filterStats').textContent=n+' words · '+lStr+' · '+gStr;
+  document.getElementById('filterStats').textContent=n+' words · '+lStr+(selLvl==='review'?'':' · '+gStr);
 }
 function setLevel(btn,lvl){
   selLvl=lvl;
@@ -3415,6 +3636,7 @@ function renderFlash(w){
   document.getElementById('flashHint').classList.remove('hidden');
   document.getElementById('flashDiv').classList.add('hidden');
   document.getElementById('flashMeaning').classList.add('hidden');
+  document.getElementById('flashReviewRow').classList.add('hidden');
   document.getElementById('prevBtn').disabled=idx===0;
 }
 function toggleCard(){
@@ -3422,6 +3644,7 @@ function toggleCard(){
   document.getElementById('flashHint').classList.toggle('hidden',revealed);
   document.getElementById('flashDiv').classList.toggle('hidden',!revealed);
   document.getElementById('flashMeaning').classList.toggle('hidden',!revealed);
+  document.getElementById('flashReviewRow').classList.toggle('hidden',!revealed);
 }
 function prevCard(){if(idx>0){idx--;renderCurrent();}}
 function nextCard(){
@@ -3457,6 +3680,7 @@ function selectOpt(btn,correct,word){
       if(b.textContent===word.m)b.classList.add('correct');
     });
   }
+  recordResult(word,correct);
   document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
   document.getElementById('quizNext').classList.remove('hidden');
   updateProgress();
@@ -3494,6 +3718,7 @@ function typingSubmit(){
     document.getElementById('typingFb').textContent='Answer: "'+w.m+'"';
     document.getElementById('typingFb').className='typing-fb fb-err';
   }
+  recordResult(w,ok);
   inp.disabled=true;
   document.getElementById('checkBtn').classList.add('hidden');
   document.getElementById('skipBtn').classList.add('hidden');
@@ -3508,6 +3733,7 @@ function typingSkip(){
   inp.className='typing-input wrong'; inp.disabled=true;
   document.getElementById('typingFb').textContent='Answer: "'+w.m+'"';
   document.getElementById('typingFb').className='typing-fb fb-err';
+  recordResult(w,false);
   document.getElementById('checkBtn').classList.add('hidden');
   document.getElementById('skipBtn').classList.add('hidden');
   document.getElementById('typingNext').classList.remove('hidden');
@@ -3517,6 +3743,36 @@ function nextQuestion(){
   idx++;
   if(idx>=deck.length)showResult();
   else renderCurrent();
+}
+
+/* ════════════════════════════════════════
+   REVIEW (localStorage)
+════════════════════════════════════════ */
+const REVIEW_KEY='iq_review_v1';
+function loadReview(){
+  try{return JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}');}catch(e){return {};}
+}
+function saveReview(rv){
+  try{localStorage.setItem(REVIEW_KEY,JSON.stringify(rv));}catch(e){}
+}
+function recordResult(word,correct){
+  const rv=loadReview();
+  const key=word.w;
+  if(correct){
+    if(rv[key]){
+      rv[key].s=(rv[key].s||0)+1;
+      if(rv[key].s>=3)delete rv[key];
+    }
+  }else{
+    rv[key]={w:((rv[key]&&rv[key].w)||0)+1,s:0};
+  }
+  saveReview(rv);
+}
+function flashRate(correct){
+  const w=deck[idx];
+  if(w)recordResult(w,correct);
+  document.getElementById('flashReviewRow').classList.add('hidden');
+  nextCard();
 }
 
 /* ════════════════════════════════════════
@@ -3638,6 +3894,109 @@ const SENTENCES=[
 {s:"Kuliner lokal di kota ini sangat beragam dan lezat",t:"The local cuisine in this city is very diverse and delicious",g:"travel",l:"B1",d:["unik","khas","istimewa"]},
 {s:"Perjalanan dengan kapal feri memakan waktu empat jam",t:"The ferry trip takes four hours",g:"travel",l:"B1",d:["menghabiskan","menempuh","memerlukan"]},
 {s:"Saya ingin mengunjungi semua pulau di Indonesia",t:"I want to visit all the islands in Indonesia",g:"travel",l:"B1",d:["menjelajahi","melihat","menemukan"]},
+/* ── Daily (added) ── */
+{s:"Saya biasanya bangun pagi jam enam setiap hari",t:"I usually wake up early at six every day",g:"daily",l:"B1",d:["tidur","bekerja","tiba"]},
+{s:"Dia tidak suka makan makanan yang terlalu pedas",t:"She doesn't like eating food that is too spicy",g:"daily",l:"B1",d:["asin","manis","pahit"]},
+{s:"Kami berencana pergi ke pasar pagi ini",t:"We plan to go to the market this morning",g:"daily",l:"B1",d:["berangkat","singgah","pulang"]},
+{s:"Tolong jangan lupa membawa payung kalau hujan",t:"Please don't forget to bring an umbrella if it rains",g:"daily",l:"B1",d:["jaket","tas","topi"]},
+{s:"Mereka tinggal di apartemen di pusat kota",t:"They live in an apartment in the city center",g:"daily",l:"B1",d:["bekerja","belajar","menetap"]},
+{s:"Saya harus mencuci pakaian kotor setelah pulang kerja",t:"I have to wash dirty clothes after coming home from work",g:"daily",l:"B1",d:["menjemur","menyetrika","melipat"]},
+{s:"Anak-anak itu bermain di taman setiap sore",t:"Those children play in the park every afternoon",g:"daily",l:"B1",d:["berlari","berkumpul","belajar"]},
+{s:"Nenek saya memasak rendang setiap hari raya",t:"My grandmother cooks rendang every holiday",g:"daily",l:"B1",d:["menyajikan","menyiapkan","membuat"]},
+{s:"Dia selalu membaca buku sebelum tidur malam",t:"He always reads a book before going to sleep at night",g:"daily",l:"B1",d:["menulis","menonton","belajar"]},
+{s:"Saya tidak punya waktu untuk pergi ke gym",t:"I don't have time to go to the gym",g:"daily",l:"B1",d:["kantor","pasar","sekolah"]},
+{s:"Kita harus lebih hemat pengeluaran bulan ini",t:"We need to be more frugal with expenses this month",g:"daily",l:"B2",d:["cermat","bijak","selektif"]},
+{s:"Lampu di dapur sudah rusak dan harus diganti",t:"The light in the kitchen is broken and needs to be replaced",g:"daily",l:"B1",d:["diperbaiki","dibeli","dibersihkan"]},
+{s:"Adik saya takut dengan anjing besar",t:"My younger sibling is afraid of big dogs",g:"daily",l:"B1",d:["binatang","kucing","serangga"]},
+{s:"Kami biasa makan malam bersama setiap hari Minggu",t:"We usually have dinner together every Sunday",g:"daily",l:"B1",d:["siang","pagi","sore"]},
+{s:"Obat itu harus diminum dua kali sehari",t:"That medicine must be taken twice a day",g:"daily",l:"B1",d:["diminum","disuntik","dioleskan"]},
+{s:"Dia tidak bisa tidur karena terlalu banyak pikiran",t:"He can't sleep because he has too many things on his mind",g:"daily",l:"B2",d:["kerja","stres","beban"]},
+{s:"Kami perlu memperbaiki atap sebelum musim hujan tiba",t:"We need to fix the roof before the rainy season arrives",g:"daily",l:"B2",d:["dinding","lantai","jendela"]},
+{s:"Saya belajar bahasa Indonesia setiap malam selama satu jam",t:"I study Indonesian every night for one hour",g:"daily",l:"B1",d:["membaca","menulis","mendengar"]},
+{s:"Dia membeli buah dan sayuran segar di pasar",t:"She bought fresh fruits and vegetables at the market",g:"daily",l:"B1",d:["daging","bumbu","rempah"]},
+{s:"Mereka memutuskan untuk pindah ke rumah yang lebih besar",t:"They decided to move to a bigger house",g:"daily",l:"B2",d:["menyewa","membeli","merenovasi"]},
+{s:"Saya selalu sarapan dengan nasi goreng di pagi hari",t:"I always have breakfast with fried rice in the morning",g:"daily",l:"B1",d:["makan","minum","menyantap"]},
+{s:"Cuaca pagi ini cerah sehingga kami bisa berjalan kaki",t:"The weather this morning is clear so we can walk",g:"daily",l:"B1",d:["berkendara","bersepeda","berlari"]},
+{s:"Saya sudah lama tidak bertemu teman lama",t:"I haven't seen an old friend for a long time",g:"daily",l:"B1",d:["menghubungi","mengunjungi","menemani"]},
+{s:"Dia meminta maaf karena datang terlambat ke pesta",t:"He apologized for arriving late to the party",g:"daily",l:"B1",d:["pertemuan","acara","rapat"]},
+{s:"Kami berencana mengadakan reuni keluarga bulan depan",t:"We plan to hold a family reunion next month",g:"daily",l:"B2",d:["pesta","pertemuan","acara"]},
+/* ── Work (added) ── */
+{s:"Dia mendapatkan tawaran pekerjaan dari perusahaan teknologi besar",t:"He received a job offer from a large technology company",g:"work",l:"B2",d:["lamaran","promosi","pelatihan"]},
+{s:"Kami harus menyelesaikan laporan sebelum rapat besok pagi",t:"We have to finish the report before tomorrow morning's meeting",g:"work",l:"B2",d:["presentasi","proposal","dokumen"]},
+{s:"Pertemuan dengan klien akan diadakan di ruang konferensi",t:"The meeting with the client will be held in the conference room",g:"work",l:"B1",d:["rapat","diskusi","negosiasi"]},
+{s:"Saya perlu berdiskusi dengan atasan tentang kenaikan gaji",t:"I need to discuss a salary raise with my superior",g:"work",l:"B2",d:["bonus","tunjangan","jabatan"]},
+{s:"Proyek ini membutuhkan kerja sama antara tiga departemen",t:"This project requires cooperation between three departments",g:"work",l:"B2",d:["divisi","tim","bagian"]},
+{s:"Anggaran proyek ini melebihi batas yang sudah ditetapkan",t:"This project's budget has exceeded the set limit",g:"work",l:"B2",d:["target","jadwal","rencana"]},
+{s:"Pelatihan karyawan baru akan dimulai minggu depan",t:"New employee training will begin next week",g:"work",l:"B1",d:["orientasi","evaluasi","seleksi"]},
+{s:"Kami berhasil menandatangani kontrak dengan klien dari Jepang",t:"We successfully signed a contract with a client from Japan",g:"work",l:"B2",d:["memperbarui","menegosiasikan","menyiapkan"]},
+{s:"Tim pemasaran sedang menyiapkan strategi untuk produk baru",t:"The marketing team is preparing a strategy for the new product",g:"work",l:"B2",d:["kampanye","presentasi","proposal"]},
+{s:"Dia mengundurkan diri karena tidak cocok dengan budaya perusahaan",t:"She resigned because she didn't fit the company culture",g:"work",l:"B2",d:["pindah","dipecat","berhenti"]},
+{s:"Kami harus mempresentasikan hasil kerja kepada direktur besok",t:"We have to present our work results to the director tomorrow",g:"work",l:"B2",d:["melaporkan","menjelaskan","mendiskusikan"]},
+{s:"Perusahaan memutuskan untuk mengurangi biaya operasional tahun ini",t:"The company decided to reduce operational costs this year",g:"work",l:"B2",d:["anggaran","pengeluaran","overhead"]},
+{s:"Karyawan baru itu sangat cepat menyesuaikan diri dengan tim",t:"That new employee adapted to the team very quickly",g:"work",l:"B2",d:["bergabung","berkontribusi","belajar"]},
+{s:"Rapat daring dengan klien luar negeri dijadwalkan pagi ini",t:"An online meeting with an overseas client is scheduled this morning",g:"work",l:"B2",d:["ditunda","dibatalkan","diubah"]},
+{s:"Dia dipromosikan menjadi manajer setelah bekerja lima tahun",t:"She was promoted to manager after working for five years",g:"work",l:"B2",d:["dinaikkan","dipilih","ditunjuk"]},
+{s:"Seluruh karyawan diwajibkan mengisi formulir evaluasi kinerja",t:"All employees are required to fill in the performance evaluation form",g:"work",l:"B2",d:["penilaian","laporan","survei"]},
+{s:"Kami memerlukan lebih banyak data untuk membuat keputusan yang tepat",t:"We need more data to make the right decision",g:"work",l:"B2",d:["informasi","analisis","laporan"]},
+{s:"Karyawan yang berprestasi akan mendapat bonus tahunan",t:"High-performing employees will receive an annual bonus",g:"work",l:"B2",d:["promosi","penghargaan","tunjangan"]},
+{s:"Tim kami belum siap untuk presentasi hari ini",t:"Our team is not ready for today's presentation",g:"work",l:"B1",d:["rapat","diskusi","evaluasi"]},
+{s:"Dia sering lembur karena pekerjaan yang menumpuk",t:"She often works overtime because work piles up",g:"work",l:"B1",d:["terlambat","lelah","terbebani"]},
+{s:"Perusahaan kami berencana ekspansi ke pasar Asia Tenggara",t:"Our company plans to expand into the Southeast Asian market",g:"work",l:"B2",d:["Asia Timur","Asia Selatan","Eropa"]},
+{s:"Negosiasi harga dengan pemasok berlangsung selama dua jam",t:"Price negotiations with the supplier lasted for two hours",g:"work",l:"B2",d:["diskusi","rapat","pertemuan"]},
+{s:"Kami perlu merekrut tenaga ahli di bidang teknologi informasi",t:"We need to recruit an expert in the field of information technology",g:"work",l:"B2",d:["keuangan","pemasaran","hukum"]},
+{s:"Dokumen kontrak harus ditandatangani oleh kedua belah pihak",t:"The contract documents must be signed by both parties",g:"work",l:"B2",d:["disetujui","disahkan","diverifikasi"]},
+/* ── News (added) ── */
+{s:"Presiden mengumumkan program pembangunan infrastruktur baru tahun depan",t:"The president announced a new infrastructure development program for next year",g:"news",l:"B2",d:["meluncurkan","mencanangkan","memperkenalkan"]},
+{s:"Gempa bumi melanda wilayah Sulawesi dan merusak ribuan rumah",t:"An earthquake hit the Sulawesi region and damaged thousands of homes",g:"news",l:"B2",d:["banjir","longsor","tsunami"]},
+{s:"Pemerintah menetapkan upah minimum yang baru mulai bulan Januari",t:"The government set the new minimum wage starting in January",g:"news",l:"B2",d:["menaikkan","menurunkan","membekukan"]},
+{s:"Polisi menangkap jaringan pengedar narkoba di beberapa kota besar",t:"Police arrested a drug distribution network in several major cities",g:"news",l:"B2",d:["membongkar","mengungkap","menyelidiki"]},
+{s:"Nilai tukar rupiah melemah terhadap dolar Amerika hari ini",t:"The rupiah exchange rate weakened against the US dollar today",g:"news",l:"B2",d:["menguat","stabil","berfluktuasi"]},
+{s:"Menteri pendidikan meluncurkan program beasiswa untuk pelajar berprestasi",t:"The education minister launched a scholarship program for high-achieving students",g:"news",l:"B2",d:["memperkenalkan","mencanangkan","meresmikan"]},
+{s:"Bank sentral mempertahankan suku bunga acuan bulan ini",t:"The central bank maintained the benchmark interest rate this month",g:"news",l:"B2",d:["menaikkan","memangkas","mengubah"]},
+{s:"Tersangka korupsi ditangkap setelah buron selama dua tahun",t:"The corruption suspect was arrested after being a fugitive for two years",g:"news",l:"B2",d:["ditahan","diperiksa","diselidiki"]},
+{s:"Harga kebutuhan pokok naik menjelang hari raya lebaran",t:"Prices of staple goods rose ahead of Eid al-Fitr",g:"news",l:"B2",d:["turun","stabil","terpantau"]},
+{s:"Demonstran berkumpul di depan gedung DPR menuntut perubahan",t:"Demonstrators gathered in front of the parliament building demanding change",g:"news",l:"B2",d:["kantor","istana","pengadilan"]},
+{s:"Produk ekspor Indonesia mencatat rekor tertinggi dalam sejarah",t:"Indonesian export products recorded the highest figure in history",g:"news",l:"B2",d:["impor","investasi","perdagangan"]},
+{s:"Bencana tanah longsor merusak ratusan rumah penduduk di Jawa Barat",t:"A landslide disaster damaged hundreds of homes in West Java",g:"news",l:"B2",d:["banjir","kebakaran","gempa"]},
+{s:"Pemerintah daerah melarang penggunaan plastik sekali pakai",t:"The regional government banned the use of single-use plastic",g:"news",l:"B2",d:["membatasi","mengurangi","mengatur"]},
+{s:"Kasus penipuan online meningkat tajam selama dua tahun terakhir",t:"Online fraud cases have risen sharply over the past two years",g:"news",l:"B2",d:["kejahatan","pelanggaran","insiden"]},
+{s:"Presiden bertemu dengan pemimpin negara-negara ASEAN di Jakarta",t:"The president met with leaders of ASEAN nations in Jakarta",g:"news",l:"B2",d:["berdiskusi","berunding","berkonferensi"]},
+{s:"Banjir bandang memaksa ribuan warga mengungsi dari rumah mereka",t:"Flash floods forced thousands of residents to evacuate from their homes",g:"news",l:"B2",d:["meninggalkan","menyelamatkan","kabur"]},
+{s:"Indonesia berhasil meraih medali emas di kejuaraan bulu tangkis dunia",t:"Indonesia successfully won a gold medal at the world badminton championship",g:"news",l:"B2",d:["perak","perunggu","kehormatan"]},
+{s:"Cadangan devisa meningkat signifikan pada kuartal ketiga tahun ini",t:"Foreign reserves increased significantly in the third quarter of this year",g:"news",l:"B2",d:["menurun","stabil","berfluktuasi"]},
+{s:"Majelis hakim menjatuhkan vonis penjara kepada terdakwa korupsi",t:"The panel of judges handed down a prison sentence to the corruption defendant",g:"news",l:"B2",d:["denda","sanksi","hukuman"]},
+{s:"Perusahaan asing menanamkan modal senilai miliaran dolar di Indonesia",t:"Foreign companies invested billions of dollars in Indonesia",g:"news",l:"B2",d:["menarik","mendapatkan","mengelola"]},
+{s:"Program vaksinasi nasional berhasil mencapai target yang ditetapkan",t:"The national vaccination program successfully met the set target",g:"news",l:"B2",d:["melampaui","memenuhi","menyelesaikan"]},
+{s:"Kebakaran hutan meluas akibat cuaca kering yang berkepanjangan",t:"Forest fires spread due to prolonged dry weather",g:"news",l:"B2",d:["hujan","angin","kabut"]},
+{s:"Perjanjian perdagangan baru ditandatangani oleh kedua negara",t:"A new trade agreement was signed by both countries",g:"news",l:"B2",d:["diratifikasi","disepakati","disetujui"]},
+{s:"Tingkat pengangguran turun setelah pemerintah membuka lapangan kerja baru",t:"Unemployment fell after the government opened new job opportunities",g:"news",l:"B2",d:["naik","stabil","meningkat"]},
+{s:"Pemerintah berencana membangun pembangkit listrik tenaga surya di beberapa daerah",t:"The government plans to build solar power plants in several regions",g:"news",l:"B2",d:["angin","air","nuklir"]},
+/* ── Travel (added) ── */
+{s:"Petugas imigrasi meminta saya menunjukkan paspor dan visa",t:"The immigration officer asked me to show my passport and visa",g:"travel",l:"B1",d:["tiket","kartu","dokumen"]},
+{s:"Hotel tempat kami menginap menyediakan sarapan gratis setiap pagi",t:"The hotel where we stayed provided free breakfast every morning",g:"travel",l:"B1",d:["makan siang","makan malam","camilan"]},
+{s:"Bus pariwisata akan berangkat dari terminal pada pukul delapan",t:"The tourist bus will depart from the terminal at eight o'clock",g:"travel",l:"B1",d:["stasiun","bandara","pelabuhan"]},
+{s:"Saya menukar uang rupiah dengan dolar di money changer",t:"I exchanged rupiah for dollars at the money changer",g:"travel",l:"B1",d:["yen","euro","pound"]},
+{s:"Pemandu wisata membawa kami keliling situs bersejarah di Yogyakarta",t:"The tour guide took us around the historical sites in Yogyakarta",g:"travel",l:"B2",d:["museum","keraton","candi"]},
+{s:"Penerbangan kami ditunda karena cuaca buruk di bandara tujuan",t:"Our flight was delayed due to bad weather at the destination airport",g:"travel",l:"B2",d:["dibatalkan","diubah","dipercepat"]},
+{s:"Kami harus check out dari hotel sebelum jam dua belas",t:"We have to check out of the hotel before noon",g:"travel",l:"B1",d:["check in","berangkat","meninggalkan"]},
+{s:"Wisatawan mancanegara berdatangan ke Bali sepanjang tahun",t:"Foreign tourists keep coming to Bali throughout the year",g:"travel",l:"B2",d:["domestik","lokal","asing"]},
+{s:"Saya memesan taksi online untuk pergi ke stasiun kereta",t:"I ordered an online taxi to go to the train station",g:"travel",l:"A2",d:["bandara","pelabuhan","terminal"]},
+{s:"Antrian di loket imigrasi sangat panjang waktu musim liburan",t:"The queue at the immigration counter is very long during the holiday season",g:"travel",l:"B2",d:["musim panas","musim hujan","akhir pekan"]},
+{s:"Pemandangan matahari terbenam dari puncak gunung sangat menakjubkan",t:"The sunset view from the mountain peak is truly amazing",g:"travel",l:"B2",d:["laut","bukit","pantai"]},
+{s:"Kami menyewa sepeda untuk berkeliling kota tua Jakarta",t:"We rented bicycles to tour the old city of Jakarta",g:"travel",l:"B1",d:["motor","mobil","becak"]},
+{s:"Restoran di tepi pantai menyajikan hidangan laut yang segar",t:"The restaurant by the beach serves fresh seafood",g:"travel",l:"B1",d:["menyediakan","menawarkan","menghidangkan"]},
+{s:"Kami harus transit di Singapura sebelum terbang ke Tokyo",t:"We have to transit in Singapore before flying to Tokyo",g:"travel",l:"B1",d:["singgah","berhenti","menunggu"]},
+{s:"Wisata air terjun itu memerlukan pendakian selama dua jam",t:"The waterfall tour requires a two-hour hike",g:"travel",l:"B2",d:["perjalanan","trekking","hiking"]},
+{s:"Saya memesan paket wisata tiga hari dua malam ke Lombok",t:"I booked a three-day two-night travel package to Lombok",g:"travel",l:"B1",d:["Bali","Raja Ampat","Komodo"]},
+{s:"Bagasi saya melebihi batas berat yang diperbolehkan maskapai",t:"My luggage exceeded the weight limit allowed by the airline",g:"travel",l:"B2",d:["ukuran","jumlah","batas"]},
+{s:"Pemandu lokal merekomendasikan restoran makanan khas daerah itu",t:"The local guide recommended a restaurant for the region's specialty food",g:"travel",l:"B2",d:["menunjukkan","memperkenalkan","mengajak"]},
+{s:"Kami berkunjung ke museum batik untuk mengetahui sejarahnya",t:"We visited the batik museum to learn about its history",g:"travel",l:"B1",d:["perkembangan","asal-usul","makna"]},
+{s:"Harga suvenir di bandara jauh lebih mahal dari di pasar",t:"Souvenir prices at the airport are much more expensive than at the market",g:"travel",l:"B1",d:["toko","hotel","terminal"]},
+{s:"Perjalanan dengan kereta api lebih nyaman dibanding naik bus",t:"Traveling by train is more comfortable than taking a bus",g:"travel",l:"B1",d:["pesawat","kapal","motor"]},
+{s:"Kami menghabiskan seminggu di Raja Ampat menikmati keindahan laut",t:"We spent a week in Raja Ampat enjoying the beauty of the sea",g:"travel",l:"B2",d:["Lombok","Labuan Bajo","Wakatobi"]},
+{s:"Penginapan murah itu letaknya strategis dekat pusat perbelanjaan",t:"That budget accommodation is strategically located near the shopping center",g:"travel",l:"B2",d:["stasiun","terminal","bandara"]},
+{s:"Kartu kredit saya tidak bisa digunakan di daerah terpencil itu",t:"My credit card couldn't be used in that remote area",g:"travel",l:"B2",d:["dipakai","diterima","difungsikan"]},
+{s:"Layanan antar-jemput dari hotel ke bandara sangat membantu",t:"The hotel's airport shuttle service was very helpful",g:"travel",l:"B2",d:["taksi","bus","kereta"]},
 ];
 
 let sentDeck=[],sentSentIdx=0,sentScore={ok:0,total:0};
