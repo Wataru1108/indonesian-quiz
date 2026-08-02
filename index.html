@@ -28,8 +28,10 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
 /* filter rows */
 .filter-block { background:white; border-radius:13px; padding:11px 13px; margin-bottom:10px; box-shadow:0 1px 5px rgba(0,0,0,.08); }
 .filter-label { font-size:11px; font-weight:700; color:#aaa; text-transform:uppercase; letter-spacing:.7px; display:block; margin-bottom:7px; }
-.lvl-pills { display:flex; gap:6px; }
-.lvl-pill  { flex:1; padding:7px 4px; border:2px solid #e0e0e0; border-radius:8px; background:white; font-size:13px; font-weight:800; color:#555; cursor:pointer; text-align:center; transition:all .2s; }
+.lvl-pills     { display:flex; gap:6px; }
+.lvl-pills-src { display:flex; gap:6px; margin-top:6px; }
+.lvl-pill      { flex:1; padding:7px 4px; border:2px solid #e0e0e0; border-radius:8px; background:white; font-size:13px; font-weight:800; color:#555; cursor:pointer; text-align:center; transition:all .2s; }
+.lvl-pills-src .lvl-pill { flex:none; padding:7px 18px; }
 .lvl-pill.active { border-color:#c8001d; background:#c8001d; color:white; }
 .genre-select {
   width:100%; padding:10px 12px; border:2px solid #e0e0e0; border-radius:10px;
@@ -291,6 +293,8 @@ header p  { font-size: 12px; opacity: .82; margin-top: 3px; }
       <button class="lvl-pill" onclick="setLevel(this,'B1')">B1</button>
       <button class="lvl-pill" onclick="setLevel(this,'B2')">B2</button>
       <button class="lvl-pill" onclick="setLevel(this,'C1')">C1</button>
+    </div>
+    <div class="lvl-pills-src">
       <button class="lvl-pill" onclick="setLevel(this,'warda')">Warda</button>
       <button class="lvl-pill" onclick="setLevel(this,'sanjaya')">Sanjaya</button>
     </div>
